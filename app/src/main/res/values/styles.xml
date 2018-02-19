@@ -1,0 +1,17 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:editTextStyle">@drawable/cursor</item>
+        <item name="colorPrimary">@color/background_list</item>
+        <item name="colorPrimaryDark">@color/background_app</item>
+        <item name="colorAccent">@color/background_list</item>
+
+    </style>
+
+    <style name="edit_branco" parent="@android:style/Widget.EditText">
+        <item name="android:textCursorDrawable">@drawable/cursor</item>
+    </style>
+
+</resources>

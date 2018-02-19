@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_editar_treino"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:animateLayoutChanges="true"
+    tools:context="appersonal.development.com.appersonaltrainer.Activities.EditarTreinoActivity"
+    android:background="@drawable/bg2">
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
+
+    <TextView
+        android:text="Nome:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/txtTreino"
+        android:textSize="@dimen/titulo"
+        android:layout_alignBottom="@+id/edtTreino"
+        android:textColor="@color/color_texto"/>
+
+    <LinearLayout
+        android:id="@+id/lltButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/adView"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnNovoExercicio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@color/botoes_transparente"
+            android:text="Novo Exercício"
+            android:textColor="@color/color_texto" />
+
+        <Button
+            android:id="@+id/btnNovoAerobico"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:background="@color/botoes_transparente"
+            android:text="Novo Aeróbico"
+            android:textColor="@color/color_texto" />
+
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_below="@+id/txtTreino"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
+        android:divider="@android:drawable/divider_horizontal_textfield"
+        android:id="@+id/lstExercicios"
+        android:background="@color/background_list"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:layout_marginBottom="20dp"
+        android:layout_above="@id/lltButtons"/>
+
+    <EditText
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/edtTreino"
+        android:textSize="@dimen/titulo"
+        android:background="@color/background_list"
+        android:layout_width="wrap_content"
+        android:textColor="@color/color_texto"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/txtTreino"
+        android:layout_marginStart="21dp"
+        style="@style/edit_branco" />
+
+    <Button
+        android:text="Salvar"
+        android:id="@+id/btnSalvar"
+        android:layout_height="wrap_content"
+        android:layout_width="72dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/imgLixo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/lstExercicios"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        ads:srcCompat="@drawable/lixeira" />
+
+</RelativeLayout>

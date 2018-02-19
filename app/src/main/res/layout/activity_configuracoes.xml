@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_configuracoes"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:animateLayoutChanges="true"
+    tools:context="appersonal.development.com.appersonaltrainer.Activities.ConfiguracoesActivity"
+    android:background="@drawable/bg2">
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id2">
+    </com.google.android.gms.ads.AdView>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
+
+    <Switch
+        android:id="@+id/swtInicioAut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/adView2"
+        android:layout_marginTop="20dp"
+        android:text="Inicio Automático de Exercícios"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:id="@+id/rdgvoz"
+        android:orientation="horizontal"
+        android:layout_below="@+id/textView17"
+        android:layout_alignParentStart="true">
+
+        <RadioButton
+            android:text="Masculina"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rdbMasculina"
+            android:layout_weight="1"
+            android:textColor="@color/color_texto"
+            android:textSize="@dimen/texto_campos"
+            android:layout_marginRight="10dp"
+            app:buttonTint="@color/color_texto"/>
+
+        <RadioButton
+            android:text="Feminina"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rdbFeminina"
+            android:layout_weight="1"
+            android:textSize="@dimen/texto_campos"
+            android:textColor="@color/color_texto"
+            app:buttonTint="@color/color_texto"/>
+    </RadioGroup>
+
+    <TextView
+        android:text="Voz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView17"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/swtInicioAut"
+        android:layout_alignParentStart="true"
+        android:paddingTop="3dp" />
+
+    <Switch
+        android:text="Uso do botão do fone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rdgvoz"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="25dp"
+        android:id="@+id/swtBotaoFone"
+        android:textSize="@dimen/texto_campos"
+        android:textColor="@color/color_texto" />
+
+    <TextView
+        android:text="Sons de Treino"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/swtBotaoFone"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="25dp"
+        android:id="@+id/textView20"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos"
+        android:paddingTop="3dp" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView20"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentStart="true"
+        android:orientation="horizontal"
+        android:id="@+id/rdgSons">
+
+        <RadioButton
+            android:text="Padrão"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rdbSomPadrao"
+            android:layout_weight="1"
+            android:textColor="@color/color_texto"
+            android:textSize="@dimen/texto_campos"
+            app:buttonTint="@color/color_texto"/>
+
+        <RadioButton
+            android:text="Bambam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rdbSomBambam"
+            android:layout_weight="1"
+            android:textSize="@dimen/texto_campos"
+            android:textColor="@color/color_texto"
+            app:buttonTint="@color/color_texto"/>
+    </RadioGroup>
+
+
+</RelativeLayout>

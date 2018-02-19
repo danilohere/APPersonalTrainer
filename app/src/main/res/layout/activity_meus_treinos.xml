@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_meus_treinos"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="appersonal.development.com.appersonaltrainer.Activities.MeusTreinosActivity"
+    android:background="@drawable/bg2">
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id2">
+    </com.google.android.gms.ads.AdView>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/lstTreinos"
+        android:divider="@android:drawable/divider_horizontal_textfield"
+        android:background="@color/background_list"
+        android:layout_below="@id/adView2"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_above="@+id/linearLayout"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout"
+        android:layout_above="@id/adView"
+        android:layout_marginBottom="10dp">
+
+        <Button
+            android:text="Novo Treino"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnNovo"
+            android:background="@color/botoes_transparente"
+            android:textColor="@color/color_texto"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="1"
+            android:layout_marginRight="5dp" />
+
+        <Button
+            android:text="Receber Treino"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnReceber"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/color_texto"
+            android:background="@color/botoes_transparente" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linearLayout"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="43dp"
+        android:id="@+id/txtTeste"
+        android:textSize="36sp"
+        android:textColor="@color/color_texto"
+        android:visibility="invisible" />
+
+</RelativeLayout>

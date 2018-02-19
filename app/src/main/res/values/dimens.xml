@@ -1,0 +1,10 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="titulo">32sp</dimen>
+    <dimen name="texto_campos">18sp</dimen>
+    <dimen name="padding_caixa_texto">3dp</dimen>
+    <dimen name="margem_rep">3dp</dimen>
+    <dimen name="tamanho_caixa_texto_num">30dp</dimen>
+</resources>

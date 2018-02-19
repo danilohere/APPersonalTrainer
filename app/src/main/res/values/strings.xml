@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">APPersonal Trainer</string>
+    <string name="treino">Treino</string>
+    <string name="banner_ad_unit_id2">ca-app-pub-4960619699535760/2087771137</string>
+    <string name="banner_ad_unit_id">ca-app-pub-4960619699535760/2759839538</string>
+    <string name="facebook_app_id">315516028874581</string>
+    <string name="fb_login_protocol_scheme">fb315516028874581</string>
+</resources>

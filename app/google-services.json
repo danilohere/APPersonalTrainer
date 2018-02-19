@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "710942897757",
+    "firebase_url": "https://appersonal-trainer.firebaseio.com",
+    "project_id": "appersonal-trainer",
+    "storage_bucket": "appersonal-trainer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:710942897757:android:3e8a671c7e7cd0a1",
+        "android_client_info": {
+          "package_name": "appersonal.development.com.appersonaltrainer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "710942897757-02p0e6l2r2a99fni7414fk8u2tv5p7ek.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCc5JRPWoO1BhZdwSq3hiFUvHBVls08LeQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

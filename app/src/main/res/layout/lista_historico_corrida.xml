@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="@color/list_background">
+
+    <TextView
+        android:id="@+id/txtKMTempo"
+        android:layout_width="110dp"
+        android:layout_height="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_toStartOf="@+id/txtData"
+        android:layout_weight="2.28"
+        android:padding="@dimen/padding_caixa_texto"
+        android:textColor="@color/color_texto"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/txtVelocidade"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignStart="@+id/txtKMTempo"
+        android:layout_below="@id/txtKMTempo"
+        android:layout_toStartOf="@+id/txtData"
+        android:layout_weight="2.28"
+        android:padding="@dimen/padding_caixa_texto"
+
+        android:textColor="@color/color_texto"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/txtData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtKMTempo"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/txtKMTempo"
+        android:layout_marginRight="5dp"
+        android:layout_toEndOf="@+id/txtNome"
+        android:gravity="center"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos" />
+
+    <TextView
+        android:id="@+id/txtHora"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@+id/txtData"
+        android:layout_marginRight="5dp"
+        android:layout_toEndOf="@+id/txtVelocidade"
+        android:gravity="center"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos" />
+
+</RelativeLayout>

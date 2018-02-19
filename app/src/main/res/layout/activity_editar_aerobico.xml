@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_editar_aerobico"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="appersonal.development.com.appersonaltrainer.Activities.EditarAerobicoActivity"
+    android:background="@drawable/bg2">
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_alignParentStart="true"
+        android:id="@+id/spnAerobico"
+        android:padding="@dimen/padding_caixa_texto"
+        android:background="@color/background_list"
+        android:popupBackground="@color/background_list"
+        android:layout_height="30dp"
+        android:layout_below="@+id/textView14"
+        android:layout_marginTop="10dp"/>
+
+    <CheckBox
+        android:id="@+id/chbObs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/spnAerobico"
+        android:layout_marginTop="11dp"
+        android:buttonTint="@color/color_texto"
+        android:text="Obs"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos" />
+
+    <EditText
+        android:id="@+id/edtObs"
+        style="@style/edit_branco"
+        android:layout_width="@dimen/tamanho_caixa_texto_num"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/chbObs"
+        android:layout_alignBottom="@+id/chbObs"
+        android:background="@color/background_list"
+        android:ems="10"
+        android:padding="@dimen/padding_caixa_texto"
+        android:textAlignment="viewStart"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos"
+        android:visibility="invisible"
+        android:layout_alignEnd="@+id/spnAerobico"
+        android:layout_toEndOf="@+id/textView1" />
+
+    <TextView
+        android:text="Duração:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1"
+        android:textSize="@dimen/texto_campos"
+        android:layout_below="@+id/chbObs"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/color_texto"
+        android:layout_marginTop="15dp" />
+
+    <TextView
+        android:text="Exercício:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/textView14"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos"
+        android:layout_marginTop="15dp"/>
+
+    <TextView
+        android:text="Séries"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layoutDuracao"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp"
+        android:id="@+id/txtSeries"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos"
+        android:visibility="invisible" />
+
+    <TextView
+        android:text="Descanso:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edtSeries"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp"
+        android:id="@+id/txtDescanso"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="31dp"
+        android:layout_width="wrap_content"
+        android:background="#00da6129"
+        android:id="@+id/layoutDescanso"
+        android:layout_below="@+id/txtDescanso"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible">
+
+        <EditText
+            android:layout_width="@dimen/tamanho_caixa_texto_num"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/edtDescansoM"
+            android:background="@color/background_list"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/color_texto"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textSize="@dimen/texto_campos"
+            android:maxLength="1"
+            style="@style/edit_branco"
+            android:padding="@dimen/padding_caixa_texto" />
+
+        <TextView
+            android:text=":"
+            android:id="@+id/txtDoisPontos"
+            android:textColor="@color/color_texto"
+            android:textAlignment="center"
+            android:textSize="@dimen/texto_campos"
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:layout_width="@dimen/tamanho_caixa_texto_num"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/edtDescansoS"
+            android:layout_weight="1"
+            android:background="@color/background_list"
+            android:textAlignment="center"
+            android:textColor="@color/color_texto"
+            android:textSize="@dimen/texto_campos"
+            android:maxLength="2"
+            style="@style/edit_branco"
+            android:padding="@dimen/padding_caixa_texto" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/adView"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/layoutBotoes">
+
+        <Button
+            android:text="Confirmar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnConfirmar"
+            android:layout_weight="1"
+            android:background="@color/botoes_transparente"
+            android:textColor="@color/color_texto"
+            android:layout_marginRight="5dp" />
+
+        <Button
+            android:text="Cancelar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnCancelar"
+            android:layout_weight="1"
+            android:textColor="@color/color_texto"
+            android:background="@color/botoes_transparente"
+            android:layout_marginLeft="5dp" />
+    </LinearLayout>
+
+    <TextView
+        android:text="KM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtKM"
+        android:textSize="@dimen/texto_campos"
+        android:textColor="@color/color_texto"
+        android:layout_marginStart="14dp"
+        android:layout_alignBaseline="@+id/edtDistancia"
+        android:layout_alignBottom="@+id/edtDistancia"
+        android:layout_toEndOf="@+id/edtDistancia"
+        android:visibility="invisible" />
+
+    <EditText
+        android:layout_width="@dimen/tamanho_caixa_texto_num"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:id="@+id/edtSeries"
+        android:textSize="@dimen/texto_campos"
+        android:background="@color/background_list"
+        android:padding="@dimen/padding_caixa_texto"
+        android:textColor="@color/color_texto"
+        android:textAlignment="center"
+        android:maxLength="2"
+        android:inputType="number"
+        style="@style/edit_branco"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible"
+        android:layout_below="@+id/txtSeries"
+        android:layout_alignParentStart="true"/>
+
+    <CheckBox
+        android:text="Medir por distância"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chbDistancia"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos"
+        android:checked="false"
+        android:layout_alignBaseline="@+id/textView1"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_alignParentEnd="true"
+        android:buttonTint="@color/color_texto"/>
+
+    <EditText
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:id="@+id/edtDistancia"
+        android:textSize="@dimen/texto_campos"
+        android:background="@color/background_list"
+        android:padding="@dimen/padding_caixa_texto"
+        android:textColor="@color/color_texto"
+        android:textAlignment="center"
+        android:maxLength="5"
+        android:inputType="number|numberDecimal"
+        style="@style/edit_branco"
+        android:visibility="invisible"
+        android:layout_width="120dp"
+        android:layout_below="@+id/chbDistancia"
+        android:layout_marginTop="10dp"
+        android:layout_alignStart="@+id/chbDistancia" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="31dp"
+        android:layout_width="wrap_content"
+        android:background="#00702b0c"
+        android:id="@+id/layoutDuracao"
+        android:layout_alignBottom="@+id/edtDistancia"
+        android:layout_alignParentStart="true">
+
+        <EditText
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/edtDuracaoH"
+            android:background="@color/background_list"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/color_texto"
+            android:textAlignment="center"
+            android:textSize="@dimen/texto_campos"
+            android:maxLength="1"
+            style="@style/edit_branco"
+            android:layout_width="@dimen/tamanho_caixa_texto_num"
+            android:padding="@dimen/padding_caixa_texto" />
+
+        <TextView
+            android:text=":"
+            android:id="@+id/txtDoisPont"
+            android:textColor="@color/color_texto"
+            android:textAlignment="center"
+            android:textSize="@dimen/texto_campos"
+            android:layout_width="5dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.38" />
+
+        <EditText
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/edtDuracaoM"
+            android:background="@color/background_list"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/color_texto"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textSize="@dimen/texto_campos"
+            android:maxLength="2"
+            style="@style/edit_branco"
+            android:layout_width="@dimen/tamanho_caixa_texto_num"
+            android:padding="@dimen/padding_caixa_texto" />
+
+        <TextView
+            android:text=":"
+            android:id="@+id/txtDoisP"
+            android:textColor="@color/color_texto"
+            android:textAlignment="center"
+            android:textSize="@dimen/texto_campos"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.38"
+            android:layout_width="wrap_content" />
+
+        <EditText
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/edtDuracaoS"
+            android:layout_weight="1"
+            android:background="@color/background_list"
+            android:textAlignment="center"
+            android:textColor="@color/color_texto"
+            android:textSize="@dimen/texto_campos"
+            android:maxLength="2"
+            style="@style/edit_branco"
+            android:layout_width="@dimen/tamanho_caixa_texto_num"
+            android:padding="@dimen/padding_caixa_texto" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:id="@+id/txtAerobico"
+        android:layout_height="30dp"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos"
+        android:visibility="invisible"
+        android:enabled="false"
+        android:background="@color/background_list"
+        android:paddingLeft="8dp"
+        android:layout_alignTop="@+id/spnAerobico"
+        android:layout_alignParentStart="true"
+        android:paddingTop="@dimen/padding_caixa_texto" />
+
+</RelativeLayout>

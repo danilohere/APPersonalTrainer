@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_exercicio"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:animateLayoutChanges="true"
+    tools:context="appersonal.development.com.appersonaltrainer.Activities.ExercicioActivity"
+    android:orientation="vertical"
+    android:background="@drawable/bg2">
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
+
+    <TextView
+        android:text="Exercicio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtExercicio"
+        android:layout_below="@id/adView"
+        android:layout_marginTop="10dp"
+        android:textSize="@dimen/titulo"
+        android:textAlignment="center"
+        android:textColor="@color/color_texto"
+        android:layout_toStartOf="@+id/imgImagem" />
+
+    <TextView
+        android:text="Repetições:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView4"
+        android:layout_weight="0.03"
+        android:textSize="@dimen/texto_campos"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/txtExercicio"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/color_texto"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtRep"
+        android:layout_alignBottom="@+id/textView4"
+        android:layout_toEndOf="@+id/textView4"
+        android:layout_marginStart="24dp"
+        android:textSize="@dimen/texto_campos"
+        android:textColor="@color/color_texto"/>
+
+    <TextView
+        android:text="Séries:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:id="@+id/textView6"
+        android:layout_below="@+id/textView4"
+        android:layout_alignParentStart="true"
+        android:textSize="@dimen/texto_campos"
+        android:textColor="@color/color_texto"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtSeries"
+        android:textSize="@dimen/texto_campos"
+        android:layout_alignBaseline="@+id/textView6"
+        android:layout_alignBottom="@+id/textView6"
+        android:layout_alignStart="@+id/txtRep"
+        android:textColor="@color/color_texto" />
+
+    <TextView
+        android:text="Descanso:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="158dp"
+        android:id="@+id/textView8"
+        android:textSize="@dimen/texto_campos"
+        android:textColor="@color/color_texto"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtDescanso"
+        android:textSize="@dimen/texto_campos"
+        android:layout_alignBaseline="@+id/textView8"
+        android:layout_alignBottom="@+id/textView8"
+        android:layout_alignStart="@+id/txtSeries"
+        android:textColor="@color/color_texto"/>
+
+    <RelativeLayout
+        android:id="@+id/layoutIniciar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/swtInicioAut"
+        android:layout_marginTop="15dp">
+
+        <ToggleButton
+            android:id="@+id/btnIniciar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:background="@color/botoes_transparente"
+            android:textAllCaps="false"
+            android:textColor="@color/color_texto"
+            android:textOff="INICIAR!"
+            android:textOn="PARAR"
+            android:visibility="visible"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layoutIniciar"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp">
+
+        <Button
+            android:text="Anterior"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnAnterior"
+            android:layout_weight="1"
+            android:background="@color/botoes_transparente"
+            android:textColor="@color/color_texto"
+            android:layout_marginRight="5dp" />/>
+
+        <Button
+            android:text="Próximo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnProximo"
+            android:layout_weight="1"
+            android:background="@color/botoes_transparente"
+            android:textColor="@color/color_texto"
+            android:layout_marginLeft="5dp" />/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtTemporizador"
+        android:textSize="80sp"
+        android:layout_below="@+id/textView6"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:textColor="@color/color_confirm_text"
+        android:textAlignment="center" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView6"
+        android:orientation="horizontal"
+        android:layout_toStartOf="@+id/imgImagem">
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/txtSeries"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:text="Tempo de execução:"
+            android:textColor="@color/color_texto"
+            android:textSize="@dimen/texto_campos" />
+
+        <Button
+            android:id="@+id/btnMenos"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtSeries"
+            android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@+id/textView15"
+            android:layout_weight="1"
+            android:background="@color/botoes_transparente"
+            android:text="-"
+            android:textColor="@color/color_texto" />
+
+        <TextView
+            android:id="@+id/txtTempoExecucao"
+            android:layout_width="49dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/textView15"
+            android:layout_marginLeft="5dp"
+            android:layout_toEndOf="@+id/btnMenos"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textColor="@color/color_texto"
+            android:textSize="@dimen/texto_campos" />
+
+        <Button
+            android:id="@+id/btnMais"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@+id/txtTempoExecucao"
+            android:layout_weight="1"
+            android:background="@color/botoes_transparente"
+            android:text="+"
+            android:textColor="@color/color_texto" />
+    </LinearLayout>
+
+    <Switch
+        android:text="Início Automático"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/swtInicioAut"
+        android:textSize="@dimen/texto_campos"
+        android:textColor="@color/color_texto"
+        android:layout_marginTop="13dp"
+        android:layout_below="@+id/txtDescanso"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="/"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/txtTemporizador"
+        android:layout_toEndOf="@+id/txtSeries"
+        android:id="@+id/txtBarra"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/txtTemporizador"
+        android:layout_toEndOf="@+id/txtBarra"
+        android:id="@+id/txtSeriesTotal"
+        android:textSize="@dimen/texto_campos"
+        android:textColor="@color/color_texto" />
+
+    <TextView
+        android:id="@+id/txtObs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/txtExercicio"
+        android:text="Obs: "
+        android:textColor="@color/color_texto"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/imgImagem"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignBottom="@+id/txtExercicio"
+        android:layout_alignParentEnd="true"
+        ads:srcCompat="@drawable/imgimg" />
+
+    <ImageView
+        android:id="@+id/imgExercicio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:background="@color/botoes_transparente"
+        android:maxHeight="500dp"
+        android:padding="2dp"
+        android:visibility="invisible"
+        ads:srcCompat="@drawable/imgimg"
+        />
+
+
+</RelativeLayout>
