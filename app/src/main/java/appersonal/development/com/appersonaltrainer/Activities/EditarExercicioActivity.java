@@ -3,6 +3,8 @@ package appersonal.development.com.appersonaltrainer.Activities;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -340,85 +342,42 @@ public class EditarExercicioActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ArrayAdapter<String> adaptador = new ArrayAdapter<String>(
-                getApplicationContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                musculos
-        );
-        spnMusculo.setAdapter(adaptador);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, musculos);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spnMusculo.setAdapter(adapter);
 
-        ArrayAdapter<String> adaptadorUni = new ArrayAdapter<String>(
-                getApplicationContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                unilateral
-        );
-        spnUnilateral.setAdapter(adaptadorUni);
+        ArrayAdapter<String> adapterUni = new ArrayAdapter<>(this, R.layout.spinner_item, unilateral);
+        adapterUni.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spnUnilateral.setAdapter(adapterUni);
 
         spnMusculo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 spnMusculo.setOnItemSelectedListener(this);
-                ArrayAdapter<String> adaptadorExer;
                 int codPos = position;
                 switch (codPos) {
                     case 0:
-                        adaptadorExer = new ArrayAdapter<String>(
-                                getApplicationContext(),
-                                android.R.layout.simple_spinner_dropdown_item,
-                                abdomen
-                        );
-                        spnExercicio.setAdapter(adaptadorExer);
+                        adapter(abdomen);
                         break;
                     case 1:
-                        adaptadorExer = new ArrayAdapter<String>(
-                                getApplicationContext(),
-                                android.R.layout.simple_spinner_dropdown_item,
-                                biceps
-                        );
-                        spnExercicio.setAdapter(adaptadorExer);
+                        adapter(biceps);
                         break;
                     case 2:
-                        adaptadorExer = new ArrayAdapter<String>(
-                                getApplicationContext(),
-                                android.R.layout.simple_spinner_dropdown_item,
-                                costas
-                        );
-                        spnExercicio.setAdapter(adaptadorExer);
+                        adapter(costas);
                         break;
                     case 3:
-                        adaptadorExer = new ArrayAdapter<String>(
-                                getApplicationContext(),
-                                android.R.layout.simple_spinner_dropdown_item,
-                                peito
-                        );
-                        spnExercicio.setAdapter(adaptadorExer);
+                        adapter(peito);
                         break;
                     case 4:
-                        adaptadorExer = new ArrayAdapter<String>(
-                                getApplicationContext(),
-                                android.R.layout.simple_spinner_dropdown_item,
-                                pernas
-                        );
-                        spnExercicio.setAdapter(adaptadorExer);
+                        adapter(pernas);
                         break;
                     case 5:
-                        adaptadorExer = new ArrayAdapter<String>(
-                                getApplicationContext(),
-                                android.R.layout.simple_spinner_dropdown_item,
-                                ombro
-                        );
-                        spnExercicio.setAdapter(adaptadorExer);
+                        adapter(ombro);
                         break;
                     case 6:
-                        adaptadorExer = new ArrayAdapter<String>(
-                                getApplicationContext(),
-                                android.R.layout.simple_spinner_dropdown_item,
-                                triceps
-                        );
-                        spnExercicio.setAdapter(adaptadorExer);
+                        adapter(triceps);
                         break;
                 }
-
             }
 
             @Override
@@ -427,12 +386,9 @@ public class EditarExercicioActivity extends AppCompatActivity {
             }
         });
 
-        ArrayAdapter<String> adaptadorRep = new ArrayAdapter<String>(
-                getApplicationContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                tipoRep
-        );
-        spnTipoRep.setAdapter(adaptadorRep);
+        ArrayAdapter<String> adapterRep = new ArrayAdapter<>(this, R.layout.spinner_item, tipoRep);
+        adapterRep.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spnTipoRep.setAdapter(adapterRep);
 
         edtSeries.addTextChangedListener(new TextWatcher() {
             @Override
@@ -1802,4 +1758,12 @@ public class EditarExercicioActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    void adapter(String[] musculo){
+        ArrayAdapter<String> adapterExer = new ArrayAdapter<>(this, R.layout.spinner_item, musculo);
+        adapterExer.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spnExercicio.setAdapter(adapterExer);
+    }
+
+
 }

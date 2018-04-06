@@ -1,20 +1,24 @@
 package appersonal.development.com.appersonaltrainer.Activities;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,6 +28,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import appersonal.development.com.appersonaltrainer.Controller.ConnectionThread;
 import appersonal.development.com.appersonaltrainer.R;
@@ -36,8 +41,6 @@ public class MeusTreinosActivity extends AppCompatActivity {
     private BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
     private boolean BtAtivo;
     private ListView lstTreinos;
-    private Button btnNovo;
-    private Button btnReceber;
     private ArrayList<String> treinos;
     private ArrayList<Integer> ids;
     private int id;
@@ -52,6 +55,7 @@ public class MeusTreinosActivity extends AppCompatActivity {
     private int tentativa;
     private boolean StopRun1;
     private boolean StopRun2;
+    @SuppressLint("StaticFieldLeak")
     static TextView txtTeste;
     ConnectionThread connect;
 
@@ -89,11 +93,8 @@ public class MeusTreinosActivity extends AppCompatActivity {
     private AlertDialog.Builder builder;
     private String nomeDisp;
 
-    private int c;
     private byte[] treino;
     private byte[] count;
-    private byte[] msg1;
-    private byte[] msg2;
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -134,17 +135,18 @@ public class MeusTreinosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_meus_treinos);
 
         //Implementa o botão voltar na ActionBar
+        //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Implementa o ad na activity
-        AdView adView = (AdView) findViewById(R.id.adView);
+        AdView adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
                 .build();
         adView.loadAd(adRequest);
 
-        AdView adView2 = (AdView) findViewById(R.id.adView2);
+        AdView adView2 = findViewById(R.id.adView2);
         AdRequest adRequest2 = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
@@ -156,11 +158,11 @@ public class MeusTreinosActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        lstTreinos = (ListView) findViewById(R.id.lstTreinos);
+        lstTreinos = findViewById(R.id.lstTreinos);
         registerForContextMenu(lstTreinos);
-        btnNovo = (Button) findViewById(R.id.btnNovo);
-        btnReceber = (Button) findViewById(R.id.btnReceber);
-        txtTeste = (TextView) findViewById(R.id.txtTeste);
+        Button btnNovo = findViewById(R.id.btnNovo);
+        Button btnReceber = findViewById(R.id.btnReceber);
+        txtTeste = findViewById(R.id.txtTeste);
         recuperarTreinos();
         lstTreinos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -204,39 +206,29 @@ public class MeusTreinosActivity extends AppCompatActivity {
     }
 
     private void recuperarTreinos() {
+        Cursor cursor = bancoDados.rawQuery("SELECT * FROM treinos ORDER BY idTreino ASC", null);
+        int indTreino = cursor.getColumnIndex("treino");
+        int indId = cursor.getColumnIndex("idTreino");
         try {
-            Cursor cursor = bancoDados.rawQuery("SELECT * FROM treinos ORDER BY idTreino ASC", null);
-
-            int indTreino = cursor.getColumnIndex("treino");
-            int indId = cursor.getColumnIndex("idTreino");
-
-            treinos = new ArrayList<String>();
-            ids = new ArrayList<Integer>();
-            ArrayAdapter<String> adaptador = new ArrayAdapter<String>(
-                    getApplicationContext(),
-                    android.R.layout.simple_list_item_2,
-                    android.R.id.text1,
-                    treinos
-            );
-            lstTreinos.setAdapter(adaptador);
-
-            cursor.moveToFirst();
-            while (cursor != null) {
+            treinos = new ArrayList<>();
+            ids = new ArrayList<>();
+            lstTreinos.setAdapter(new MyAdapter(treinos));
+            while (cursor.moveToNext()) {
                 treinos.add(cursor.getString(indTreino));
                 ids.add(Integer.parseInt(cursor.getString(indId)));
-                cursor.moveToNext();
             }
 
         } catch (Exception e) {
-
             e.printStackTrace();
+        } finally {
+            cursor.close();
         }
     }
 
     private void excluirTreino(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MeusTreinosActivity.this);
         builder.setTitle("Excluir Treino");
-        builder.setMessage("Deseja excluir " + treinos.get(position).toString() + "?");
+        builder.setMessage("Deseja excluir " + treinos.get(position) + "?");
         builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -287,7 +279,7 @@ public class MeusTreinosActivity extends AppCompatActivity {
                 } else {
                     connect = new ConnectionThread(data.getStringExtra("btDevAddress"));
                 }
-                if (connect.running == false) {
+                if (!connect.running) {
                     connect.start();
                 }
                 id = ids.get(lstposition);
@@ -300,7 +292,7 @@ public class MeusTreinosActivity extends AppCompatActivity {
                         if (txtTeste.getText().equals("---S")) {
                             builder = new AlertDialog.Builder(MeusTreinosActivity.this);
                             builder.setTitle("Compartilhar Treino");
-                            builder.setMessage("Deseja compartilhar " + treinos.get(lstposition).toString() + " com " + nomeDisp + "?");
+                            builder.setMessage("Deseja compartilhar " + treinos.get(lstposition) + " com " + nomeDisp + "?");
                             builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -314,7 +306,7 @@ public class MeusTreinosActivity extends AppCompatActivity {
                                             } catch (Exception e){
                                                 e.printStackTrace();
                                             }
-                                            if (BtAtivo == false) {
+                                            if (!BtAtivo) {
                                                 btAdapter.disable();
                                             }
                                         }
@@ -340,7 +332,7 @@ public class MeusTreinosActivity extends AppCompatActivity {
                                 } catch (Exception e){
                                     e.printStackTrace();
                                 }
-                                if (BtAtivo == false){
+                                if (!BtAtivo){
                                     btAdapter.disable();
                                 }
                             } else {
@@ -372,12 +364,16 @@ public class MeusTreinosActivity extends AppCompatActivity {
         startActivityForResult(searchPairedDevicesIntent, SELECT_PAIRED_DEVICE);
     }
 
+    @SuppressLint("HandlerLeak")
     public static Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             Bundle bundle = msg.getData();
             byte[] data = bundle.getByteArray("data");
-            String dataString = new String(data);
+            String dataString = null;
+            if (data != null) {
+                dataString = new String(data);
+            }
             if (dataString != null) {
                 txtTeste.setText(dataString);
             }
@@ -389,13 +385,16 @@ public class MeusTreinosActivity extends AppCompatActivity {
         StopRun2 = false;
         enviadoN = false;
         enviadoC = false;
-        c = 0;
+        int c = 0;
         treino = nomeTreino.getBytes();
+
         try {
             Cursor cursorEX = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino = " + idTreino, null);
-            c = c + cursorEX.getCount();
             Cursor cursorAE = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idTreino = " + idTreino, null);
+            c = c + cursorEX.getCount();
             c = c + cursorAE.getCount();
+            cursorEX.close();
+            cursorAE.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -442,6 +441,9 @@ public class MeusTreinosActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            cursorA.close();
+            cursorE.close();
         }
     }
 
@@ -450,14 +452,14 @@ public class MeusTreinosActivity extends AppCompatActivity {
         public void run() {
             h.postDelayed(this, 50);
             try {
-                if (enviadoN == false && enviadoC == false) {
+                if (!enviadoN && !enviadoC) {
                     enviadoN = true;
                     connect.write(treino);
-                } else if (enviadoN == true && enviadoC == false) {
+                } else if (enviadoN && !enviadoC) {
                     enviadoC = true;
                     connect.write(count);
                 } else {
-                    if (StopRun1 == false && StopRun2 == false) {
+                    if (!StopRun1 && !StopRun2) {
                         try {
                             String Exercicio = cursorE.getString(indExercicio);
                             String Series = cursorE.getString(indSeries);
@@ -487,14 +489,14 @@ public class MeusTreinosActivity extends AppCompatActivity {
                                     ", " + DescansoS + ", " + Unilateral +
                                     ", " + MusculoSpinner + ", " + ExercicioSpinner + ", '" + Obs + "'");
 
-                            msg1 = Msg.getBytes();
+                            byte[] msg1 = Msg.getBytes();
                             connect.write(msg1);
                             cursorE.moveToNext();
                         } catch (Exception e) {
                             StopRun1 = true;
                             e.printStackTrace();
                         }
-                    } else if (StopRun1 == true && StopRun2 == false) {
+                    } else if (StopRun1 && !StopRun2) {
                         try {
                             String Aerobico = cursorA.getString(indAerobico);
                             String DuracaoH = cursorA.getString(indDuracaoH);
@@ -511,7 +513,7 @@ public class MeusTreinosActivity extends AppCompatActivity {
                                     "('" + Aerobico + "', " + DuracaoH + ", " + DuracaoM + ", " + DuracaoS + ", "
                                     + Series + ", " + DescansoM + ", " + DescansoS + ", " + Distancia + ", " + KM);
 
-                            msg2 = Msg.getBytes();
+                            byte[] msg2 = Msg.getBytes();
                             connect.write(msg2);
                             cursorA.moveToNext();
                         } catch (Exception e) {
@@ -529,5 +531,60 @@ public class MeusTreinosActivity extends AppCompatActivity {
         }
     };
 
+    static class MyAdapter extends BaseAdapter {
+        private List<String> mItems;
+
+        private static class ViewHolder {
+            public TextView text;
+
+            ViewHolder(View v) {
+                text = (TextView) v;
+                text.setTextColor(Color.WHITE);
+            }
+        }
+
+        MyAdapter(List<String> items) {
+            mItems = items;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view;
+            ViewHolder vh;
+
+            if (convertView == null) {
+                view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+                vh = new ViewHolder(view);
+                view.setTag(vh);
+            } else {
+                view = convertView;
+                vh = (ViewHolder) view.getTag();
+            }
+
+            vh.text.setText(mItems.get(position));
+
+            return view;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return 0;
+        }
+
+        @Override
+        public int getCount() {
+            return mItems.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mItems.get(position);
+        }
+    }
 
 }

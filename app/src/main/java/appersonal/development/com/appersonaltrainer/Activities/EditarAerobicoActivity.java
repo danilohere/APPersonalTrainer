@@ -193,12 +193,9 @@ public class EditarAerobicoActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ArrayAdapter<String> adaptador = new ArrayAdapter<String>(
-                getApplicationContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                aerobico
-        );
-        spnAerobico.setAdapter(adaptador);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, aerobico);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spnAerobico.setAdapter(adapter);
 
         spnAerobico.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

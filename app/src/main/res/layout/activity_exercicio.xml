@@ -25,28 +25,28 @@
     </com.google.android.gms.ads.AdView>
 
     <TextView
-        android:text="Exercicio"
+        android:id="@+id/txtExercicio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtExercicio"
         android:layout_below="@id/adView"
-        android:layout_marginTop="10dp"
-        android:textSize="@dimen/titulo"
+        android:layout_marginTop="6dp"
+        android:layout_toStartOf="@+id/imgImagem"
+        android:text="Exercicio"
         android:textAlignment="center"
         android:textColor="@color/color_texto"
-        android:layout_toStartOf="@+id/imgImagem" />
+        android:textSize="@dimen/titulo" />
 
     <TextView
-        android:text="Repetições:"
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView4"
-        android:layout_weight="0.03"
-        android:textSize="@dimen/texto_campos"
-        android:layout_marginTop="30dp"
-        android:layout_below="@+id/txtExercicio"
         android:layout_alignParentStart="true"
-        android:textColor="@color/color_texto"/>
+        android:layout_below="@+id/txtObs"
+        android:layout_marginTop="8dp"
+        android:layout_weight="0.03"
+        android:text="Repetições:"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos" />
 
     <TextView
         android:layout_width="match_parent"
@@ -59,15 +59,15 @@
         android:textColor="@color/color_texto"/>
 
     <TextView
-        android:text="Séries:"
+        android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:id="@+id/textView6"
-        android:layout_below="@+id/textView4"
         android:layout_alignParentStart="true"
-        android:textSize="@dimen/texto_campos"
-        android:textColor="@color/color_texto"/>
+        android:layout_below="@+id/textView4"
+        android:layout_marginTop="8dp"
+        android:text="Séries:"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -80,15 +80,15 @@
         android:textColor="@color/color_texto" />
 
     <TextView
-        android:text="Descanso:"
+        android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="158dp"
-        android:id="@+id/textView8"
-        android:textSize="@dimen/texto_campos"
-        android:textColor="@color/color_texto"/>
+        android:layout_marginBottom="140dp"
+        android:text="Descanso:"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos" />
 
 
     <TextView
@@ -108,50 +108,50 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/swtInicioAut"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="10dp">
 
         <ToggleButton
             android:id="@+id/btnIniciar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
             android:background="@color/botoes_transparente"
             android:textAllCaps="false"
             android:textColor="@color/color_texto"
             android:textOff="INICIAR!"
             android:textOn="PARAR"
-            android:visibility="visible"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true" />
+            android:visibility="visible" />
     </RelativeLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/layoutIniciar"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp">
+        android:layout_below="@+id/layoutIniciar"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal">
 
         <Button
-            android:text="Anterior"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/btnAnterior"
-            android:layout_weight="1"
-            android:background="@color/botoes_transparente"
-            android:textColor="@color/color_texto"
-            android:layout_marginRight="5dp" />/>
-
-        <Button
-            android:text="Próximo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btnProximo"
+            android:layout_marginRight="3dp"
             android:layout_weight="1"
             android:background="@color/botoes_transparente"
-            android:textColor="@color/color_texto"
-            android:layout_marginLeft="5dp" />/>
+            android:text="Anterior"
+            android:textColor="@color/color_texto" />/>
+
+        <Button
+            android:id="@+id/btnProximo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_weight="1"
+            android:background="@color/botoes_transparente"
+            android:text="Próximo"
+            android:textColor="@color/color_texto" />/>
     </LinearLayout>
 
     <TextView
@@ -222,15 +222,15 @@
     </LinearLayout>
 
     <Switch
-        android:text="Início Automático"
+        android:id="@+id/swtInicioAut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/swtInicioAut"
-        android:textSize="@dimen/texto_campos"
-        android:textColor="@color/color_texto"
-        android:layout_marginTop="13dp"
         android:layout_below="@+id/txtDescanso"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Início Automático"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos" />
 
     <TextView
         android:text="/"
@@ -267,8 +267,9 @@
         android:id="@+id/imgImagem"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_alignBottom="@+id/txtExercicio"
         android:layout_alignParentEnd="true"
+        android:layout_below="@id/adView"
+        android:layout_marginTop="12dp"
         ads:srcCompat="@drawable/imgimg" />
 
     <ImageView

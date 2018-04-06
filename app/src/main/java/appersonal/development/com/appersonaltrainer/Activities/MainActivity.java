@@ -76,13 +76,12 @@ public class MainActivity extends AppCompatActivity {
         imgYoutube = (ImageView) findViewById(R.id.imgYoutube);
         imgFacebook = (ImageView) findViewById(R.id.imgFacebook);
 
-
-        LikeView likeView = (LikeView) findViewById(R.id.likeView);
+        LikeView likeView = findViewById(R.id.likeView);
         likeView.setLikeViewStyle(LikeView.Style.STANDARD);
         likeView.setAuxiliaryViewPosition(LikeView.AuxiliaryViewPosition.INLINE);
         likeView.setObjectIdAndType(
                 "http://www.facebook.com/appersonaltrainer1",
-                LikeView.ObjectType.PAGE);
+                LikeView.ObjectType.OPEN_GRAPH);
 
         imgFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
