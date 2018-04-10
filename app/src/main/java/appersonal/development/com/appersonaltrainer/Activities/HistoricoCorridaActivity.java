@@ -64,6 +64,7 @@ public class HistoricoCorridaActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
+                .addTestDevice("A74671A8A3250600B0E5121898AC7400")
                 .build();
         adView.loadAd(adRequest);
 
@@ -71,6 +72,7 @@ public class HistoricoCorridaActivity extends AppCompatActivity {
         AdRequest adRequest2 = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
+                .addTestDevice("A74671A8A3250600B0E5121898AC7400")
                 .build();
         adView2.loadAd(adRequest2);
 

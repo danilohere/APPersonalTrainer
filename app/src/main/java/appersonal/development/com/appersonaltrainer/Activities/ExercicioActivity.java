@@ -1,13 +1,14 @@
 package appersonal.development.com.appersonaltrainer.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v7.app.AlertDialog;
@@ -39,8 +40,6 @@ public class ExercicioActivity extends AppCompatActivity {
     private ToggleButton btnIniciar;
     private Button btnAnterior;
     private Button btnProximo;
-    private Button btnMais;
-    private Button btnMenos;
     private TextView txtExercicio;
     private TextView txtObs;
     private TextView txtRep;
@@ -50,13 +49,12 @@ public class ExercicioActivity extends AppCompatActivity {
     private TextView txtTemporizador;
     private TextView txtTempoExecucao;
     private Switch swtInicioAut;
-    private AlertDialog alerta;
-    private ImageView imgImagem;
     private ImageView imgExercicio;
 
     private int tempoExecucao;
     private int tempoExecucaoInicial;
     private int[] rep = new int[20];
+    @SuppressWarnings("MismatchedReadAndWriteOfArray")
     private int[] repEsq = new int[20];
     private int[] repInd = new int[20];
     private int series;
@@ -91,7 +89,6 @@ public class ExercicioActivity extends AppCompatActivity {
     private Runnable runnableDescanso;
     private Runnable runnableRep;
     private Runnable runnablePause;
-    private Runnable runnableBotaoFone;
 
     private MediaPlayer largada;
     private MediaPlayer bambam;
@@ -129,7 +126,7 @@ public class ExercicioActivity extends AppCompatActivity {
                             contador.release();
                         if (bambam != null)
                             bambam.release();
-                        if (completo == false) {
+                        if (!completo) {
                             bancoDados.execSQL("UPDATE exercicios SET serieAtual = " + s + " WHERE idExercicio =" + id);
                         } else {
                             bancoDados.execSQL("UPDATE exercicios SET completo = 1, serieAtual = " + s + " WHERE idExercicio =" + id);
@@ -143,54 +140,10 @@ public class ExercicioActivity extends AppCompatActivity {
                         dialog.cancel();
                     }
                 });
-                alerta = builder.create();
+                AlertDialog alerta = builder.create();
                 alerta.show();
-//                if (completo == false) {
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(ExercicioActivity.this);
-//                    builder.setTitle("Exercício Incompleto");
-//                    builder.setMessage("Deseja mesmo voltar?");
-//                    builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            btnIniciar.setChecked(false);
-//                            swtInicioAut.setChecked(false);
-//                            handler.removeCallbacks(runnablePause);
-//                            handler.removeCallbacks(runnableRep);
-//                            h.removeCallbacks(runnableDescanso);
-//                            btnIniciar.setChecked(false);
-//                            if (largada != null)
-//                                largada.release();
-//                            if (contador != null)
-//                                contador.release();
-//                            if (bambam != null)
-//                                bambam.release();
-//                            bancoDados.execSQL("UPDATE exercicios SET serieAtual = " + s + " WHERE idExercicio =" + id);
-//                            ExercicioActivity.this.finish();
-//                        }
-//                    });
-//                    builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.cancel();
-//                        }
-//                    });
-//                    alerta = builder.create();
-//                    alerta.show();
-//                } else {
-//                    bancoDados.execSQL("UPDATE exercicios SET completo = 1 WHERE idExercicio =" + id);
-//                    swtInicioAut.setChecked(false);
-//                    if (largada != null)
-//                        largada.release();
-//                    if (contador != null)
-//                        contador.release();
-//                    handler.removeCallbacks(runnablePause);
-//                    handler.removeCallbacks(runnableRep);
-//                    handler.removeCallbacks(runnableDescanso);
-//                    btnIniciar.setChecked(false);
-//                    super.onBackPressed();
-//                }
             } else {
-                if (completo == false) {
+                if (!completo) {
                     bancoDados.execSQL("UPDATE exercicios SET serieAtual = " + s + " WHERE idExercicio =" + id);
                 } else {
                     bancoDados.execSQL("UPDATE exercicios SET completo = 1, serieAtual = " + s + " WHERE idExercicio =" + id);
@@ -220,6 +173,7 @@ public class ExercicioActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 
         //Implementa o botão voltar na ActionBar
+        //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -230,36 +184,39 @@ public class ExercicioActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Bundle extra = getIntent().getExtras();
+        Intent intent = getIntent();
+        Bundle extra;
+        extra = intent.getExtras();
         if (extra != null) {
+            idTreino = extra.getInt("idTreino");
             id = extra.getInt("idExercicio");
-
         }
 
         //Implementa o ad na activity
-        AdView adView = (AdView) findViewById(R.id.adView);
+        AdView adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
+                .addTestDevice("A74671A8A3250600B0E5121898AC7400")
                 .build();
         adView.loadAd(adRequest);
 
-        btnIniciar = (ToggleButton) findViewById(R.id.btnIniciar);
-        btnAnterior = (Button) findViewById(R.id.btnAnterior);
-        btnProximo = (Button) findViewById(R.id.btnProximo);
-        btnMais = (Button) findViewById(R.id.btnMais);
-        btnMenos = (Button) findViewById(R.id.btnMenos);
-        txtRep = (TextView) findViewById(R.id.txtRep);
-        txtObs = (TextView) findViewById(R.id.txtObs);
-        txtSeries = (TextView) findViewById(R.id.txtSeries);
-        txtSeriesTotal = (TextView) findViewById(R.id.txtSeriesTotal);
-        txtDescanso = (TextView) findViewById(R.id.txtDescanso);
-        txtTemporizador = (TextView) findViewById(R.id.txtTemporizador);
-        txtExercicio = (TextView) findViewById(R.id.txtExercicio);
-        swtInicioAut = (Switch) findViewById(R.id.swtInicioAut);
-        txtTempoExecucao = (TextView) findViewById(R.id.txtTempoExecucao);
-        imgImagem = (ImageView) findViewById(R.id.imgImagem);
-        imgExercicio = (ImageView) findViewById(R.id.imgExercicio);
+        btnIniciar = findViewById(R.id.btnIniciar);
+        btnAnterior = findViewById(R.id.btnAnterior);
+        btnProximo = findViewById(R.id.btnProximo);
+        Button btnMais = findViewById(R.id.btnMais);
+        Button btnMenos = findViewById(R.id.btnMenos);
+        txtRep = findViewById(R.id.txtRep);
+        txtObs = findViewById(R.id.txtObs);
+        txtSeries = findViewById(R.id.txtSeries);
+        txtSeriesTotal = findViewById(R.id.txtSeriesTotal);
+        txtDescanso = findViewById(R.id.txtDescanso);
+        txtTemporizador = findViewById(R.id.txtTemporizador);
+        txtExercicio = findViewById(R.id.txtExercicio);
+        swtInicioAut = findViewById(R.id.swtInicioAut);
+        txtTempoExecucao = findViewById(R.id.txtTempoExecucao);
+        ImageView imgImagem = findViewById(R.id.imgImagem);
+        imgExercicio = findViewById(R.id.imgExercicio);
 
 
         SharedPreferences botaofone = getSharedPreferences(BOTAOFONE, ConfiguracoesActivity.MODE_PRIVATE);
@@ -278,7 +235,7 @@ public class ExercicioActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (tempoExecucao - tempoExecucaoInicial < 5 && tempoExecucao - tempoExecucaoInicial > -5) {
                     tempoExecucao++;
-                    txtTempoExecucao.setText("" + tempoExecucao);
+                    txtTempoExecucao.setText(tempoExecucao);
                 } else {
                     Toast.makeText(getApplicationContext(), "Valor máximo atingido", Toast.LENGTH_SHORT).show();
                 }
@@ -291,7 +248,7 @@ public class ExercicioActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (tempoExecucao > 1) {
                     tempoExecucao--;
-                    txtTempoExecucao.setText("" + tempoExecucao);
+                    txtTempoExecucao.setText(tempoExecucao);
                 } else {
                     Toast.makeText(getApplicationContext(), "Valor mínimo atingido", Toast.LENGTH_SHORT).show();
                 }
@@ -313,9 +270,10 @@ public class ExercicioActivity extends AppCompatActivity {
                         r = re;
                     }
                     runnablePause = new Runnable() {
+                        @SuppressLint("SetTextI18n")
                         @Override
                         public void run() {
-                            if (rosca21 == true) {
+                            if (rosca21) {
                                 r = 1;
                                 executarExercicio();
                             } else if (temporizador == 3 && preparo == 0) {
@@ -367,7 +325,7 @@ public class ExercicioActivity extends AppCompatActivity {
                 if (antprox == 1) {
                     Toast.makeText(getApplicationContext(), "Último exercício", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (completo == false) {
+                    if (!completo) {
                         bancoDados.execSQL("UPDATE exercicios SET serieAtual = " + s + " WHERE idExercicio =" + id);
                         carregarValores(1);
                     } else {
@@ -389,7 +347,7 @@ public class ExercicioActivity extends AppCompatActivity {
                 if (antprox == 2) {
                     Toast.makeText(getApplicationContext(), "Primeiro exercício", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (completo == false) {
+                    if (!completo) {
                         bancoDados.execSQL("UPDATE exercicios SET serieAtual = " + s + " WHERE idExercicio =" + id);
                         carregarValores(2);
                     } else {
@@ -421,22 +379,8 @@ public class ExercicioActivity extends AppCompatActivity {
 
     }
 
-    private class BotaoFone extends AsyncTask {
-        @Override
-        protected Object doInBackground(Object[] params) {
-            return null;
-        }
-    }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-//        AsyncTask<Void, Void, String> fone = new AsyncTask<Void, Void, String>() {
-//            @Override
-//            protected String doInBackground(Void... params) {
-//                return null;
-//            }
-//        };
 
             if (bf == 1) {
                 if (keyCode == KeyEvent.KEYCODE_HEADSETHOOK) {
@@ -445,7 +389,7 @@ public class ExercicioActivity extends AppCompatActivity {
                         btnIniciar.setChecked(false);
                         contbotao = 0;
                     } else {
-                        runnableBotaoFone = new Runnable() {
+                        Runnable runnableBotaoFone = new Runnable() {
                             @Override
                             public void run() {
                                 handler.postDelayed(new Runnable() {
@@ -480,6 +424,7 @@ public class ExercicioActivity extends AppCompatActivity {
 
     // MÉTODOS CRIADOS PARA A CLASSE
 
+    @SuppressLint("SetTextI18n")
     private void Descanso() {
         long m = descanso / 60;
         long s = descanso % 60;
@@ -491,10 +436,12 @@ public class ExercicioActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void executarExercicio() {
         txtSeries.setText("" + s);
         falha = 1;
         runnableRep = new Runnable() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void run() {
                 if (r <= rep[s - 1]) {
@@ -650,6 +597,7 @@ public class ExercicioActivity extends AppCompatActivity {
     private void descansar(int t){
         tempo = t;
         runnableDescanso = new Runnable() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void run() {
                 tempo--;
@@ -1052,7 +1000,6 @@ public class ExercicioActivity extends AppCompatActivity {
             public void onCompletion(MediaPlayer mp) {
                 if (mp != null) {
                     mp.release();
-                    mp = null;
                 }
             }
         });
@@ -1073,7 +1020,6 @@ public class ExercicioActivity extends AppCompatActivity {
             public void onCompletion(MediaPlayer mp) {
                 if (mp != null) {
                     mp.release();
-                    mp = null;
                 }
             }
         });
@@ -1109,7 +1055,6 @@ public class ExercicioActivity extends AppCompatActivity {
             public void onCompletion(MediaPlayer mp) {
                 if (mp != null) {
                     mp.release();
-                    mp = null;
                 }
             }
         });
@@ -1117,9 +1062,12 @@ public class ExercicioActivity extends AppCompatActivity {
 
     private void Vibrar(long milliseconds) {
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        vibrator.vibrate(milliseconds);
+        if (vibrator != null) {
+            vibrator.vibrate(milliseconds);
+        }
     }
 
+    @SuppressLint("SetTextI18n")
     private void carregarValores(int proximo) {
         SharedPreferences inicioaut = getSharedPreferences(INICIO_AUTOMATICO, ConfiguracoesActivity.MODE_PRIVATE);
         int ini = inicioaut.getInt("InicioAut", 0);
@@ -1130,15 +1078,9 @@ public class ExercicioActivity extends AppCompatActivity {
         }
         txtTemporizador.setVisibility(View.INVISIBLE);
         txtTemporizador.setText("");
-        try {
 
-            if (proximo == 0) {
-                Cursor cursor = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idExercicio = " + id, null);
-                int indIdTreino = cursor.getColumnIndex("idTreino");
-                cursor.moveToFirst();
-                idTreino = cursor.getInt(indIdTreino);
-            }
-            Cursor cursor = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino = " + idTreino + " ORDER BY pos ASC", null); //COLOCAR WHERE
+        try {
+            Cursor cursor = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino = " + idTreino + " ORDER BY pos ASC", null);
             int indExercicio = cursor.getColumnIndex("exercicio");
             int indSeries = cursor.getColumnIndex("series");
             int indSerieAtual = cursor.getColumnIndex("serieAtual");
@@ -1160,9 +1102,8 @@ public class ExercicioActivity extends AppCompatActivity {
             int indMusculoSpinner = cursor.getColumnIndex("musculoSpinner");
             int indExercicioSpinner = cursor.getColumnIndex("exercicioSpinner");
             int indCompleto = cursor.getColumnIndex("completo");
-            cursor.moveToFirst();
             boolean parar = false;
-            while (cursor != null && parar == false) {
+            while (!parar && cursor.moveToNext()) {
                 if (cursor.getInt(indIdExercicio) == id) {
                     parar = true;
                     if (proximo == 1) {
@@ -1188,18 +1129,17 @@ public class ExercicioActivity extends AppCompatActivity {
                             antprox = 0;
                         }
                     }
-                } else {
-                    cursor.moveToNext();
                 }
+
             }
             id = cursor.getInt(indIdExercicio);
             txtExercicio.setText(cursor.getString(indExercicio));
-            if (cursor.getString(indObs).toString().equals("")){
+            if (cursor.getString(indObs).equals("")){
                 txtObs.setVisibility(View.INVISIBLE);
                 txtObs.setText("");
             } else {
                 txtObs.setVisibility(View.VISIBLE);
-                txtObs.setText("Obs: "+cursor.getString(indObs).toString());
+                txtObs.setText("Obs: "+ cursor.getString(indObs));
             }
             repInd[0] = Integer.parseInt(cursor.getString(indRep1));
             repInd[1] = Integer.parseInt(cursor.getString(indRep2));
@@ -1211,11 +1151,7 @@ public class ExercicioActivity extends AppCompatActivity {
             repInd[7] = Integer.parseInt(cursor.getString(indRep8));
             series = Integer.parseInt(cursor.getString(indSeries));
             s = cursor.getInt(indSerieAtual);
-            if (cursor.getInt(indCompleto) == 0) {
-                completo = false;
-            } else {
-                completo = true;
-            }
+            completo = cursor.getInt(indCompleto) != 0;
             tipoRep = Integer.parseInt(cursor.getString(indTipoRep));
             for (int i = 0; i < series; i++) {
                 if (tipoRep == 0) {
@@ -1232,7 +1168,6 @@ public class ExercicioActivity extends AppCompatActivity {
                     seriesDrop = cursor.getInt(indRep5);
                 }
             }
-
             tempoExecucao = cursor.getInt(indTempoExecucao);
             tempoExecucaoInicial = cursor.getInt(indTempoExecucao);
             descanso = (cursor.getInt(indDescansoM) * 60) + cursor.getInt(indDescansoS);
@@ -1240,7 +1175,7 @@ public class ExercicioActivity extends AppCompatActivity {
             e = cursor.getInt(indExercicioSpinner);
             m = cursor.getInt(indMusculoSpinner);
 
-
+            cursor.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1260,9 +1195,8 @@ public class ExercicioActivity extends AppCompatActivity {
     public void verificarProximo() {
         Cursor cursor = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino = " + idTreino + " ORDER BY pos ASC", null);
         int indIdExercicio = cursor.getColumnIndex("idExercicio");
-        cursor.moveToFirst();
         boolean parar = false;
-        while (cursor != null && parar == false) {
+        while (cursor.moveToNext() && !parar) {
             if (cursor.getInt(indIdExercicio) == id) {
                 parar = true;
                 if (cursor.isLast()) {
@@ -1270,10 +1204,9 @@ public class ExercicioActivity extends AppCompatActivity {
                 } else {
                     antprox = 0;
                 }
-            } else {
-                cursor.moveToNext();
             }
         }
+        cursor.close();
     }
 
     void escolherImagem(){

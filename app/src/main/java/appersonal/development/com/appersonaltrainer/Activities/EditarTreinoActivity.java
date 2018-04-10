@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,9 +47,9 @@ public class EditarTreinoActivity extends AppCompatActivity {
     private Button btnNovoAerobico;
     private EditText edtTreino;
     private TextView txtTreino;
+    private RelativeLayout rl;
     private int numIdEx;
-    private int id = 500000;
-    private ImageView imgLixo;
+    private int id;
     private int posIni;
     private int idEscolhido;
     private boolean exercEscolhido;
@@ -86,6 +88,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
+                .addTestDevice("A74671A8A3250600B0E5121898AC7400")
                 .build();
         adView.loadAd(adRequest);
 
@@ -101,15 +104,13 @@ public class EditarTreinoActivity extends AppCompatActivity {
         if (extra != null) {
             id = extra.getInt("idTreino");
         }
-        recuperarExercicios();
-
 
         lstExercicios = findViewById(R.id.lstExercicios);
         btnNovoExercicio = findViewById(R.id.btnNovoExercicio);
         btnNovoAerobico = findViewById(R.id.btnNovoAerobico);
         edtTreino = findViewById(R.id.edtTreino);
         txtTreino = findViewById(R.id.txtTreino);
-        imgLixo = findViewById(R.id.imgLixo);
+        rl = findViewById(R.id.activity_editar_treino);
 
         recuperarExercicios();
         lstExercicios.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -222,14 +223,14 @@ public class EditarTreinoActivity extends AppCompatActivity {
                     }
                     View view = (View) event.getLocalState();
                     view.setVisibility(View.VISIBLE);
-                    imgLixo.setVisibility(View.INVISIBLE);
+                    rl.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg2));
                     txtTreino.setVisibility(View.VISIBLE);
                     edtTreino.setVisibility(View.VISIBLE);
                     btnNovoAerobico.setVisibility(View.VISIBLE);
                     btnNovoExercicio.setVisibility(View.VISIBLE);
                     recuperarExercicios();
                 } else if (event.getAction() == DragEvent.ACTION_DRAG_STARTED) {
-                    imgLixo.setVisibility(View.VISIBLE);
+                    rl.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg3));
                     txtTreino.setVisibility(View.INVISIBLE);
                     edtTreino.setVisibility(View.INVISIBLE);
                     btnNovoAerobico.setVisibility(View.INVISIBLE);
@@ -237,16 +238,8 @@ public class EditarTreinoActivity extends AppCompatActivity {
                     View view = (View) event.getLocalState();
                     view.setVisibility(View.VISIBLE);
                 } else if (event.getAction() == DragEvent.ACTION_DRAG_EXITED){
-                    imgLixo.setVisibility(View.INVISIBLE);
-                    txtTreino.setVisibility(View.VISIBLE);
-                    edtTreino.setVisibility(View.VISIBLE);
-                    btnNovoAerobico.setVisibility(View.VISIBLE);
-                    btnNovoExercicio.setVisibility(View.VISIBLE);
                     View view = (View) event.getLocalState();
                     view.setVisibility(View.VISIBLE);
-                    if (event.getAction() == DragEvent.ACTION_DROP) {
-                        Toast.makeText(EditarTreinoActivity.this, "teste", Toast.LENGTH_SHORT).show();
-                    }
                     excluirExercicio(posIni);
                 }
                 return true;
@@ -357,13 +350,20 @@ public class EditarTreinoActivity extends AppCompatActivity {
 
         Cursor cursorTreino = bancoDados.rawQuery("SELECT treino FROM treinos WHERE idTreino =" + id, null);
         int indTreino = cursorTreino.getColumnIndex("treino");
+        try {
+            cursorTreino.moveToFirst();
+            edtTreino.setText(cursorTreino.getString(indTreino));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursorTreino.close();
+        }
 
         Cursor cursorExercicio = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino =" + id + " ORDER BY idExercicio ASC", null);
         int indIdEx = cursorExercicio.getColumnIndex("idExercicio");
         int indPos = cursorExercicio.getColumnIndex("pos");
-        cursorTreino.moveToNext();
+
         try {
-            edtTreino.setText(cursorTreino.getString(indTreino));
             while (cursorExercicio.moveToNext()) {
                 if (cursorExercicio.getString(indPos) == null) {
                     bancoDados.execSQL("UPDATE exercicios SET pos = " + cursorExercicio.getInt(indIdEx) + " WHERE idExercicio = " + cursorExercicio.getInt(indIdEx));
@@ -434,7 +434,6 @@ public class EditarTreinoActivity extends AppCompatActivity {
             e.printStackTrace();
         } finally {
             cursorAerobico.close();
-            cursorTreino.close();
         }
     }
 
@@ -529,6 +528,11 @@ public class EditarTreinoActivity extends AppCompatActivity {
                 } catch (Exception e){
                     bancoDados.execSQL("DELETE FROM aerobicos WHERE idAerobico =" + idsAer.get(position - numIdEx));
                 }
+                rl.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg2));
+                txtTreino.setVisibility(View.VISIBLE);
+                edtTreino.setVisibility(View.VISIBLE);
+                btnNovoAerobico.setVisibility(View.VISIBLE);
+                btnNovoExercicio.setVisibility(View.VISIBLE);
                 recuperarExercicios();
                 Toast.makeText(getApplicationContext(), "Exercício excluído", Toast.LENGTH_SHORT).show();
             }
@@ -536,7 +540,21 @@ public class EditarTreinoActivity extends AppCompatActivity {
         builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                rl.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg2));
+                txtTreino.setVisibility(View.VISIBLE);
+                edtTreino.setVisibility(View.VISIBLE);
+                btnNovoAerobico.setVisibility(View.VISIBLE);
+                btnNovoExercicio.setVisibility(View.VISIBLE);
+            }
+        });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                rl.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg2));
+                txtTreino.setVisibility(View.VISIBLE);
+                edtTreino.setVisibility(View.VISIBLE);
+                btnNovoAerobico.setVisibility(View.VISIBLE);
+                btnNovoExercicio.setVisibility(View.VISIBLE);
             }
         });
         AlertDialog alerta = builder.create();

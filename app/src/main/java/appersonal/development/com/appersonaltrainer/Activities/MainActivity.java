@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
+                .addTestDevice("A74671A8A3250600B0E5121898AC7400")
                 .build();
         adView.loadAd(adRequest);
 
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         likeView.setAuxiliaryViewPosition(LikeView.AuxiliaryViewPosition.INLINE);
         likeView.setObjectIdAndType(
                 "http://www.facebook.com/appersonaltrainer1",
-                LikeView.ObjectType.OPEN_GRAPH);
+                LikeView.ObjectType.PAGE);
 
         imgFacebook.setOnClickListener(new View.OnClickListener() {
             @Override

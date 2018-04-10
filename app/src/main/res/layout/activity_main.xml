@@ -28,7 +28,8 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignEnd="@+id/adView"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:visibility="invisible">
 
     </com.facebook.share.widget.LikeView>
 
@@ -128,7 +129,7 @@
         android:layout_height="30dp"
         android:layout_alignEnd="@+id/likeView"
         android:layout_alignParentTop="true"
-        android:visibility="invisible"
+        android:visibility="visible"
         ads:srcCompat="@drawable/facebook" />
 
 </RelativeLayout>

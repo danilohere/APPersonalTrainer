@@ -150,6 +150,7 @@ public class MeusTreinosActivity extends AppCompatActivity {
         AdRequest adRequest2 = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
+                .addTestDevice("A74671A8A3250600B0E5121898AC7400")
                 .build();
         adView2.loadAd(adRequest2);
 
@@ -186,6 +187,7 @@ public class MeusTreinosActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MeusTreinosActivity.this, EditarTreinoActivity.class);
+                intent.putExtra("idTreino", 500000);
                 startActivity(intent);
             }
         });
