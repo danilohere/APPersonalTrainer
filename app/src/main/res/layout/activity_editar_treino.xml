@@ -24,7 +24,7 @@
     </com.google.android.gms.ads.AdView>
 
     <TextView
-        android:text="Nome:"
+        android:text="@string/nome_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -47,21 +47,23 @@
             android:id="@+id/btnNovoExercicio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_weight="1"
             android:background="@color/botoes_transparente"
-            android:text="Novo Exercício"
-            android:textColor="@color/color_texto" />
+            android:text="@string/novo_exerc_cio_text"
+            android:textColor="@color/color_texto"
+            tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/btnNovoAerobico"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_weight="1"
             android:background="@color/botoes_transparente"
-            android:text="Novo Aeróbico"
-            android:textColor="@color/color_texto" />
+            android:text="@string/novo_aer_bico_text"
+            android:textColor="@color/color_texto"
+            tools:ignore="ButtonStyle" />
 
     </LinearLayout>
 
@@ -90,10 +92,11 @@
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/txtTreino"
         android:layout_marginStart="21dp"
-        style="@style/edit_branco" />
+        style="@style/edit_branco"
+        tools:ignore="LabelFor" />
 
     <Button
-        android:text="Salvar"
+        android:text="@string/salvar_text"
         android:id="@+id/btnSalvar"
         android:layout_height="wrap_content"
         android:layout_width="72dp"

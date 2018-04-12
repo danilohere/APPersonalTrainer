@@ -1,5 +1,6 @@
 package appersonal.development.com.appersonaltrainer.Activities;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -27,7 +28,6 @@ import appersonal.development.com.appersonaltrainer.R;
 
 public class DiscoveryBTActivity extends AppCompatActivity {
 
-    private ListView lstDevices;
     private TextView txtPesq;
     private ArrayAdapter<String> adapter;
     private ArrayList<String> idsDev;
@@ -42,15 +42,17 @@ public class DiscoveryBTActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discovery_bt);
 
         //Implementa o botão voltar na ActionBar
+        //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        AdView adView = (AdView) findViewById(R.id.adView);
+        AdView adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
@@ -58,7 +60,7 @@ public class DiscoveryBTActivity extends AppCompatActivity {
                 .build();
         adView.loadAd(adRequest);
 
-        AdView adView2 = (AdView) findViewById(R.id.adView2);
+        AdView adView2 = findViewById(R.id.adView2);
         AdRequest adRequest2 = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
@@ -66,15 +68,16 @@ public class DiscoveryBTActivity extends AppCompatActivity {
                 .build();
         adView2.loadAd(adRequest2);
 
-        lstDevices = (ListView) findViewById(R.id.lstDevices);
-        txtPesq = (TextView) findViewById(R.id.txtPesq);
+        ListView lstDevices = findViewById(R.id.lstDevices);
+        txtPesq = findViewById(R.id.txtPesq);
 
-        idsDev = new ArrayList<String>();
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1){
+        idsDev = new ArrayList<>();
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1) {
+            @NonNull
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
-                TextView text = (TextView) view.findViewById(android.R.id.text1);
+                TextView text = view.findViewById(android.R.id.text1);
                 text.setTextColor(Color.WHITE);
                 return view;
             }
@@ -91,8 +94,8 @@ public class DiscoveryBTActivity extends AppCompatActivity {
         lstDevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String devName = adapter.getItem(position).toString();
-                String devAddress = idsDev.get(position).toString();
+                String devName = adapter.getItem(position);
+                String devAddress = idsDev.get(position);
 
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("btDevName", devName);
@@ -122,7 +125,7 @@ public class DiscoveryBTActivity extends AppCompatActivity {
                 adapter.add(device.getName());
                 idsDev.add((device.getAddress()));
             }
-            if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
+            if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 txtPesq.setText("");
             }
 

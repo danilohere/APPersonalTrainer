@@ -104,7 +104,7 @@ public class ExercicioActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if (imgExercicio.getVisibility() == View.VISIBLE){
+        if (imgExercicio.getVisibility() == View.VISIBLE) {
             imgExercicio.setVisibility(View.INVISIBLE);
         } else {
             if (btnIniciar.isChecked()) {
@@ -170,7 +170,6 @@ public class ExercicioActivity extends AppCompatActivity {
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 
         //Implementa o botão voltar na ActionBar
         //noinspection ConstantConditions
@@ -235,7 +234,7 @@ public class ExercicioActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (tempoExecucao - tempoExecucaoInicial < 5 && tempoExecucao - tempoExecucaoInicial > -5) {
                     tempoExecucao++;
-                    txtTempoExecucao.setText(tempoExecucao);
+                    txtTempoExecucao.setText(String.valueOf(tempoExecucao));
                 } else {
                     Toast.makeText(getApplicationContext(), "Valor máximo atingido", Toast.LENGTH_SHORT).show();
                 }
@@ -248,7 +247,7 @@ public class ExercicioActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (tempoExecucao > 1) {
                     tempoExecucao--;
-                    txtTempoExecucao.setText(tempoExecucao);
+                    txtTempoExecucao.setText(String.valueOf(tempoExecucao));
                 } else {
                     Toast.makeText(getApplicationContext(), "Valor mínimo atingido", Toast.LENGTH_SHORT).show();
                 }
@@ -259,7 +258,7 @@ public class ExercicioActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
                 r = 0;
-                if (!swtInicioAut.isChecked()){
+                if (!swtInicioAut.isChecked()) {
                     preparo = 0;
                 }
                 if (isChecked) {
@@ -286,14 +285,14 @@ public class ExercicioActivity extends AppCompatActivity {
                                 txtTemporizador.setVisibility(View.VISIBLE);
                                 txtTemporizador.setTextSize(60);
                                 handler.postDelayed(runnablePause, 1000);
-                                txtTemporizador.setText("" + temporizador);
+                                txtTemporizador.setText(String.valueOf(temporizador));
                                 contagem(temporizador);
                                 temporizador--;
                             } else {
                                 handler.removeCallbacks(runnablePause);
                                 txtTemporizador.setVisibility(View.INVISIBLE);
                                 executarExercicio();
-                                if (som == 0){
+                                if (som == 0) {
                                     largada(2);
                                 } else {
                                     bambam(1);
@@ -306,7 +305,7 @@ public class ExercicioActivity extends AppCompatActivity {
                 } else {
                     btnProximo.setEnabled(true);
                     btnAnterior.setEnabled(true);
-                    if (tipoRep == 3 && falha == 1){
+                    if (tipoRep == 3 && falha == 1) {
                         r = 51;
                         falha = 0;
                     } else {
@@ -382,42 +381,42 @@ public class ExercicioActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-            if (bf == 1) {
-                if (keyCode == KeyEvent.KEYCODE_HEADSETHOOK) {
-                    contbotao += 1;
-                    if (btnIniciar.isChecked()) {
-                        btnIniciar.setChecked(false);
-                        contbotao = 0;
-                    } else {
-                        Runnable runnableBotaoFone = new Runnable() {
-                            @Override
-                            public void run() {
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (contbotao == 1) {
-                                            btnIniciar.setChecked(true);
-                                            contbotao = 0;
-                                            handler.removeCallbacks(this);
-                                        } else if (contbotao == 2) {
-                                            Toast.makeText(ExercicioActivity.this, "Próximo", Toast.LENGTH_SHORT).show();
-                                            btnProximo.callOnClick();
-                                            contbotao = 0;
-                                            handler.removeCallbacks(this);
-                                        } else if (contbotao == 3) {
-                                            btnAnterior.callOnClick();
-                                            Toast.makeText(ExercicioActivity.this, "Anterior", Toast.LENGTH_SHORT).show();
-                                            contbotao = 0;
-                                            handler.removeCallbacks(this);
-                                        }
+        if (bf == 1) {
+            if (keyCode == KeyEvent.KEYCODE_HEADSETHOOK) {
+                contbotao += 1;
+                if (btnIniciar.isChecked()) {
+                    btnIniciar.setChecked(false);
+                    contbotao = 0;
+                } else {
+                    Runnable runnableBotaoFone = new Runnable() {
+                        @Override
+                        public void run() {
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (contbotao == 1) {
+                                        btnIniciar.setChecked(true);
+                                        contbotao = 0;
+                                        handler.removeCallbacks(this);
+                                    } else if (contbotao == 2) {
+                                        Toast.makeText(ExercicioActivity.this, "Próximo", Toast.LENGTH_SHORT).show();
+                                        btnProximo.callOnClick();
+                                        contbotao = 0;
+                                        handler.removeCallbacks(this);
+                                    } else if (contbotao == 3) {
+                                        btnAnterior.callOnClick();
+                                        Toast.makeText(ExercicioActivity.this, "Anterior", Toast.LENGTH_SHORT).show();
+                                        contbotao = 0;
+                                        handler.removeCallbacks(this);
                                     }
-                                }, 1500);
-                            }
-                        };
-                        handler.post(runnableBotaoFone);
-                    }
+                                }
+                            }, 1500);
+                        }
+                    };
+                    handler.post(runnableBotaoFone);
                 }
             }
+        }
 
         return super.onKeyDown(keyCode, event);
     }
@@ -438,7 +437,7 @@ public class ExercicioActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void executarExercicio() {
-        txtSeries.setText("" + s);
+        txtSeries.setText(String.valueOf(s));
         falha = 1;
         runnableRep = new Runnable() {
             @SuppressLint("SetTextI18n")
@@ -446,8 +445,8 @@ public class ExercicioActivity extends AppCompatActivity {
             public void run() {
                 if (r <= rep[s - 1]) {
                     contagem(r);
-                    if (r == rep[s-1]){
-                        if (s == series){
+                    if (r == rep[s - 1]) {
+                        if (s == series) {
                             if (tipoRep == 2 && sd < seriesDrop) {
                                 if (som == 0) {
                                     largada(1);
@@ -502,7 +501,7 @@ public class ExercicioActivity extends AppCompatActivity {
                         }
                     }
                     handler.postDelayed(runnableRep, tempoExecucao * 1000);
-                    txtRep.setText("" + r);
+                    txtRep.setText(String.valueOf(r));
                     r++;
                     re = r;
                     if (uni == 1 && sa < 2) {
@@ -573,10 +572,10 @@ public class ExercicioActivity extends AppCompatActivity {
                                     btnProximo.callOnClick();
                                 } else {
                                     btnIniciar.setChecked(false);
-                                    try{
+                                    try {
                                         imgExercicio.setVisibility(View.INVISIBLE);
                                         onBackPressed();
-                                    } catch (Exception e){
+                                    } catch (Exception e) {
                                         e.printStackTrace();
                                     }
 
@@ -594,14 +593,14 @@ public class ExercicioActivity extends AppCompatActivity {
         handler.post(runnableRep);
     }
 
-    private void descansar(int t){
+    private void descansar(int t) {
         tempo = t;
         runnableDescanso = new Runnable() {
             @SuppressLint("SetTextI18n")
             @Override
             public void run() {
                 tempo--;
-                if (tempo > 0){
+                if (tempo > 0) {
                     long m = tempo / 60;
                     long s = tempo % 60;
                     if (m == 1 && s == 0) {
@@ -619,9 +618,9 @@ public class ExercicioActivity extends AppCompatActivity {
                         txtDescanso.setText(m + ":0" + s);
                     }
                     h.postDelayed(runnableDescanso, 1000);
-                } else if (tempo == 0){
+                } else if (tempo == 0) {
                     h.postDelayed(runnableDescanso, 2000);
-                    txtSeries.setText("" + s);
+                    txtSeries.setText(String.valueOf(s));
                     btnIniciar.setChecked(false);
                     Descanso();
                     if (swtInicioAut.isChecked()) {
@@ -633,7 +632,7 @@ public class ExercicioActivity extends AppCompatActivity {
                         if (uni == 2 && su >= 2) {
                             btnIniciar.setChecked(true);
                         }
-                        if (tipoRep == 2 && sd >= seriesDrop){
+                        if (tipoRep == 2 && sd >= seriesDrop) {
                             btnIniciar.setChecked(true);
                         }
                     }
@@ -1026,7 +1025,7 @@ public class ExercicioActivity extends AppCompatActivity {
     }
 
     private void bambam(int num) {
-        switch(num){
+        switch (num) {
             case 0:
                 bambam = MediaPlayer.create(ExercicioActivity.this, R.raw.birl);
                 break;
@@ -1134,12 +1133,12 @@ public class ExercicioActivity extends AppCompatActivity {
             }
             id = cursor.getInt(indIdExercicio);
             txtExercicio.setText(cursor.getString(indExercicio));
-            if (cursor.getString(indObs).equals("")){
+            if (cursor.getString(indObs).equals("")) {
                 txtObs.setVisibility(View.INVISIBLE);
                 txtObs.setText("");
             } else {
                 txtObs.setVisibility(View.VISIBLE);
-                txtObs.setText("Obs: "+ cursor.getString(indObs));
+                txtObs.setText("Obs: " + cursor.getString(indObs));
             }
             repInd[0] = Integer.parseInt(cursor.getString(indRep1));
             repInd[1] = Integer.parseInt(cursor.getString(indRep2));
@@ -1184,11 +1183,11 @@ public class ExercicioActivity extends AppCompatActivity {
         if (tipoRep == 3) {
             txtRep.setText("Até a falha");
         } else {
-            txtRep.setText("" + rep[0]);
+            txtRep.setText(String.valueOf(rep[0]));
         }
-        txtSeries.setText("" + s);
-        txtSeriesTotal.setText("" + series);
-        txtTempoExecucao.setText("" + tempoExecucao);
+        txtSeries.setText(String.valueOf(s));
+        txtSeriesTotal.setText(String.valueOf(series));
+        txtTempoExecucao.setText(String.valueOf(tempoExecucao));
         Descanso();
     }
 
@@ -1209,12 +1208,12 @@ public class ExercicioActivity extends AppCompatActivity {
         cursor.close();
     }
 
-    void escolherImagem(){
+    void escolherImagem() {
         int M = m;
         int E = e;
-        switch (M){
+        switch (M) {
             case 0:
-                switch (E){
+                switch (E) {
                     case 0:
                         imgExercicio.setImageResource(R.drawable.m0e0);
                         break;
@@ -1227,7 +1226,7 @@ public class ExercicioActivity extends AppCompatActivity {
                 }
                 break;
             case 1:
-                switch (E){
+                switch (E) {
                     case 0:
                         imgExercicio.setImageResource(R.drawable.m1e0);
                         break;
@@ -1261,7 +1260,7 @@ public class ExercicioActivity extends AppCompatActivity {
                 }
                 break;
             case 2:
-                switch (E){
+                switch (E) {
                     case 0:
                         imgExercicio.setImageResource(R.drawable.m2e0);
                         break;
@@ -1314,7 +1313,7 @@ public class ExercicioActivity extends AppCompatActivity {
                 break;
 
             case 3:
-                switch (E){
+                switch (E) {
                     case 0:
                         imgExercicio.setImageResource(R.drawable.m3e0);
                         break;
@@ -1358,7 +1357,7 @@ public class ExercicioActivity extends AppCompatActivity {
                 break;
 
             case 4:
-                switch (E){
+                switch (E) {
                     case 0:
                         imgExercicio.setImageResource(R.drawable.m4e0);
                         break;
@@ -1419,7 +1418,7 @@ public class ExercicioActivity extends AppCompatActivity {
                 }
                 break;
             case 5:
-                switch (E){
+                switch (E) {
                     case 0:
                         imgExercicio.setImageResource(R.drawable.m5e0);
                         break;
@@ -1453,7 +1452,7 @@ public class ExercicioActivity extends AppCompatActivity {
                 }
                 break;
             case 6:
-                switch (E){
+                switch (E) {
                     case 0:
                         imgExercicio.setImageResource(R.drawable.m6e0);
                         break;

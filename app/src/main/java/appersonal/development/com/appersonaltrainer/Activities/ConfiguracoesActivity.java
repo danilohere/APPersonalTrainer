@@ -28,25 +28,13 @@ import appersonal.development.com.appersonaltrainer.R;
 
 public class ConfiguracoesActivity extends AppCompatActivity {
 
-    private Switch swtInicioAut;
-    private Switch swtBotaoFone;
-
     private RadioGroup rdgVoz;
-    private RadioButton rdbMasculina;
-    private RadioButton rdbFeminina;
     private RadioGroup rdgSons;
-    private RadioButton rdbPadrao;
-    private RadioButton rdbBambam;
-
-    private AlarmManager alarmManager;
-    private PendingIntent alarmIntent;
 
     private static final String INICIO_AUTOMATICO = "InicioAut";
     private static final String VOZ = "Voz";
     private static final String SONS = "Sons";
     private static final String BOTAOFONE = "BotaoFone";
-
-    private static final String INTERVALOID = "IntervaloId";
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -64,9 +52,10 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_configuracoes);
 
         //Implementa o botão voltar na ActionBar
+        //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        AdView adView = (AdView) findViewById(R.id.adView);
+        AdView adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
@@ -74,7 +63,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                 .build();
         adView.loadAd(adRequest);
 
-        AdView adView2 = (AdView) findViewById(R.id.adView2);
+        AdView adView2 = findViewById(R.id.adView2);
         AdRequest adRequest2 = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
@@ -82,31 +71,29 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                 .build();
         adView2.loadAd(adRequest2);
 
-        swtInicioAut = (Switch) findViewById(R.id.swtInicioAut);
-        rdgVoz = (RadioGroup) findViewById(R.id.rdgvoz);
-        rdbMasculina = (RadioButton) findViewById(R.id.rdbMasculina);
-        rdbFeminina = (RadioButton) findViewById(R.id.rdbFeminina);
-        swtBotaoFone = (Switch) findViewById(R.id.swtBotaoFone);
-        rdgSons = (RadioGroup) findViewById(R.id.rdgSons);
-        rdbPadrao = (RadioButton) findViewById(R.id.rdbSomPadrao);
-        rdbBambam = (RadioButton) findViewById(R.id.rdbSomBambam);
-
-
+        Switch swtInicioAut = findViewById(R.id.swtInicioAut);
+        rdgVoz = findViewById(R.id.rdgvoz);
+        RadioButton rdbMasculina = findViewById(R.id.rdbMasculina);
+        RadioButton rdbFeminina = findViewById(R.id.rdbFeminina);
+        Switch swtBotaoFone = findViewById(R.id.swtBotaoFone);
+        rdgSons = findViewById(R.id.rdgSons);
+        RadioButton rdbPadrao = findViewById(R.id.rdbSomPadrao);
+        RadioButton rdbBambam = findViewById(R.id.rdbSomBambam);
 
 
         swtInicioAut.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    SharedPreferences inicioaut = getSharedPreferences(INICIO_AUTOMATICO,0);
+                if (isChecked) {
+                    SharedPreferences inicioaut = getSharedPreferences(INICIO_AUTOMATICO, 0);
                     SharedPreferences.Editor editor = inicioaut.edit();
                     editor.putInt("InicioAut", 1);
-                    editor.commit();
+                    editor.apply();
                 } else {
-                    SharedPreferences inicioaut = getSharedPreferences(INICIO_AUTOMATICO,0);
+                    SharedPreferences inicioaut = getSharedPreferences(INICIO_AUTOMATICO, 0);
                     SharedPreferences.Editor editor = inicioaut.edit();
                     editor.putInt("InicioAut", 0);
-                    editor.commit();
+                    editor.apply();
                 }
             }
         });
@@ -114,16 +101,16 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         rdgVoz.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (rdgVoz.getCheckedRadioButtonId() == R.id.rdbMasculina){
+                if (rdgVoz.getCheckedRadioButtonId() == R.id.rdbMasculina) {
                     SharedPreferences voz = getSharedPreferences(VOZ, 0);
                     SharedPreferences.Editor editor = voz.edit();
                     editor.putInt("Voz", 0);
-                    editor.commit();
+                    editor.apply();
                 } else {
                     SharedPreferences voz = getSharedPreferences(VOZ, 0);
                     SharedPreferences.Editor editor = voz.edit();
                     editor.putInt("Voz", 1);
-                    editor.commit();
+                    editor.apply();
                 }
             }
         });
@@ -131,16 +118,16 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         swtBotaoFone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    SharedPreferences botaofone = getSharedPreferences(BOTAOFONE,0);
+                if (isChecked) {
+                    SharedPreferences botaofone = getSharedPreferences(BOTAOFONE, 0);
                     SharedPreferences.Editor editor = botaofone.edit();
                     editor.putInt("BotaoFone", 1);
-                    editor.commit();
+                    editor.apply();
                 } else {
-                    SharedPreferences botaofone = getSharedPreferences(BOTAOFONE,0);
+                    SharedPreferences botaofone = getSharedPreferences(BOTAOFONE, 0);
                     SharedPreferences.Editor editor = botaofone.edit();
                     editor.putInt("BotaoFone", 0);
-                    editor.commit();
+                    editor.apply();
                 }
             }
         });
@@ -148,16 +135,16 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         rdgSons.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (rdgSons.getCheckedRadioButtonId() == R.id.rdbSomPadrao){
+                if (rdgSons.getCheckedRadioButtonId() == R.id.rdbSomPadrao) {
                     SharedPreferences sons = getSharedPreferences(SONS, 0);
                     SharedPreferences.Editor editor = sons.edit();
                     editor.putInt("Sons", 0);
-                    editor.commit();
+                    editor.apply();
                 } else {
                     SharedPreferences sons = getSharedPreferences(SONS, 0);
                     SharedPreferences.Editor editor = sons.edit();
                     editor.putInt("Sons", 1);
-                    editor.commit();
+                    editor.apply();
                 }
             }
         });
@@ -177,7 +164,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         }
 
         SharedPreferences voz = getSharedPreferences(VOZ, Context.MODE_PRIVATE);
-        if (voz.getInt("Voz", 0) == 0){
+        if (voz.getInt("Voz", 0) == 0) {
             rdbMasculina.setChecked(true);
             rdbFeminina.setChecked(false);
         } else {
@@ -186,7 +173,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         }
 
         SharedPreferences sons = getSharedPreferences(SONS, Context.MODE_PRIVATE);
-        if (sons.getInt("Sons", 0) == 0){
+        if (sons.getInt("Sons", 0) == 0) {
             rdbPadrao.setChecked(true);
             rdbBambam.setChecked(false);
         } else {

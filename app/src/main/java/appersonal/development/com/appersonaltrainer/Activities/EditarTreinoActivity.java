@@ -22,7 +22,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -190,7 +189,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
                         try {
                             if (posNova == -1) {
                                 posNova = exercicios.size() - 1;
-                            } else if (posNova < numIdEx){
+                            } else if (posNova < numIdEx) {
                                 posNova = numIdEx;
                             }
                             while (cursorAerobico.moveToNext()) {
@@ -237,7 +236,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
                     btnNovoExercicio.setVisibility(View.INVISIBLE);
                     View view = (View) event.getLocalState();
                     view.setVisibility(View.VISIBLE);
-                } else if (event.getAction() == DragEvent.ACTION_DRAG_EXITED){
+                } else if (event.getAction() == DragEvent.ACTION_DRAG_EXITED) {
                     View view = (View) event.getLocalState();
                     view.setVisibility(View.VISIBLE);
                     excluirExercicio(posIni);
@@ -348,40 +347,38 @@ public class EditarTreinoActivity extends AppCompatActivity {
         idsEx = new ArrayList<>();
         idsAer = new ArrayList<>();
 
-        Cursor cursorTreino = bancoDados.rawQuery("SELECT treino FROM treinos WHERE idTreino =" + id, null);
-        int indTreino = cursorTreino.getColumnIndex("treino");
+        Cursor cursorTreino;
+        Cursor cursorExercicio;
+        Cursor cursorAerobico;
+
         try {
+            cursorTreino = bancoDados.rawQuery("SELECT treino FROM treinos WHERE idTreino =" + id, null);
+            int indTreino = cursorTreino.getColumnIndex("treino");
             cursorTreino.moveToFirst();
             edtTreino.setText(cursorTreino.getString(indTreino));
+            cursorTreino.close();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            cursorTreino.close();
         }
 
-        Cursor cursorExercicio = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino =" + id + " ORDER BY idExercicio ASC", null);
-        int indIdEx = cursorExercicio.getColumnIndex("idExercicio");
-        int indPos = cursorExercicio.getColumnIndex("pos");
-
         try {
+            cursorExercicio = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino =" + id + " ORDER BY idExercicio ASC", null);
+            int indIdEx = cursorExercicio.getColumnIndex("idExercicio");
+            int indPos = cursorExercicio.getColumnIndex("pos");
             while (cursorExercicio.moveToNext()) {
                 if (cursorExercicio.getString(indPos) == null) {
                     bancoDados.execSQL("UPDATE exercicios SET pos = " + cursorExercicio.getInt(indIdEx) + " WHERE idExercicio = " + cursorExercicio.getInt(indIdEx));
                 }
             }
+            cursorExercicio.close();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            cursorExercicio.close();
         }
 
-        cursorExercicio = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino =" + id + " ORDER BY pos ASC", null);
-
-        int indExercicio = cursorExercicio.getColumnIndex("exercicio");
-        indIdEx = cursorExercicio.getColumnIndex("idExercicio");
-
-
         try {
+            cursorExercicio = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino =" + id + " ORDER BY pos ASC", null);
+            int indExercicio = cursorExercicio.getColumnIndex("exercicio");
+            int indIdEx = cursorExercicio.getColumnIndex("idExercicio");
             lstExercicios.setAdapter(new MyAdapter(exercicios));
             int position = 0;
             while (cursorExercicio.moveToNext()) {
@@ -391,36 +388,30 @@ public class EditarTreinoActivity extends AppCompatActivity {
                 numIdEx++;
                 position++;
             }
+            cursorExercicio.close();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            cursorExercicio.close();
         }
 
-        Cursor cursorAerobico = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idTreino =" + id + " ORDER BY idAerobico ASC", null);
-
-        int indIdAer = cursorAerobico.getColumnIndex("idAerobico");
-        indPos = cursorAerobico.getColumnIndex("pos");
-
         try {
+            cursorAerobico = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idTreino =" + id + " ORDER BY idAerobico ASC", null);
+            int indIdAer = cursorAerobico.getColumnIndex("idAerobico");
+            int indPos = cursorAerobico.getColumnIndex("pos");
             lstExercicios.setAdapter(new MyAdapter(exercicios));
             while (cursorAerobico.moveToNext()) {
                 if (cursorAerobico.getString(indPos) == null) {
                     bancoDados.execSQL("UPDATE aerobicos SET pos = " + cursorAerobico.getInt(indIdAer) + " WHERE idAerobico = " + cursorAerobico.getInt(indIdAer));
                 }
             }
+            cursorAerobico.close();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            cursorAerobico.close();
         }
 
-        cursorAerobico = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idTreino =" + id + " ORDER BY pos ASC", null);
-
-        int indAerobico = cursorAerobico.getColumnIndex("aerobico");
-        indIdAer = cursorAerobico.getColumnIndex("idAerobico");
-
         try {
+            cursorAerobico = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idTreino =" + id + " ORDER BY pos ASC", null);
+            int indAerobico = cursorAerobico.getColumnIndex("aerobico");
+            int indIdAer = cursorAerobico.getColumnIndex("idAerobico");
             lstExercicios.setAdapter(new MyAdapter(exercicios));
             int position = numIdEx;
             while (cursorAerobico.moveToNext()) {
@@ -428,12 +419,10 @@ public class EditarTreinoActivity extends AppCompatActivity {
                 bancoDados.execSQL("UPDATE aerobicos SET pos = " + position + " WHERE idAerobico = " + cursorAerobico.getInt(indIdAer));
                 idsAer.add(Integer.parseInt(cursorAerobico.getString(indIdAer)));
                 position++;
-
             }
+            cursorAerobico.close();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            cursorAerobico.close();
         }
     }
 
@@ -507,7 +496,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
         }
     }
 
-    void salvar(){
+    void salvar() {
         String nomeTreino = edtTreino.getText().toString();
         if (id == 500000) {
             bancoDados.execSQL("INSERT INTO treinos (treino) VALUES ('" + nomeTreino + "')");
@@ -525,7 +514,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     bancoDados.execSQL("DELETE FROM exercicios WHERE idExercicio =" + idsEx.get(position));
-                } catch (Exception e){
+                } catch (Exception e) {
                     bancoDados.execSQL("DELETE FROM aerobicos WHERE idAerobico =" + idsAer.get(position - numIdEx));
                 }
                 rl.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg2));

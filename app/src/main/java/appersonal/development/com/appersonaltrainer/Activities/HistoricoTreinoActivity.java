@@ -1,5 +1,6 @@
 package appersonal.development.com.appersonaltrainer.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -19,13 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookDialog;
 import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.model.ShareOpenGraphAction;
-import com.facebook.share.model.ShareOpenGraphContent;
-import com.facebook.share.model.ShareOpenGraphObject;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -43,14 +38,13 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
     private ListView lstMeses;
     private ArrayList<Treinos> treinos;
     private ArrayList<String> meses;
-    private Button btnApagar;
     private SQLiteDatabase bancoDados;
     private AlertDialog alerta;
     ShareDialog shareDialog = new ShareDialog(this);
 
     @Override
     public void onBackPressed() {
-        if (lstHistorico.getVisibility() == View.VISIBLE){
+        if (lstHistorico.getVisibility() == View.VISIBLE) {
             lstHistorico.setVisibility(View.INVISIBLE);
             lstMeses.setVisibility(View.VISIBLE);
         } else {
@@ -74,9 +68,10 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_historico_treino);
 
         //Implementa o botão voltar na ActionBar
+        //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        AdView adView = (AdView) findViewById(R.id.adView);
+        AdView adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
@@ -84,7 +79,7 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
                 .build();
         adView.loadAd(adRequest);
 
-        AdView adView2 = (AdView) findViewById(R.id.adView2);
+        AdView adView2 = findViewById(R.id.adView2);
         AdRequest adRequest2 = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
@@ -92,15 +87,15 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
                 .build();
         adView2.loadAd(adRequest2);
 
-        try{
-            bancoDados = openOrCreateDatabase("appersonal", MODE_PRIVATE,null);
+        try {
+            bancoDados = openOrCreateDatabase("appersonal", MODE_PRIVATE, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        lstHistorico = (ListView) findViewById(R.id.lstHistorico);
-        lstMeses = (ListView) findViewById(R.id.lstMeses);
-        btnApagar = (Button) findViewById(R.id.btnApagar);
+        lstHistorico = findViewById(R.id.lstHistorico);
+        lstMeses = findViewById(R.id.lstMeses);
+        Button btnApagar = findViewById(R.id.btnApagar);
         lstHistorico.setVisibility(View.INVISIBLE);
 
         btnApagar.setOnClickListener(new View.OnClickListener() {
@@ -139,18 +134,18 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 lstHistorico.setVisibility(View.VISIBLE);
                 lstMeses.setVisibility(View.INVISIBLE);
-                recuperarTreinos((String) meses.get(position));
+                recuperarTreinos(meses.get(position));
             }
         });
 
         lstHistorico.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String treino = treinos.get(position).getNome().toString();
+                String treino = treinos.get(position).getNome();
                 ShareLinkContent content = new ShareLinkContent.Builder()
                         .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=appersonal.development.com.appersonaltrainer"))
 //                        .setContentUrl(Uri.parse("https://www.facebook.com/appersonaltrainer1"))
-                        .setQuote("Acabei de fazer "+treino+" com o APPersonal Trainer!")
+                        .setQuote("Acabei de fazer " + treino + " com o APPersonal Trainer!")
                         .build();
                 shareDialog.show(content);
             }
@@ -169,26 +164,25 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
             Cursor cursor = bancoDados.rawQuery("SELECT * FROM historico ORDER BY data DESC", null);
             int indTreino = cursor.getColumnIndex("treinoH");
             int indData = cursor.getColumnIndex("data");
-            meses = new ArrayList<String>();
-            ArrayAdapter<String> adaptador = new ArrayAdapter<String>(
+            meses = new ArrayList<>();
+            ArrayAdapter<String> adaptador = new ArrayAdapter<>(
                     getApplicationContext(),
                     android.R.layout.simple_list_item_1,
                     android.R.id.text1,
                     meses
             );
             lstMeses.setAdapter(adaptador);
-            cursor.moveToFirst();
-            while (cursor!=null){
+            while (cursor.moveToNext()) {
                 Treinos treino = new Treinos();
                 treino.setNome(cursor.getString(indTreino));
                 treino.setData(cursor.getLong(indData));
                 long data = treino.getData();
-                SimpleDateFormat formatarData = new SimpleDateFormat("MM/yyyy");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatarData = new SimpleDateFormat("MM/yyyy");
                 String date = formatarData.format(data);
                 int i = 0;
                 int igual = 0;
                 while (i < meses.size()) {
-                    if (meses.get(i).equals(date)){
+                    if (meses.get(i).equals(date)) {
                         igual = 1;
                     }
                     i++;
@@ -196,10 +190,9 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
                 if (igual == 0) {
                     meses.add(date);
                 }
-                cursor.moveToNext();
             }
-
-        }catch (Exception e) {
+            cursor.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -211,16 +204,13 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
             int indTreino = cursor.getColumnIndex("treinoH");
             int indData = cursor.getColumnIndex("data");
 
-            treinos = new ArrayList<Treinos>();
-
+            treinos = new ArrayList<>();
             AdapterTreinosPersonalizado adaptador = new AdapterTreinosPersonalizado(treinos, this);
-
             lstHistorico.setAdapter(adaptador);
 
-            cursor.moveToFirst();
-            while (cursor!=null){
+            while (cursor.moveToNext()) {
                 long data = cursor.getLong(indData);
-                SimpleDateFormat formatarData = new SimpleDateFormat("MM/yyyy");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatarData = new SimpleDateFormat("MM/yyyy");
                 String date = formatarData.format(data);
                 if (date.equals(mesTreino)) {
                     Treinos treino = new Treinos();
@@ -228,9 +218,8 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
                     treino.setData(cursor.getLong(indData));
                     treinos.add(treino);
                 }
-                cursor.moveToNext();
             }
-
+            cursor.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -243,7 +232,7 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
         private final List<Treinos> treinos;
         private final Activity activity;
 
-        public AdapterTreinosPersonalizado(List<Treinos> treinos, Activity activity) {
+        AdapterTreinosPersonalizado(List<Treinos> treinos, Activity activity) {
             this.treinos = treinos;
             this.activity = activity;
         }
@@ -266,24 +255,24 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View view = activity.getLayoutInflater()
+            @SuppressLint("ViewHolder") View view = activity.getLayoutInflater()
                     .inflate(R.layout.lista_historico, parent, false);
 
             Treinos treino = treinos.get(position);
 
-            TextView txtNomeTreino = (TextView)
+            TextView txtNomeTreino =
                     view.findViewById(R.id.txtNome);
-            TextView txtData = (TextView)
+            TextView txtData =
                     view.findViewById(R.id.txtData);
-            TextView txtHora = (TextView)
+            TextView txtHora =
                     view.findViewById(R.id.txtHora);
 
             txtNomeTreino.setText(treino.getNome());
             long data = treino.getData();
-            SimpleDateFormat formatarData = new SimpleDateFormat("dd/MM");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatarData = new SimpleDateFormat("dd/MM");
             String date = formatarData.format(data);
             txtData.setText(date);
-            SimpleDateFormat formatarHora = new SimpleDateFormat("HH:mm");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatarHora = new SimpleDateFormat("HH:mm");
             String hora = formatarHora.format(data);
             txtHora.setText(hora);
             return view;

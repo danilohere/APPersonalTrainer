@@ -31,7 +31,7 @@
         android:layout_below="@id/adView"
         android:layout_marginTop="6dp"
         android:layout_toStartOf="@+id/imgImagem"
-        android:text="Exercicio"
+        android:text="@string/exerc_cio_text"
         android:textAlignment="center"
         android:textColor="@color/color_texto"
         android:textSize="@dimen/titulo" />
@@ -43,8 +43,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/txtObs"
         android:layout_marginTop="8dp"
-        android:layout_weight="0.03"
-        android:text="Repetições:"
+        android:text="@string/repeti_es_text"
         android:textColor="@color/color_texto"
         android:textSize="@dimen/texto_campos" />
 
@@ -65,7 +64,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/textView4"
         android:layout_marginTop="8dp"
-        android:text="Séries:"
+        android:text="@string/s_ries_text"
         android:textColor="@color/color_texto"
         android:textSize="@dimen/texto_campos" />
 
@@ -86,7 +85,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="140dp"
-        android:text="Descanso:"
+        android:text="@string/descanso_text"
         android:textColor="@color/color_texto"
         android:textSize="@dimen/texto_campos" />
 
@@ -120,8 +119,8 @@
             android:background="@color/botoes_transparente"
             android:textAllCaps="false"
             android:textColor="@color/color_texto"
-            android:textOff="INICIAR!"
-            android:textOn="PARAR"
+            android:textOff="@string/iniciar_btn"
+            android:textOn="@string/parar_btn"
             android:visibility="visible" />
     </RelativeLayout>
 
@@ -137,21 +136,23 @@
             android:id="@+id/btnAnterior"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="3dp"
+            android:layout_marginEnd="3dp"
             android:layout_weight="1"
             android:background="@color/botoes_transparente"
-            android:text="Anterior"
-            android:textColor="@color/color_texto" />/>
+            android:text="@string/anterior_text"
+            android:textColor="@color/color_texto"
+            tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/btnProximo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
+            android:layout_marginStart="3dp"
             android:layout_weight="1"
             android:background="@color/botoes_transparente"
-            android:text="Próximo"
-            android:textColor="@color/color_texto" />/>
+            android:text="@string/pr_ximo_text"
+            android:textColor="@color/color_texto"
+            tools:ignore="ButtonStyle" />
     </LinearLayout>
 
     <TextView
@@ -177,11 +178,9 @@
             android:id="@+id/textView15"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/txtSeries"
             android:layout_marginTop="2dp"
             android:layout_weight="1"
-            android:text="Tempo de execução:"
+            android:text="@string/tempo_de_execu_o_text"
             android:textColor="@color/color_texto"
             android:textSize="@dimen/texto_campos" />
 
@@ -189,21 +188,17 @@
             android:id="@+id/btnMenos"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/txtSeries"
-            android:layout_marginLeft="10dp"
-            android:layout_toEndOf="@+id/textView15"
+            android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:background="@color/botoes_transparente"
-            android:text="-"
+            android:text="@string/traco"
             android:textColor="@color/color_texto" />
 
         <TextView
             android:id="@+id/txtTempoExecucao"
             android:layout_width="49dp"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/textView15"
-            android:layout_marginLeft="5dp"
-            android:layout_toEndOf="@+id/btnMenos"
+            android:layout_marginStart="5dp"
             android:layout_weight="1"
             android:textAlignment="center"
             android:textColor="@color/color_texto"
@@ -214,10 +209,9 @@
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_toEndOf="@+id/txtTempoExecucao"
             android:layout_weight="1"
             android:background="@color/botoes_transparente"
-            android:text="+"
+            android:text="@string/mais"
             android:textColor="@color/color_texto" />
     </LinearLayout>
 
@@ -228,12 +222,12 @@
         android:layout_below="@+id/txtDescanso"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="Início Automático"
+        android:text="@string/in_cio_autom_tico_btn"
         android:textColor="@color/color_texto"
         android:textSize="@dimen/texto_campos" />
 
     <TextView
-        android:text="/"
+        android:text="@string/barra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/txtTemporizador"
@@ -259,7 +253,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/txtExercicio"
-        android:text="Obs: "
+        android:text="@string/obs_text"
         android:textColor="@color/color_texto"
         android:visibility="invisible" />
 
@@ -270,7 +264,8 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@id/adView"
         android:layout_marginTop="12dp"
-        ads:srcCompat="@drawable/imgimg" />
+        ads:srcCompat="@drawable/imgimg"
+        android:contentDescription="@string/todo"/>
 
     <ImageView
         android:id="@+id/imgExercicio"
@@ -283,7 +278,5 @@
         android:padding="2dp"
         android:visibility="invisible"
         ads:srcCompat="@drawable/imgimg"
-        />
-
-
+        android:contentDescription="@string/todo"/>
 </RelativeLayout>

@@ -43,12 +43,11 @@
 
         <Switch
             android:id="@+id/swtAlerta"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:text="Alarme de Água"
+            android:text="@string/alarme_de_gua_text"
             android:textColor="@color/color_texto"
             android:textSize="24sp" />
 
@@ -57,7 +56,8 @@
             android:layout_width="24dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            app:srcCompat="@drawable/info24x24i" />
+            app:srcCompat="@drawable/info24x24i"
+            android:contentDescription="@string/todo" />
 
     </LinearLayout>
 
@@ -100,7 +100,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true"
             android:background="@color/botoes_transparente"
-            android:text="Salvar"
+            android:text="@string/salvar_text"
             android:textColor="@color/color_texto" />
 
         <TextView
@@ -111,7 +111,7 @@
             android:layout_alignBottom="@+id/textView22"
             android:layout_alignParentStart="true"
             android:layout_toEndOf="@+id/spnMinutoInicio"
-            android:text="até"
+            android:text="@string/at_text"
             android:textAlignment="center"
             android:textColor="@color/color_texto"
             android:textSize="@dimen/texto_campos" />
@@ -123,7 +123,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/spnHoraInicio"
             android:layout_marginTop="20dp"
-            android:text="Beber água a cada"
+            android:text="@string/beber_gua_a_cada_text"
             android:textAlignment="center"
             android:textColor="@color/color_texto"
             android:textSize="@dimen/titulo" />
@@ -148,7 +148,7 @@
             android:layout_marginRight="2dp"
             android:layout_toEndOf="@+id/spnHoraInicio"
             android:paddingTop="3dp"
-            android:text=":"
+            android:text="@string/doispontos_text"
             android:textAlignment="center"
             android:textColor="@color/color_texto"
             android:textSize="@dimen/texto_campos" />
@@ -171,7 +171,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:text="Horário para alerta"
+            android:text="@string/hor_rio_para_alerta_text"
             android:textAlignment="center"
             android:textColor="@color/color_texto"
             android:textSize="@dimen/titulo" />
@@ -195,7 +195,7 @@
             android:layout_marginRight="2dp"
             android:layout_toStartOf="@+id/spnMinutoFim"
             android:paddingTop="3dp"
-            android:text=":"
+            android:text="@string/doispontos_text"
             android:textAlignment="center"
             android:textColor="@color/color_texto"
             android:textSize="@dimen/texto_campos" />

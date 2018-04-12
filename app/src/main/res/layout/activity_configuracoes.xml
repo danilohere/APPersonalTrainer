@@ -41,7 +41,7 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@id/adView2"
         android:layout_marginTop="20dp"
-        android:text="Inicio Automático de Exercícios"
+        android:text="@string/inicio_autom_tico_de_exerc_cios_text"
         android:textColor="@color/color_texto"
         android:textSize="@dimen/texto_campos" />
 
@@ -55,29 +55,31 @@
         android:layout_alignParentStart="true">
 
         <RadioButton
-            android:text="Masculina"
+            android:text="@string/masculina_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/rdbMasculina"
             android:layout_weight="1"
             android:textColor="@color/color_texto"
             android:textSize="@dimen/texto_campos"
-            android:layout_marginRight="10dp"
-            app:buttonTint="@color/color_texto"/>
+            android:layout_marginEnd="10dp"
+            android:buttonTint="@color/background_list"
+            tools:targetApi="lollipop" />
 
         <RadioButton
-            android:text="Feminina"
+            android:text="@string/feminina_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/rdbFeminina"
             android:layout_weight="1"
             android:textSize="@dimen/texto_campos"
             android:textColor="@color/color_texto"
-            app:buttonTint="@color/color_texto"/>
+            android:buttonTint="@color/background_list"
+            tools:targetApi="lollipop" />
     </RadioGroup>
 
     <TextView
-        android:text="Voz"
+        android:text="@string/voz_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView17"
@@ -89,7 +91,7 @@
         android:paddingTop="3dp" />
 
     <Switch
-        android:text="Uso do botão do fone"
+        android:text="@string/uso_do_bot_o_do_fone_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rdgvoz"
@@ -100,7 +102,7 @@
         android:textColor="@color/color_texto" />
 
     <TextView
-        android:text="Sons de Treino"
+        android:text="@string/sons_de_treino_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/swtBotaoFone"
@@ -121,24 +123,26 @@
         android:id="@+id/rdgSons">
 
         <RadioButton
-            android:text="Padrão"
+            android:text="@string/padr_o_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/rdbSomPadrao"
             android:layout_weight="1"
             android:textColor="@color/color_texto"
             android:textSize="@dimen/texto_campos"
-            app:buttonTint="@color/color_texto"/>
+            android:buttonTint="@color/background_list"
+            tools:targetApi="lollipop" />
 
         <RadioButton
-            android:text="Bambam"
+            android:text="@string/bambam_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/rdbSomBambam"
             android:layout_weight="1"
             android:textSize="@dimen/texto_campos"
             android:textColor="@color/color_texto"
-            app:buttonTint="@color/color_texto"/>
+            android:buttonTint="@color/background_list"
+            tools:targetApi="lollipop" />
     </RadioGroup>
 
 

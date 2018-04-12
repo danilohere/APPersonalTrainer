@@ -43,14 +43,10 @@ public class AlarmeActivity extends AppCompatActivity {
     private static final String INTERVALO = "Intervalo";
     private static final String INTERVALOID = "IntervaloId";
 
-    private Switch swtDespertador;
-    private ImageView imgInfo;
     private Spinner spnHoraInicio;
     private Spinner spnMinutoInicio;
     private Spinner spnHoraFim;
     private Spinner spnMinutoFim;
-    private Spinner spnIntervalo;
-    private Button btnSalvar;
     private RelativeLayout rltAlarme;
 
     private int hi;
@@ -95,9 +91,10 @@ public class AlarmeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_alarme);
 
         //Implementa o botão voltar na ActionBar
+        //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        AdView adView = (AdView) findViewById(R.id.adView);
+        AdView adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
@@ -106,7 +103,7 @@ public class AlarmeActivity extends AppCompatActivity {
                 .build();
         adView.loadAd(adRequest);
 
-        AdView adView2 = (AdView) findViewById(R.id.adView2);
+        AdView adView2 = findViewById(R.id.adView2);
         AdRequest adRequest2 = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
@@ -115,28 +112,28 @@ public class AlarmeActivity extends AppCompatActivity {
                 .build();
         adView2.loadAd(adRequest2);
 
-        imgInfo = (ImageView) findViewById(R.id.imgInfo);
-        swtDespertador = (Switch) findViewById(R.id.swtAlerta);
-        rltAlarme = (RelativeLayout) findViewById(R.id.rltAlarme);
-        spnHoraInicio = (Spinner) findViewById(R.id.spnHoraInicio);
-        spnMinutoInicio = (Spinner) findViewById(R.id.spnMinutoInicio);
-        spnHoraFim = (Spinner) findViewById(R.id.spnHoraFim);
-        spnMinutoFim = (Spinner) findViewById(R.id.spnMinutoFim);
-        spnIntervalo = (Spinner) findViewById(R.id.spnIntervalo);
-        btnSalvar = (Button) findViewById(R.id.btnSalvar);
-        ArrayAdapter<String> adapHoras = new ArrayAdapter<String>(
+        ImageView imgInfo = findViewById(R.id.imgInfo);
+        Switch swtDespertador = findViewById(R.id.swtAlerta);
+        rltAlarme = findViewById(R.id.rltAlarme);
+        spnHoraInicio = findViewById(R.id.spnHoraInicio);
+        spnMinutoInicio = findViewById(R.id.spnMinutoInicio);
+        spnHoraFim = findViewById(R.id.spnHoraFim);
+        spnMinutoFim = findViewById(R.id.spnMinutoFim);
+        Spinner spnIntervalo = findViewById(R.id.spnIntervalo);
+        Button btnSalvar = findViewById(R.id.btnSalvar);
+        ArrayAdapter<String> adapHoras = new ArrayAdapter<>(
                 getApplicationContext(),
                 android.R.layout.simple_spinner_dropdown_item,
                 horas
         );
 
-        ArrayAdapter<String> adapMinutos = new ArrayAdapter<String>(
+        ArrayAdapter<String> adapMinutos = new ArrayAdapter<>(
                 getApplicationContext(),
                 android.R.layout.simple_spinner_dropdown_item,
                 minutos
         );
 
-        ArrayAdapter<String> adapIntervalo = new ArrayAdapter<String>(
+        ArrayAdapter<String> adapIntervalo = new ArrayAdapter<>(
                 getApplicationContext(),
                 android.R.layout.simple_spinner_dropdown_item,
                 intervalo
@@ -169,13 +166,13 @@ public class AlarmeActivity extends AppCompatActivity {
                     SharedPreferences alarme = getSharedPreferences(ALARME,0);
                     SharedPreferences.Editor editor = alarme.edit();
                     editor.putInt("Alarme", 1);
-                    editor.commit();
+                    editor.apply();
                     rltAlarme.setVisibility(View.VISIBLE);
                 } else {
                     SharedPreferences alarme = getSharedPreferences(ALARME,0);
                     SharedPreferences.Editor editor = alarme.edit();
                     editor.putInt("Alarme", 0);
-                    editor.commit();
+                    editor.apply();
                     rltAlarme.setVisibility(View.INVISIBLE);
                     alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                     Intent alarm = new Intent(AlarmeActivity.this, OnAlarmReceiver.class);
@@ -332,38 +329,37 @@ public class AlarmeActivity extends AppCompatActivity {
         cf.setTimeInMillis(System.currentTimeMillis());
         cf.set(Calendar.HOUR_OF_DAY, hf);
         cf.set(Calendar.MINUTE, mf);
-        long fim = cf.getTimeInMillis();
 
         SharedPreferences horainicioAlarm = getSharedPreferences(HORAINICIO,0);
         SharedPreferences.Editor editorHoraInicio = horainicioAlarm.edit();
         editorHoraInicio.putInt("HoraInicio", hi);
-        editorHoraInicio.commit();
+        editorHoraInicio.apply();
 
         SharedPreferences minutoinicioAlarm = getSharedPreferences(MINUTOINICIO,0);
         SharedPreferences.Editor editorMinutoInicio = minutoinicioAlarm.edit();
         editorMinutoInicio.putInt("MinutoInicio", mi);
-        editorMinutoInicio.commit();
+        editorMinutoInicio.apply();
 
 
         SharedPreferences horafimAlarm = getSharedPreferences(HORAFIM,0);
         SharedPreferences.Editor editorHoraFim = horafimAlarm.edit();
         editorHoraFim.putInt("HoraFim", hf);
-        editorHoraFim.commit();
+        editorHoraFim.apply();
 
         SharedPreferences minutofimAlarm = getSharedPreferences(MINUTOFIM,0);
         SharedPreferences.Editor editorMinutoFim = minutofimAlarm.edit();
         editorMinutoFim.putInt("MinutoFim", mf);
-        editorMinutoFim.commit();
+        editorMinutoFim.apply();
 
         SharedPreferences intervaloAlarm = getSharedPreferences(INTERVALO,0);
         SharedPreferences.Editor editorIntervalo = intervaloAlarm.edit();
         editorIntervalo.putLong("Intervalo", i);
-        editorIntervalo.commit();
+        editorIntervalo.apply();
 
         SharedPreferences intervaloIdAlarm = getSharedPreferences(INTERVALOID,0);
         SharedPreferences.Editor editorIntervaloId = intervaloIdAlarm.edit();
         editorIntervaloId.putInt("IntervaloId", inter);
-        editorIntervaloId.commit();
+        editorIntervaloId.apply();
 
         if (hi > hf){
             Calendar cmeia = Calendar.getInstance();

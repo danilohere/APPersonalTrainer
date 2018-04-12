@@ -1,8 +1,5 @@
 package appersonal.development.com.appersonaltrainer.Controller;
 
-/**
- * Created by Danilo on 02/05/2017.
- */
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -23,17 +20,15 @@ import appersonal.development.com.appersonaltrainer.Activities.ReceberTreinoActi
 
 public class ConnectionThread extends Thread {
 
-    Handler h = new Handler();
+    private Handler h = new Handler();
 
     private byte[] treinos;
-//    private int bytes;
-    BluetoothSocket btSocket = null;
-    BluetoothServerSocket btServerSocket = null;
-    InputStream input = null;
-    OutputStream output = null;
-    String btDevAddress = null;
-    String myUUID = "00001101-0000-1000-8000-00805F9B34FB";
-    boolean server;
+    //    private int bytes;
+    private BluetoothSocket btSocket = null;
+    private BluetoothServerSocket btServerSocket = null;
+    private OutputStream output = null;
+    private String btDevAddress = null;
+    private boolean server;
     public boolean running = false;
 
     /*  Este construtor prepara o dispositivo para atuar como servidor.
@@ -66,6 +61,7 @@ public class ConnectionThread extends Thread {
         /*  Determina que ações executar dependendo se a thread está configurada
         para atuar como servidor ou cliente.
          */
+        String myUUID = "00001101-0000-1000-8000-00805F9B34FB";
         if (this.server) {
 
             /*  Servidor.
@@ -152,7 +148,7 @@ public class ConnectionThread extends Thread {
                 /*  Obtem referências para os fluxos de entrada e saída do
                 socket Bluetooth.
                  */
-                input = btSocket.getInputStream();
+                InputStream input = btSocket.getInputStream();
                 output = btSocket.getOutputStream();
 
                 /*  Cria um byte array para armazenar temporariamente uma
@@ -202,7 +198,7 @@ public class ConnectionThread extends Thread {
         MeusTreinosActivity.handler.sendMessage(message);
     }
 
-//    h.postDelayed(receberMensagem, 10);
+    //    h.postDelayed(receberMensagem, 10);
     private void toReceberActivity(byte[] treino) {
 
         treinos = treino;
@@ -249,10 +245,10 @@ public class ConnectionThread extends Thread {
 
         try {
             running = false;
-            if (btServerSocket!=null)
-            btServerSocket.close();
-            if (btSocket!=null)
-            btSocket.close();
+            if (btServerSocket != null)
+                btServerSocket.close();
+            if (btSocket != null)
+                btSocket.close();
 
         } catch (IOException e) {
             e.printStackTrace();

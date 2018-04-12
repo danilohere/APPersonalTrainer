@@ -1,5 +1,6 @@
 package appersonal.development.com.appersonaltrainer.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -30,9 +31,7 @@ public class TreinarActivity extends AppCompatActivity {
 
     private ListView lstTreinos;
     private Button btnNovoTreino;
-    private Button btnCorrer;
     private TextView txtAviso;
-    private ArrayList<Treinos> treinos;
     private ArrayList<Integer> ids;
     private SQLiteDatabase bancoDados;
 
@@ -51,10 +50,11 @@ public class TreinarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_treinar);
 
         //Implementa o botão voltar na ActionBar
+        //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Implementa o ad na activity
-        AdView adView = (AdView) findViewById(R.id.adView);
+        AdView adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
@@ -62,7 +62,7 @@ public class TreinarActivity extends AppCompatActivity {
                 .build();
         adView.loadAd(adRequest);
 
-        AdView adView2 = (AdView) findViewById(R.id.adView2);
+        AdView adView2 = findViewById(R.id.adView2);
         AdRequest adRequest2 = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
@@ -70,21 +70,21 @@ public class TreinarActivity extends AppCompatActivity {
                 .build();
         adView2.loadAd(adRequest2);
 
-        try{
-            bancoDados = openOrCreateDatabase("appersonal", MODE_PRIVATE,null);
+        try {
+            bancoDados = openOrCreateDatabase("appersonal", MODE_PRIVATE, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        btnNovoTreino = (Button) findViewById(R.id.btnNovoTreino);
-        btnCorrer = (Button) findViewById(R.id.btnCorrer);
-        txtAviso = (TextView) findViewById(R.id.txtAviso);
-        lstTreinos = (ListView) findViewById(R.id.lstTreinos);
+        btnNovoTreino = findViewById(R.id.btnNovoTreino);
+        Button btnCorrer = findViewById(R.id.btnCorrer);
+        txtAviso = findViewById(R.id.txtAviso);
+        lstTreinos = findViewById(R.id.lstTreinos);
 
         lstTreinos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(TreinarActivity.this,TreinoXActivity.class);
+                Intent intent = new Intent(TreinarActivity.this, TreinoXActivity.class);
                 intent.putExtra("idTreino", ids.get(position));
                 startActivity(intent);
             }
@@ -94,6 +94,7 @@ public class TreinarActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TreinarActivity.this, EditarTreinoActivity.class);
+                intent.putExtra("idTreino", 500000);
                 startActivity(intent);
             }
         });
@@ -139,27 +140,24 @@ public class TreinarActivity extends AppCompatActivity {
             int indId = cursor.getColumnIndex("idTreino");
             int indData = cursor.getColumnIndex("data");
 
-            treinos = new ArrayList<Treinos>();
-            ids = new ArrayList<Integer>();
+            ArrayList<Treinos> treinos = new ArrayList<>();
+            ids = new ArrayList<>();
 
             AdapterTreinosPersonalizado adaptador = new AdapterTreinosPersonalizado(treinos, this);
             lstTreinos.setAdapter(adaptador);
 
-            cursor.moveToFirst();
-
-            while (cursor!=null){
+            while (cursor.moveToNext()) {
                 Treinos treino = new Treinos();
                 treino.setNome(cursor.getString(indTreino));
                 treino.setData(cursor.getLong(indData));
                 treinos.add(treino);
                 ids.add(Integer.parseInt(cursor.getString(indId)));
-                cursor.moveToNext();
             }
 
+            cursor.close();
         } catch (Exception e) {
-        e.printStackTrace();
-    }
-
+            e.printStackTrace();
+        }
 
     }
 
@@ -168,7 +166,7 @@ public class TreinarActivity extends AppCompatActivity {
         private final List<Treinos> treinos;
         private final Activity activity;
 
-        public AdapterTreinosPersonalizado(List<Treinos> treinos, Activity activity) {
+        AdapterTreinosPersonalizado(List<Treinos> treinos, Activity activity) {
             this.treinos = treinos;
             this.activity = activity;
         }
@@ -191,21 +189,21 @@ public class TreinarActivity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View view = activity.getLayoutInflater()
+            @SuppressLint("ViewHolder") View view = activity.getLayoutInflater()
                     .inflate(R.layout.lista_treinos, parent, false);
 
             Treinos treino = treinos.get(position);
 
-            TextView txtNomeTreino = (TextView)
+            TextView txtNomeTreino =
                     view.findViewById(R.id.txtNome);
-            TextView txtData = (TextView)
+            TextView txtData =
                     view.findViewById(R.id.txtData);
 
             txtNomeTreino.setText(treino.getNome());
             long data = treino.getData();
-            SimpleDateFormat formatarData = new SimpleDateFormat("dd/MM");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatarData = new SimpleDateFormat("dd/MM");
             String date = formatarData.format(data);
-            if (data == 0){
+            if (data == 0) {
                 txtData.setText(" - ");
             } else {
                 txtData.setText(date);

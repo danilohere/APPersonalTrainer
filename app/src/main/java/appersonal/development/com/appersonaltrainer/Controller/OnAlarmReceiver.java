@@ -6,17 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.NotificationCompat;
-import android.widget.Toast;
 
 import java.util.Calendar;
 
 import appersonal.development.com.appersonaltrainer.R;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
-
-/**
- * Created by Danilo on 10/05/2017.
- */
 
 public class OnAlarmReceiver extends BroadcastReceiver {
 
@@ -25,10 +20,6 @@ public class OnAlarmReceiver extends BroadcastReceiver {
     private static final String HORAINICIO = "HoraInicio";
     private static final String MINUTOINICIO = "MinutoInicio";
     private static final String ALARME = "Alarme";
-    private int hf;
-    private int mf;
-    private int hi;
-    private int mi;
     private int alarme;
 
 
@@ -36,13 +27,13 @@ public class OnAlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         SharedPreferences horafimAlarm = context.getSharedPreferences(HORAFIM, Context.MODE_PRIVATE);
-        hf = horafimAlarm.getInt("HoraFim", 0);
+        int hf = horafimAlarm.getInt("HoraFim", 0);
         SharedPreferences minutofimAlarm = context.getSharedPreferences(MINUTOFIM, Context.MODE_PRIVATE);
-        mf = minutofimAlarm.getInt("MinutoFim", 0);
+        int mf = minutofimAlarm.getInt("MinutoFim", 0);
         SharedPreferences horainicioAlarm = context.getSharedPreferences(HORAINICIO, Context.MODE_PRIVATE);
-        hi = horainicioAlarm.getInt("HoraInicio", 0);
+        int hi = horainicioAlarm.getInt("HoraInicio", 0);
         SharedPreferences minutoinicioAlarm = context.getSharedPreferences(MINUTOINICIO, Context.MODE_PRIVATE);
-        mi = minutoinicioAlarm.getInt("MinutoInicio", 0);
+        int mi = minutoinicioAlarm.getInt("MinutoInicio", 0);
         SharedPreferences alarm = context.getSharedPreferences(ALARME, Context.MODE_PRIVATE);
         alarme = alarm.getInt("Alarme", 0);
 
@@ -54,18 +45,18 @@ public class OnAlarmReceiver extends BroadcastReceiver {
         //Se o alarme não precisar virar a noite
         if (hi <= hf) {
             //se a hora de inicio e a hora final forem iguais
-            if (hi == hf){
+            if (hi == hf) {
                 //ele verifica se o minuto inicial e minuto final também são iguais
-                if (mi == mf){
+                if (mi == mf) {
                     //se for, ele vai tocar sem restrição de horário
                     notificacao(context);
                 }
                 //se o minuto inicial for menor que o final
-                else if (mi < mf){
+                else if (mi < mf) {
                     //verifica se a hora atual é igual
-                    if (h == hi){
+                    if (h == hi) {
                         //verifica se o minuto atual é maior que o inicial e menor que o final
-                        if (m >= mi && m <= mf){
+                        if (m >= mi && m <= mf) {
                             //se sim, ele dispara o alarme
                             notificacao(context);
                         }
@@ -80,8 +71,8 @@ public class OnAlarmReceiver extends BroadcastReceiver {
                             notificacao(context);
                         }
                         //se hora for igual, ele precisa verificar se o minuto atual é maior ou igual ao inicial
-                        else if (h == hi){
-                            if (m >= mi){
+                        else if (h == hi) {
+                            if (m >= mi) {
                                 notificacao(context);
                             }
                         }
@@ -93,9 +84,9 @@ public class OnAlarmReceiver extends BroadcastReceiver {
                             notificacao(context);
                         }
                         // se não for, ele verifica se a hora é igual
-                        else if (h == hf){
+                        else if (h == hf) {
                             //se for igual, ele verifica se o minuto atual é menor ou igual ao final
-                            if (m <= mf){
+                            if (m <= mf) {
                                 notificacao(context);
                             }
                         }
@@ -117,11 +108,11 @@ public class OnAlarmReceiver extends BroadcastReceiver {
                     //se a hora atual for maior que a hora inicial
                     else {
                         //ele verifica se a hora atual é menor ou igual a hora final
-                        if (h <= hf){
+                        if (h <= hf) {
                             //se for, ele verifica se é igual
-                            if (h == hf){
+                            if (h == hf) {
                                 //se for igual, ele verifica o minuto atual para saber se é menor que o final
-                                if (m <= mf){
+                                if (m <= mf) {
                                     //se sim, ele envia  a notificação
                                     notificacao(context);
                                 }
@@ -145,8 +136,8 @@ public class OnAlarmReceiver extends BroadcastReceiver {
                     notificacao(context);
                 }
                 //se hora for igual, ele precisa verificar se o minuto atual é maior ou igual ao inicial
-                else if (h == hi){
-                    if (m >= mi){
+                else if (h == hi) {
+                    if (m >= mi) {
                         notificacao(context);
                     }
                 }
@@ -158,9 +149,9 @@ public class OnAlarmReceiver extends BroadcastReceiver {
                     notificacao(context);
                 }
                 // se não for, ele verifica se a hora é igual
-                else if (h == hf){
+                else if (h == hf) {
                     //se for igual, ele verifica se o minuto atual é menor ou igual ao final
-                    if (m <= mf){
+                    if (m <= mf) {
                         notificacao(context);
                     }
                 }
@@ -168,8 +159,10 @@ public class OnAlarmReceiver extends BroadcastReceiver {
         }
     }
 
-    void notificacao(Context context){
+
+    void notificacao(Context context) {
         if (alarme == 1) {
+            //noinspection deprecation
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
                             .setSmallIcon(R.drawable.applogopush)
@@ -177,12 +170,13 @@ public class OnAlarmReceiver extends BroadcastReceiver {
                             .setContentText("Hora de tomar água!")
                             .setLights(100, 500, 100)
                             .setVibrate(new long[]{100, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500
-                                    , 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500
-                                    , 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500});
+                                    , 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500});
 
-            int mNotificationId = 001;
+            int mNotificationId = 1;
             NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-            mNotifyMgr.notify(mNotificationId, mBuilder.build());
+            if (mNotifyMgr != null) {
+                mNotifyMgr.notify(mNotificationId, mBuilder.build());
+            }
         }
     }
 }

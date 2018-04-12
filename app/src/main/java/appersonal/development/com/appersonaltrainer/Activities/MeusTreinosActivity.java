@@ -305,7 +305,7 @@ public class MeusTreinosActivity extends AppCompatActivity {
                                             connect.cancel();
                                             try {
                                                 PairedDevicesActivity.connect.cancel();
-                                            } catch (Exception e){
+                                            } catch (Exception e) {
                                                 e.printStackTrace();
                                             }
                                             if (!BtAtivo) {
@@ -326,15 +326,15 @@ public class MeusTreinosActivity extends AppCompatActivity {
                             alerta = builder.create();
                             alerta.show();
                         } else {
-                            if (tentativa >= 3){
+                            if (tentativa >= 3) {
                                 Toast.makeText(MeusTreinosActivity.this, "Dispositivo não encontrado", Toast.LENGTH_SHORT).show();
                                 connect.cancel();
                                 try {
                                     PairedDevicesActivity.connect.cancel();
-                                } catch (Exception e){
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                if (!BtAtivo){
+                                if (!BtAtivo) {
                                     btAdapter.disable();
                                 }
                             } else {
@@ -527,7 +527,7 @@ public class MeusTreinosActivity extends AppCompatActivity {
                     }
                 }
 
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

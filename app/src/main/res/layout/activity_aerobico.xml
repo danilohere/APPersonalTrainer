@@ -23,7 +23,7 @@
     </com.google.android.gms.ads.AdView>
 
     <TextView
-        android:text="Descanso:"
+        android:text="@string/descanso_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -34,7 +34,7 @@
         android:textColor="@color/color_texto" />
 
     <TextView
-        android:text="Aeróbico"
+        android:text="@string/aer_bico_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtAerobico"
@@ -50,16 +50,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/txtAerobico"
-        android:text="Obs: "
+        android:text="@string/obs_text3"
         android:textColor="@color/color_texto"
         android:visibility="invisible" />
 
     <TextView
-        android:text="Séries:"
+        android:text="@string/s_ries_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtSer"
-        android:layout_weight="0.03"
         android:textSize="@dimen/texto_campos"
         android:layout_marginTop="30dp"
         android:textColor="@color/color_texto"
@@ -67,7 +66,7 @@
         android:layout_alignParentStart="true" />
 
     <TextView
-        android:text="Duração:"
+        android:text="@string/dura_o_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -103,8 +102,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/btnIniciar"
         android:visibility="visible"
-        android:textOff="INICIAR!"
-        android:textOn="PARAR"
+        android:textOff="@string/iniciar_btn"
+        android:textOn="@string/parar_btn"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/swtInicioAut"
@@ -122,7 +121,7 @@
         android:layout_marginTop="10dp"
         android:background="@color/botoes_transparente"
         android:enabled="false"
-        android:text="Finalizar Corrida"
+        android:text="@string/finalizar_corrida_text"
         android:textColor="@color/color_texto"
         android:visibility="invisible" />
 
@@ -139,21 +138,23 @@
             android:id="@+id/btnAnterior"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_weight="1"
             android:background="@color/botoes_transparente"
-            android:text="Anterior"
-            android:textColor="@color/color_texto" />
+            android:text="@string/anterior_text"
+            android:textColor="@color/color_texto"
+            tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/btnProximo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_weight="1"
             android:background="@color/botoes_transparente"
-            android:text="Próximo"
-            android:textColor="@color/color_texto" />
+            android:text="@string/pr_ximo_text"
+            android:textColor="@color/color_texto"
+            tools:ignore="ButtonStyle" />
     </LinearLayout>
 
     <TextView
@@ -163,7 +164,7 @@
         android:layout_alignBaseline="@+id/txtDesca"
         android:layout_alignBottom="@+id/txtDesca"
         android:layout_alignParentEnd="true"
-        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_toEndOf="@id/txtDesca"
         android:textColor="@color/color_texto"
         android:textSize="@dimen/texto_campos" />
@@ -180,7 +181,7 @@
         android:layout_marginBottom="31dp" />
 
     <Switch
-        android:text="Início Automático"
+        android:text="@string/in_cio_autom_tico_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/swtInicioAut"
@@ -191,7 +192,7 @@
         android:layout_centerHorizontal="true" />
 
     <TextView
-        android:text="/"
+        android:text="@string/barra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/txtTemporizador"
@@ -219,7 +220,7 @@
         android:layout_alignBottom="@+id/swtInicioAut"
         android:layout_alignEnd="@+id/adView"
         android:layout_alignParentStart="true"
-        android:text="Contar distância"
+        android:text="@string/contar_dist_ncia_text"
         android:textAlignment="center"
         android:textColor="@color/color_texto"
         android:textSize="@dimen/texto_campos"
@@ -231,9 +232,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/txtDescanso"
-        android:text="*A precisão do GPS pode diminuir de acordo com o sinal"
+        android:text="@string/a_precis_o_do_gps_pode_diminuir_de_acordo_com_o_sinal_text"
         android:textColor="@color/color_texto"
         android:textSize="8sp"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        tools:ignore="SmallSp" />
 
 </RelativeLayout>

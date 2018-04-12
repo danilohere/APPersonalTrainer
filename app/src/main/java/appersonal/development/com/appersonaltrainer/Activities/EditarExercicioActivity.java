@@ -1,10 +1,9 @@
 package appersonal.development.com.appersonaltrainer.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,10 +31,6 @@ import appersonal.development.com.appersonaltrainer.R;
 
 public class EditarExercicioActivity extends AppCompatActivity {
 
-    private Button btnConfirmar;
-    private Button btnCancelar;
-    private Button btnMais;
-    private Button btnMenos;
     private Spinner spnMusculo;
     private Spinner spnExercicio;
     private Spinner spnTipoRep;
@@ -58,9 +53,6 @@ public class EditarExercicioActivity extends AppCompatActivity {
     private TextView txtRepDrop;
     private TextView txtExercicio;
     private TextView txtMusculo;
-    private ImageView imgInfoUnilateral;
-    private ImageView imgInfoTipoRep;
-    private ImageView imgImagem;
     private ImageView imgExercicio;
 
     private Runnable runRep;
@@ -77,7 +69,6 @@ public class EditarExercicioActivity extends AppCompatActivity {
     private int idTreino;
     private int idExercicio = 500000;
     private int carregado;
-    private String exercicio;
 
     private String[] unilateral = {
             "Simultâneo", "Alternado", "Unilateral"
@@ -145,7 +136,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (imgExercicio.getVisibility() == View.VISIBLE){
+        if (imgExercicio.getVisibility() == View.VISIBLE) {
             imgExercicio.setVisibility(View.INVISIBLE);
         } else {
             super.onBackPressed();
@@ -166,16 +157,12 @@ public class EditarExercicioActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_DEL) {
             if (edtDescansoS.isFocused()) {
-                if (edtDescansoS.getText().length() == 0 && vazio == true) {
+                if (edtDescansoS.getText().length() == 0 && vazio) {
                     edtDescansoM.requestFocus();
                     vazio = false;
-                } else if (edtDescansoS.getText().length() == 0) {
-                    vazio = true;
-                } else {
-                    vazio = false;
-                }
+                } else vazio = edtDescansoS.getText().length() == 0;
             } else if (edtDescansoM.isFocused()) {
-                if (edtDescansoM.getText().length() == 0 && vazio == true) {
+                if (edtDescansoM.getText().length() == 0 && vazio) {
                     if (edtRep8.getVisibility() == View.VISIBLE) {
                         edtRep8.requestFocus();
                     } else if (edtRep7.getVisibility() == View.VISIBLE) {
@@ -194,83 +181,47 @@ public class EditarExercicioActivity extends AppCompatActivity {
                         edtRep1.requestFocus();
                     }
                     vazio = false;
-                } else if (edtDescansoM.getText().length() == 0) {
-                    vazio = true;
-                } else {
-                    vazio = false;
-                }
+                } else vazio = edtDescansoM.getText().length() == 0;
             } else if (edtRep8.isFocused()) {
-                if (edtRep8.getText().length() == 0 && vazio == true) {
+                if (edtRep8.getText().length() == 0 && vazio) {
                     edtRep7.requestFocus();
                     vazio = false;
-                } else if (edtRep8.getText().length() == 0) {
-                    vazio = true;
-                } else {
-                    vazio = false;
-                }
+                } else vazio = edtRep8.getText().length() == 0;
             } else if (edtRep7.isFocused()) {
-                if (edtRep7.getText().length() == 0 && vazio == true) {
+                if (edtRep7.getText().length() == 0 && vazio) {
                     edtRep6.requestFocus();
                     vazio = false;
-                } else if (edtRep7.getText().length() == 0) {
-                    vazio = true;
-                } else {
-                    vazio = false;
-                }
+                } else vazio = edtRep7.getText().length() == 0;
             } else if (edtRep6.isFocused()) {
-                if (edtRep6.getText().length() == 0 && vazio == true) {
+                if (edtRep6.getText().length() == 0 && vazio) {
                     edtRep5.requestFocus();
                     vazio = false;
-                } else if (edtRep6.getText().length() == 0) {
-                    vazio = true;
-                } else {
-                    vazio = false;
-                }
+                } else vazio = edtRep6.getText().length() == 0;
             } else if (edtRep5.isFocused()) {
-                if (edtRep5.getText().length() == 0 && vazio == true) {
+                if (edtRep5.getText().length() == 0 && vazio) {
                     edtRep4.requestFocus();
                     vazio = false;
-                } else if (edtRep5.getText().length() == 0) {
-                    vazio = true;
-                } else {
-                    vazio = false;
-                }
+                } else vazio = edtRep5.getText().length() == 0;
             } else if (edtRep4.isFocused()) {
-                if (edtRep4.getText().length() == 0 && vazio == true) {
+                if (edtRep4.getText().length() == 0 && vazio) {
                     edtRep3.requestFocus();
                     vazio = false;
-                } else if (edtRep4.getText().length() == 0) {
-                    vazio = true;
-                } else {
-                    vazio = false;
-                }
+                } else vazio = edtRep4.getText().length() == 0;
             } else if (edtRep3.isFocused()) {
-                if (edtRep3.getText().length() == 0 && vazio == true) {
+                if (edtRep3.getText().length() == 0 && vazio) {
                     edtRep2.requestFocus();
                     vazio = false;
-                } else if (edtRep3.getText().length() == 0) {
-                    vazio = true;
-                } else {
-                    vazio = false;
-                }
+                } else vazio = edtRep3.getText().length() == 0;
             } else if (edtRep2.isFocused()) {
-                if (edtRep2.getText().length() == 0 && vazio == true) {
+                if (edtRep2.getText().length() == 0 && vazio) {
                     edtRep1.requestFocus();
                     vazio = false;
-                } else if (edtRep2.getText().length() == 0) {
-                    vazio = true;
-                } else {
-                    vazio = false;
-                }
+                } else vazio = edtRep2.getText().length() == 0;
             } else if (edtRep1.isFocused()) {
-                if (edtRep1.getText().length() == 0 && vazio == true) {
+                if (edtRep1.getText().length() == 0 && vazio) {
                     edtSeries.requestFocus();
                     vazio = false;
-                } else if (edtRep1.getText().length() == 0) {
-                    vazio = true;
-                } else {
-                    vazio = false;
-                }
+                } else vazio = edtRep1.getText().length() == 0;
             }
         }
         return super.onKeyDown(keyCode, event);
@@ -282,9 +233,10 @@ public class EditarExercicioActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editar_exercicio);
 
         //Implementa o botão voltar na ActionBar
+        //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        AdView adView = (AdView) findViewById(R.id.adView);
+        AdView adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
@@ -292,36 +244,36 @@ public class EditarExercicioActivity extends AppCompatActivity {
                 .build();
         adView.loadAd(adRequest);
 
-        btnConfirmar = (Button) findViewById(R.id.btnConfirmar);
-        btnCancelar = (Button) findViewById(R.id.btnCancelar);
-        btnMais = (Button) findViewById(R.id.btnMais);
-        btnMenos = (Button) findViewById(R.id.btnMenos);
-        spnMusculo = (Spinner) findViewById(R.id.spnMusculo);
-        spnExercicio = (Spinner) findViewById(R.id.spnExercicio);
-        spnTipoRep = (Spinner) findViewById(R.id.spnTipoRep);
-        spnUnilateral = (Spinner) findViewById(R.id.spnUnilateral);
-        edtSeries = (EditText) findViewById(R.id.edtSeries);
-        edtRep1 = (EditText) findViewById(R.id.edtRep1);
-        edtRep2 = (EditText) findViewById(R.id.edtRep2);
-        edtRep3 = (EditText) findViewById(R.id.edtRep3);
-        edtRep4 = (EditText) findViewById(R.id.edtRep4);
-        edtRep5 = (EditText) findViewById(R.id.edtRep5);
-        edtRep6 = (EditText) findViewById(R.id.edtRep6);
-        edtRep7 = (EditText) findViewById(R.id.edtRep7);
-        edtRep8 = (EditText) findViewById(R.id.edtRep8);
-        edtTempoExecucao = (EditText) findViewById(R.id.edtTempoExecucao);
-        edtDescansoM = (EditText) findViewById(R.id.edtDescansoM);
-        edtDescansoS = (EditText) findViewById(R.id.edtDescansoS);
-        edtObs = (EditText) findViewById(R.id.edtObs);
-        imgInfoTipoRep = (ImageView) findViewById(R.id.imgInfoTipoRep);
-        imgInfoUnilateral = (ImageView) findViewById(R.id.imgInfoUnilateral);
-        imgImagem = (ImageView) findViewById(R.id.imgImagem);
-        imgExercicio = (ImageView) findViewById(R.id.imgExercicio);
-        txtRepDrop = (TextView) findViewById(R.id.txtRepDrop);
-        txtSeriesDrop = (TextView) findViewById(R.id.txtSeriesDrop);
-        txtExercicio = (TextView) findViewById(R.id.txtExercicio);
-        txtMusculo = (TextView) findViewById(R.id.txtMusculo);
-        chbObs = (CheckBox) findViewById(R.id.chbObs);
+        Button btnConfirmar = findViewById(R.id.btnConfirmar);
+        Button btnCancelar = findViewById(R.id.btnCancelar);
+        Button btnMais = findViewById(R.id.btnMais);
+        Button btnMenos = findViewById(R.id.btnMenos);
+        spnMusculo = findViewById(R.id.spnMusculo);
+        spnExercicio = findViewById(R.id.spnExercicio);
+        spnTipoRep = findViewById(R.id.spnTipoRep);
+        spnUnilateral = findViewById(R.id.spnUnilateral);
+        edtSeries = findViewById(R.id.edtSeries);
+        edtRep1 = findViewById(R.id.edtRep1);
+        edtRep2 = findViewById(R.id.edtRep2);
+        edtRep3 = findViewById(R.id.edtRep3);
+        edtRep4 = findViewById(R.id.edtRep4);
+        edtRep5 = findViewById(R.id.edtRep5);
+        edtRep6 = findViewById(R.id.edtRep6);
+        edtRep7 = findViewById(R.id.edtRep7);
+        edtRep8 = findViewById(R.id.edtRep8);
+        edtTempoExecucao = findViewById(R.id.edtTempoExecucao);
+        edtDescansoM = findViewById(R.id.edtDescansoM);
+        edtDescansoS = findViewById(R.id.edtDescansoS);
+        edtObs = findViewById(R.id.edtObs);
+        ImageView imgInfoTipoRep = findViewById(R.id.imgInfoTipoRep);
+        ImageView imgInfoUnilateral = findViewById(R.id.imgInfoUnilateral);
+        ImageView imgImagem = findViewById(R.id.imgImagem);
+        imgExercicio = findViewById(R.id.imgExercicio);
+        txtRepDrop = findViewById(R.id.txtRepDrop);
+        txtSeriesDrop = findViewById(R.id.txtSeriesDrop);
+        txtExercicio = findViewById(R.id.txtExercicio);
+        txtMusculo = findViewById(R.id.txtMusculo);
+        chbObs = findViewById(R.id.chbObs);
         edtSeries.setSelectAllOnFocus(true);
         edtRep1.setSelectAllOnFocus(true);
         edtRep2.setSelectAllOnFocus(true);
@@ -355,8 +307,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 spnMusculo.setOnItemSelectedListener(this);
-                int codPos = position;
-                switch (codPos) {
+                switch (position) {
                     case 0:
                         adapter(abdomen);
                         break;
@@ -619,6 +570,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (edtDescansoS.getText().length() == 2) {
+                    //noinspection ConstantConditions
                     ((InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                             .hideSoftInputFromWindow(edtDescansoS.getWindowToken(), 0);
                 }
@@ -859,7 +811,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
         spnTipoRep.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (idExercicio == 500000 || altEditRep == true) {
+                if (idExercicio == 500000 || altEditRep) {
                     if (position == 0) {
                         resetaEdits();
                     } else if (position == 3) {
@@ -877,15 +829,20 @@ public class EditarExercicioActivity extends AppCompatActivity {
                     }
                 } else {
                     altEditRep = true;
-                    if (position == 0) {
-                    } else if (position == 3) {
-                        edtRep1.setVisibility(View.INVISIBLE);
-                    } else if (position == 2) {
-                        edtRep5.setVisibility(View.VISIBLE);
-                        txtSeriesDrop.setVisibility(View.VISIBLE);
-                        txtRepDrop.setVisibility(View.VISIBLE);
-                    } else if (position == 1) {
-                        selecionaSpinnerRepInd();
+                    switch (position) {
+                        case 0:
+                            break;
+                        case 3:
+                            edtRep1.setVisibility(View.INVISIBLE);
+                            break;
+                        case 2:
+                            edtRep5.setVisibility(View.VISIBLE);
+                            txtSeriesDrop.setVisibility(View.VISIBLE);
+                            txtRepDrop.setVisibility(View.VISIBLE);
+                            break;
+                        case 1:
+                            selecionaSpinnerRepInd();
+                            break;
                     }
                 }
             }
@@ -954,7 +911,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
         chbObs.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isChecked) {
                     edtObs.setVisibility(View.VISIBLE);
                 } else {
                     edtObs.setVisibility(View.INVISIBLE);
@@ -969,7 +926,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
                 int tempoExecucao = Integer.parseInt(edtTempoExecucao.getText().toString());
                 if (tempoExecucao < 9) {
                     tempoExecucao++;
-                    edtTempoExecucao.setText("" + tempoExecucao);
+                    edtTempoExecucao.setText(String.valueOf(tempoExecucao));
                 } else {
                     Toast.makeText(getApplicationContext(), "Valor máximo atingido", Toast.LENGTH_SHORT).show();
                 }
@@ -983,7 +940,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
                 int tempoExecucao = Integer.parseInt(edtTempoExecucao.getText().toString());
                 if (tempoExecucao > 1) {
                     tempoExecucao--;
-                    edtTempoExecucao.setText("" + tempoExecucao);
+                    edtTempoExecucao.setText(String.valueOf(tempoExecucao));
                 } else {
                     Toast.makeText(getApplicationContext(), "Valor mínimo atingido", Toast.LENGTH_SHORT).show();
                 }
@@ -1034,7 +991,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
                     }
 
                 }
-                if (ver == true) {
+                if (ver) {
 
                     try {
                         if (idExercicio == 500000) {
@@ -1083,12 +1040,12 @@ public class EditarExercicioActivity extends AppCompatActivity {
 
     }
 
-    void escolherImagem(long m, long e){
+    void escolherImagem(long m, long e) {
         int M = (int) m;
         int E = (int) e;
-        switch (M){
+        switch (M) {
             case 0:
-                switch (E){
+                switch (E) {
                     case 0:
                         imgExercicio.setImageResource(R.drawable.m0e0);
                         break;
@@ -1101,7 +1058,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
                 }
                 break;
             case 1:
-                switch (E){
+                switch (E) {
                     case 0:
                         imgExercicio.setImageResource(R.drawable.m1e0);
                         break;
@@ -1135,7 +1092,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
                 }
                 break;
             case 2:
-                switch (E){
+                switch (E) {
                     case 0:
                         imgExercicio.setImageResource(R.drawable.m2e0);
                         break;
@@ -1188,7 +1145,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
                 break;
 
             case 3:
-                switch (E){
+                switch (E) {
                     case 0:
                         imgExercicio.setImageResource(R.drawable.m3e0);
                         break;
@@ -1232,7 +1189,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
                 break;
 
             case 4:
-                switch (E){
+                switch (E) {
                     case 0:
                         imgExercicio.setImageResource(R.drawable.m4e0);
                         break;
@@ -1293,7 +1250,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
                 }
                 break;
             case 5:
-                switch (E){
+                switch (E) {
                     case 0:
                         imgExercicio.setImageResource(R.drawable.m5e0);
                         break;
@@ -1327,7 +1284,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
                 }
                 break;
             case 6:
-                switch (E){
+                switch (E) {
                     case 0:
                         imgExercicio.setImageResource(R.drawable.m6e0);
                         break;
@@ -1406,7 +1363,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
         }
         setExercicio[1] = edtSeries.getText().toString().trim();
         setExercicio[2] = "" + spnTipoRep.getSelectedItemId();
-        if (setExercicio[0].toString().equals("Rosca 21")) {
+        if (setExercicio[0].equals("Rosca 21")) {
             setExercicio[2] = "2";
 
         }
@@ -1638,6 +1595,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void carregarValores() {
         try {
             if (idExercicio != 500000) {
@@ -1666,13 +1624,12 @@ public class EditarExercicioActivity extends AppCompatActivity {
                 spnMusculo.setVisibility(View.INVISIBLE);
                 txtMusculo.setVisibility(View.VISIBLE);
                 carregado = 1;
-                cursor.moveToFirst();
 
-                while (cursor != null) {
+                while (cursor.moveToNext()) {
                     spnMusculo.setSelection(cursor.getInt(indMusculoSpinner));
-                    exercicio = (cursor.getString(indExercicio));
+                    String exercicio = (cursor.getString(indExercicio));
                     edtObs.setText(cursor.getString(indObs));
-                    if (edtObs.getText().toString().equals("")){
+                    if (edtObs.getText().toString().equals("")) {
                         chbObs.setChecked(false);
                     } else {
                         chbObs.setChecked(true);
@@ -1746,8 +1703,8 @@ public class EditarExercicioActivity extends AppCompatActivity {
                     } else if (uni == 2) {
                         spnUnilateral.setSelection(2);
                     }
-                    cursor.moveToNext();
                 }
+                cursor.close();
             } else {
                 spnExercicio.setVisibility(View.VISIBLE);
                 txtExercicio.setVisibility(View.INVISIBLE);
@@ -1760,7 +1717,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
         }
     }
 
-    void adapter(String[] musculo){
+    void adapter(String[] musculo) {
         ArrayAdapter<String> adapterExer = new ArrayAdapter<>(this, R.layout.spinner_item, musculo);
         adapterExer.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spnExercicio.setAdapter(adapterExer);

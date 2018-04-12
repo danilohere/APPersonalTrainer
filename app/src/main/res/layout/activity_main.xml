@@ -29,9 +29,7 @@
         android:layout_height="30dp"
         android:layout_alignEnd="@+id/adView"
         android:layout_alignParentTop="true"
-        android:visibility="invisible">
-
-    </com.facebook.share.widget.LikeView>
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/btnTreinar"
@@ -42,7 +40,7 @@
         android:layout_below="@+id/imageView2"
         android:layout_marginTop="20dp"
         android:background="@color/botoes_transparente"
-        android:text="Treinar!"
+        android:text="@string/treinarText"
         android:textColor="@color/color_texto" />
 
     <Button
@@ -55,7 +53,7 @@
         android:layout_centerVertical="true"
         android:layout_marginTop="10dp"
         android:background="@color/botoes_transparente"
-        android:text="Editar Treinos"
+        android:text="@string/editar_treinos_text"
         android:textColor="@color/color_texto" />
 
     <Button
@@ -67,7 +65,7 @@
         android:layout_below="@+id/btnAlarme"
         android:layout_marginTop="10dp"
         android:background="@color/botoes_transparente"
-        android:text="Histórico de Treinos"
+        android:text="@string/hist_rico_de_treinos_btn"
         android:textColor="@color/color_texto" />
 
     <Button
@@ -79,7 +77,7 @@
         android:layout_below="@+id/btnHistorico"
         android:layout_marginTop="10dp"
         android:background="@color/botoes_transparente"
-        android:text="Histórico de Corridas"
+        android:text="@string/hist_rico_de_corridas_btn"
         android:textColor="@color/color_texto" />
 
     <ImageView
@@ -88,7 +86,8 @@
         android:layout_height="100dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/appersonalbg" />
+        app:srcCompat="@drawable/appersonalbg"
+        android:contentDescription="@string/todo" />
 
     <Button
         android:id="@+id/btnConfig"
@@ -99,7 +98,7 @@
         android:layout_below="@+id/btnHistoricoCorrida"
         android:layout_marginTop="10dp"
         android:background="@color/botoes_transparente"
-        android:text="Configurações"
+        android:text="@string/configura_es_text"
         android:textColor="@color/color_texto" />
 
     <Button
@@ -111,7 +110,7 @@
         android:layout_below="@+id/btnMeusTreinos"
         android:layout_marginTop="10dp"
         android:background="@color/botoes_transparente"
-        android:text="Alarme de Água"
+        android:text="@string/alarme_de_gua_text"
         android:textColor="@color/color_texto" />
 
     <ImageView
@@ -121,7 +120,8 @@
         android:layout_alignStart="@+id/likeView"
         android:layout_below="@+id/likeView"
         android:layout_marginTop="10dp"
-        ads:srcCompat="@drawable/youtube" />
+        ads:srcCompat="@drawable/youtube"
+        android:contentDescription="@string/todo" />
 
     <ImageView
         android:id="@+id/imgFacebook"
@@ -130,6 +130,7 @@
         android:layout_alignEnd="@+id/likeView"
         android:layout_alignParentTop="true"
         android:visibility="visible"
-        ads:srcCompat="@drawable/facebook" />
+        ads:srcCompat="@drawable/facebook"
+        android:contentDescription="@string/todo"/>
 
 </RelativeLayout>

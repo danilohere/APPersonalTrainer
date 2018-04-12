@@ -1,7 +1,8 @@
 package appersonal.development.com.appersonaltrainer.Activities;
 
 import android.Manifest;
-import android.app.Activity;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,11 +19,14 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -39,15 +43,19 @@ import com.facebook.share.model.ShareOpenGraphObject;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import appersonal.development.com.appersonaltrainer.Controller.MyLocation;
 import appersonal.development.com.appersonaltrainer.R;
 
-public class AerobicoActivity extends AppCompatActivity{
+public class AerobicoActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     //Shared Preferences
     private static final String VOZ = "Voz";
@@ -57,9 +65,9 @@ public class AerobicoActivity extends AppCompatActivity{
 
     //Componentes de tela
     private ToggleButton btnIniciar;
+    private Button btnFinalizar;
     private Button btnAnterior;
     private Button btnProximo;
-    private Button btnFinalizar;
     private LinearLayout layoutBotoes;
     private TextView txtAerobico;
     private TextView txtDuracao;
@@ -87,6 +95,8 @@ public class AerobicoActivity extends AppCompatActivity{
     private int id;
     private int idTreino;
     private int s = 1;
+    private int bf;
+    private int contbotao = 0;
     private int temporizador;
     private int preparo = 0;
     private int antprox;
@@ -98,10 +108,12 @@ public class AerobicoActivity extends AppCompatActivity{
     private boolean completo = false;
     private int pausado;
     private int som;
-    private int bf;
     private int vozselecionada;
     private boolean corrida = false;
     private String nome;
+
+    private GoogleApiClient googleApiClient;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     //Players de áudio
     private MediaPlayer largada;
@@ -123,7 +135,7 @@ public class AerobicoActivity extends AppCompatActivity{
     public void onBackPressed() {
         //Verifica se o aeróbico está completo
         //se estiver incompleto, abre um AlertDialog perguntando se deseja cancelar o exercício sem terminar
-        if (completo == false) {
+        if (!completo) {
             AlertDialog.Builder builder = new AlertDialog.Builder(AerobicoActivity.this);
             builder.setTitle("Aeróbico Incompleto");
             builder.setMessage("O exercício será zerado, deseja mesmo cancelar o exercício?");
@@ -155,7 +167,7 @@ public class AerobicoActivity extends AppCompatActivity{
         }
         //se estiver completo, ele deixa voltar para a tela anterior e salva como completo
         else {
-            if (distancia == 2){
+            if (distancia == 2) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(AerobicoActivity.this);
                 builder.setTitle("Cancelar corrida");
                 builder.setMessage("Deseja cancelar a corrida?");
@@ -218,6 +230,7 @@ public class AerobicoActivity extends AppCompatActivity{
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         //Implementa o botão voltar na ActionBar
+        //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Configurações da tela
@@ -233,11 +246,12 @@ public class AerobicoActivity extends AppCompatActivity{
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
             id = extra.getInt("idAerobico");
-            try{
+            idTreino = extra.getInt("idTreino");
+            try {
                 distancia = extra.getInt("distancia");
                 tipoAe = extra.getInt("tipoAe");
                 nome = extra.getString("nome");
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -245,8 +259,18 @@ public class AerobicoActivity extends AppCompatActivity{
         if (nome == null)
             corrida = false;
 
+
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this) //Be aware of state of the connection
+                .addOnConnectionFailedListener(this) //Be aware of failures
+                .addApi(LocationServices.API)
+                .build();
+
+        //Tentando conexão com o Google API. Se a tentativa for bem sucessidade, o método onConnected() será chamado, senão, o método onConnectionFailed() será chamado.
+        googleApiClient.connect();
+
         //Implementa o ad na activity
-        AdView adView = (AdView) findViewById(R.id.adView);
+        AdView adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
@@ -255,25 +279,25 @@ public class AerobicoActivity extends AppCompatActivity{
         adView.loadAd(adRequest);
 
         //Encontra componentes declarados na tela
-        btnIniciar = (ToggleButton) findViewById(R.id.btnIniciar);
-        btnAnterior = (Button) findViewById(R.id.btnAnterior);
-        btnProximo = (Button) findViewById(R.id.btnProximo);
-        btnFinalizar = (Button) findViewById(R.id.btnFinalizar);
-        txtDuracao = (TextView) findViewById(R.id.txtDuracao);
-        txtDur = (TextView) findViewById(R.id.txtDur);
-        txtSeries = (TextView) findViewById(R.id.txtSeries);
-        txtSeriesTotal = (TextView) findViewById(R.id.txtSeriesTotal);
-        txtDescanso = (TextView) findViewById(R.id.txtDescanso);
-        txtSer = (TextView) findViewById(R.id.txtSer);
-        txtDesca = (TextView) findViewById(R.id.txtDesca);
-        txtTemporizador = (TextView) findViewById(R.id.txtTemporizador);
-        txtAerobico = (TextView) findViewById(R.id.txtAerobico);
-        txtBarra = (TextView) findViewById(R.id.txtBarra);
-        txtAviso = (TextView) findViewById(R.id.txtAviso);
-        txtObs = (TextView) findViewById(R.id.txtObs);
-        swtInicioAut = (Switch) findViewById(R.id.swtInicioAut);
-        swtContarKM = (Switch) findViewById(R.id.swtContarKM);
-        layoutBotoes = (LinearLayout) findViewById(R.id.layoutBotoes);
+        btnIniciar = findViewById(R.id.btnIniciar);
+        btnAnterior = findViewById(R.id.btnAnterior);
+        btnProximo = findViewById(R.id.btnProximo);
+        btnFinalizar = findViewById(R.id.btnFinalizar);
+        txtDuracao = findViewById(R.id.txtDuracao);
+        txtDur = findViewById(R.id.txtDur);
+        txtSeries = findViewById(R.id.txtSeries);
+        txtSeriesTotal = findViewById(R.id.txtSeriesTotal);
+        txtDescanso = findViewById(R.id.txtDescanso);
+        txtSer = findViewById(R.id.txtSer);
+        txtDesca = findViewById(R.id.txtDesca);
+        txtTemporizador = findViewById(R.id.txtTemporizador);
+        txtAerobico = findViewById(R.id.txtAerobico);
+        txtBarra = findViewById(R.id.txtBarra);
+        txtAviso = findViewById(R.id.txtAviso);
+        txtObs = findViewById(R.id.txtObs);
+        swtInicioAut = findViewById(R.id.swtInicioAut);
+        swtContarKM = findViewById(R.id.swtContarKM);
+        layoutBotoes = findViewById(R.id.layoutBotoes);
 
 
         //usa o shared preferences para acessar as configurações de voz e botão do fone
@@ -285,8 +309,10 @@ public class AerobicoActivity extends AppCompatActivity{
         som = sons.getInt("Sons", 0);
         bf = botaofone.getInt("BotaoFone", 0);
 
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         //Chama o método carregarValores()
-        if(!corrida) {
+        if (!corrida) {
             carregarValores(0);
         } else {
             carregarText();
@@ -295,24 +321,24 @@ public class AerobicoActivity extends AppCompatActivity{
         btnFinalizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (btnIniciar.isChecked()){
+                if (btnIniciar.isChecked()) {
                     btnIniciar.setChecked(false);
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(AerobicoActivity.this);
                 builder.setTitle("Encerrando a corrida");
                 builder.setMessage("Deseja salvar sua corrida? Clique fora ou pressione voltar para continuar a corrida");
-                builder.setNeutralButton("Salvar e compartilhar corrida com os amigos", new DialogInterface.OnClickListener(){
+                builder.setNeutralButton("Salvar e compartilhar corrida com os amigos", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String kmS = txtDescanso.getText().toString().replaceAll("KM","");
-                        kmS = kmS.replaceAll(",",".");
+                        String kmS = txtDescanso.getText().toString().replaceAll("KM", "");
+                        kmS = kmS.replaceAll(",", ".");
                         Double km = Double.parseDouble(kmS);
                         int hora = Integer.parseInt(txtSeries.getText().toString().substring(0, 1));
                         int min = Integer.parseInt(txtSeries.getText().toString().substring(2, 4));
                         int seg = Integer.parseInt(txtSeries.getText().toString().substring(5, 7));
-                        int tempoA = (hora*3600) + (min*60) + seg;
+                        int tempoA = (hora * 3600) + (min * 60) + seg;
                         Double kmph;
-                        if (km < 0.01){
+                        if (km < 0.01) {
                             kmph = 0.0;
                         } else {
                             kmph = ((km * 1000) / tempoA);
@@ -323,7 +349,7 @@ public class AerobicoActivity extends AppCompatActivity{
                                 .putString("og:description", "Acabei de correr com o")
                                 .putInt("fitness:duration:value", tempoA)
                                 .putString("fitness:duration:units", "s")
-                                .putDouble("fitness:distance:value", km )
+                                .putDouble("fitness:distance:value", km)
                                 .putString("fitness:distance:units", "km")
                                 .putDouble("fitness:speed:value", kmph)
                                 .putString("fitness:speed:units", "m/s")
@@ -345,7 +371,7 @@ public class AerobicoActivity extends AppCompatActivity{
                         String Skm = txtDescanso.getText().toString();
                         String Stempo = txtSeries.getText().toString();
                         bancoDados.execSQL("INSERT INTO historicokm (nomeCorrida, km, tempo, data) VALUES" +
-                                " ('"+nome+"', '"+Skm+"', '"+Stempo+"', "+data+")");
+                                " ('" + nome + "', '" + Skm + "', '" + Stempo + "', " + data + ")");
                         //para o aeróbico, para todos os áudios e fecha a tela
                         handler.removeCallbacks(runnablePause);
                         swtInicioAut.setChecked(false);
@@ -367,7 +393,7 @@ public class AerobicoActivity extends AppCompatActivity{
                         String km = txtDescanso.getText().toString();
                         String tempoS = txtSeries.getText().toString();
                         bancoDados.execSQL("INSERT INTO historicokm (nomeCorrida, km, tempo, data) VALUES" +
-                                " ('"+nome+"', '"+km+"', '"+tempoS+"', "+data+")");
+                                " ('" + nome + "', '" + km + "', '" + tempoS + "', " + data + ")");
                         //para o aeróbico, para todos os áudios e fecha a tela
                         handler.removeCallbacks(runnablePause);
                         swtInicioAut.setChecked(false);
@@ -406,7 +432,7 @@ public class AerobicoActivity extends AppCompatActivity{
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 //Se for alterado para Checked
                 if (isChecked) {
-                    if (swtContarKM.isChecked()){
+                    if (swtContarKM.isChecked()) {
                         if (ContextCompat.checkSelfPermission(AerobicoActivity.this,
                                 Manifest.permission.ACCESS_FINE_LOCATION)
                                 != PackageManager.PERMISSION_GRANTED) {
@@ -416,7 +442,10 @@ public class AerobicoActivity extends AppCompatActivity{
                                     "Caso negue, será necessário permitir em Configurações > Aplicativos > APPersonal Trainer > Permissões", Toast.LENGTH_LONG).show();
                         } else {
                             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                            boolean GPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                            boolean GPSEnabled = false;
+                            if (locationManager != null) {
+                                GPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                            }
                             if (!GPSEnabled && swtContarKM.isChecked()) {
                                 Toast.makeText(AerobicoActivity.this, "Ative a localização para continuar", Toast.LENGTH_SHORT).show();
                                 btnIniciar.setChecked(false);
@@ -428,39 +457,40 @@ public class AerobicoActivity extends AppCompatActivity{
                     } else {
                         //Inicia o temporizador com 3
                         temporizador = 3;
-                            //Inicia uma Thread para fazer a contagem antes de iniciar o exercício
-                            runnablePause = new Runnable() {
-                                @Override
-                                public void run() {
-                                    //Se o preparo for igual a 0, altera o txtTemporizador para mostrar "Preparar" por 2 segundos
-                                    if (temporizador == 3 && preparo == 0) {
-                                        txtTemporizador.setTextSize(48);
-                                        txtTemporizador.setText("Preparar!");
-                                        handler.postDelayed(runnablePause, 2000);
-                                        //altera o preparo para 1 para não passar novamente aqui
-                                        preparo = 1;
-                                    }
-                                    // a cada 1 segundo ele altera o valor de temporizador e mostra na tela e executa o som da contagem
-                                    else if (temporizador > 0) {
-                                        txtTemporizador.setTextSize(60);
-                                        handler.postDelayed(runnablePause, 1000);
-                                        txtTemporizador.setText("" + temporizador);
-                                        contagem(temporizador);
-                                        temporizador--;
-                                    }
-                                    //quando chega a 0, ele tira o temporizador da tela, executa o som de início, para a thread e executa o exercício
-                                    else {
-                                        handler.removeCallbacks(runnablePause);
-                                        txtTemporizador.setText("");
-                                        executarAerobico();
-                                        if (som == 0) {
-                                            largada(2);
-                                        } else {
-                                            bambam(1);
-                                        }
+                        //Inicia uma Thread para fazer a contagem antes de iniciar o exercício
+                        runnablePause = new Runnable() {
+                            @SuppressLint("SetTextI18n")
+                            @Override
+                            public void run() {
+                                //Se o preparo for igual a 0, altera o txtTemporizador para mostrar "Preparar" por 2 segundos
+                                if (temporizador == 3 && preparo == 0) {
+                                    txtTemporizador.setTextSize(48);
+                                    txtTemporizador.setText("Preparar!");
+                                    handler.postDelayed(runnablePause, 2000);
+                                    //altera o preparo para 1 para não passar novamente aqui
+                                    preparo = 1;
+                                }
+                                // a cada 1 segundo ele altera o valor de temporizador e mostra na tela e executa o som da contagem
+                                else if (temporizador > 0) {
+                                    txtTemporizador.setTextSize(60);
+                                    handler.postDelayed(runnablePause, 1000);
+                                    txtTemporizador.setText(String.valueOf(temporizador));
+                                    contagem(temporizador);
+                                    temporizador--;
+                                }
+                                //quando chega a 0, ele tira o temporizador da tela, executa o som de início, para a thread e executa o exercício
+                                else {
+                                    handler.removeCallbacks(runnablePause);
+                                    txtTemporizador.setText("");
+                                    executarAerobico();
+                                    if (som == 0) {
+                                        largada(2);
+                                    } else {
+                                        bambam(1);
                                     }
                                 }
-                            };
+                            }
+                        };
                         //faz a thread executar repetidamente
                         handler.post(runnablePause);
                         temporizador = 3;
@@ -481,7 +511,7 @@ public class AerobicoActivity extends AppCompatActivity{
                         }
                     }
 
-                    if (distancia == 1){
+                    if (distancia == 1) {
                         completo = true;
                     }
 
@@ -494,11 +524,11 @@ public class AerobicoActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 //Se o antprox for igual a um, significa que é o último aeróbico, ele faz a alteração quando carrega um novo aeróbico
-                if (antprox == 1){
-                    Toast.makeText(getApplicationContext(), "Último exercício", Toast.LENGTH_SHORT).show();
+                if (antprox == 1) {
+                    Toast.makeText(getApplicationContext(), "Último aeróbico", Toast.LENGTH_SHORT).show();
                 } else {
                     //Se o exercício estiver incompleto, abre um AlertDialog perguntando se quer mudar para o próximo exercício sem salvar como completo
-                    if (completo == false) {
+                    if (!completo) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(AerobicoActivity.this);
                         builder.setTitle("Exercício Incompleto");
                         builder.setMessage("Caso mude, o exercício será zerado, deseja mesmo mudar para o próximo?");
@@ -520,7 +550,7 @@ public class AerobicoActivity extends AppCompatActivity{
                         alerta = builder.create();
                         alerta.show();
                     } else {
-                        bancoDados.execSQL("UPDATE aerobicos SET completo = 1 WHERE idAerobico ="+id);
+                        bancoDados.execSQL("UPDATE aerobicos SET completo = 1 WHERE idAerobico =" + id);
                         btnIniciar.setChecked(false);
                         handler.removeCallbacks(runnablePause);
                         carregarValores(1);
@@ -535,12 +565,12 @@ public class AerobicoActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 //se for o primeiro aeróbico, ele apenas informa que é o primeiro
-                if (antprox == 2){
+                if (antprox == 2) {
                     Toast.makeText(getApplicationContext(), "Primeiro aeróbico", Toast.LENGTH_SHORT).show();
                 }
                 //se não for e não estiver completo, ele pergunta se deseja mesmo cancelar antes de mudar para o anterior
                 else {
-                    if (completo == false) {
+                    if (!completo) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(AerobicoActivity.this);
                         builder.setTitle("Exercício Incompleto");
                         builder.setMessage("Caso mude, o exercício será zerado, deseja mesmo mudar para o anterior?");
@@ -563,7 +593,7 @@ public class AerobicoActivity extends AppCompatActivity{
                     }
                     //se estiver completo, ele salva e muda para o próximo sem perguntar
                     else {
-                        bancoDados.execSQL("UPDATE aerobicos SET completo = 1 WHERE idAerobico ="+id);
+                        bancoDados.execSQL("UPDATE aerobicos SET completo = 1 WHERE idAerobico =" + id);
                         btnIniciar.setChecked(false);
                         handler.removeCallbacks(runnablePause);
                         carregarValores(2);
@@ -573,9 +603,10 @@ public class AerobicoActivity extends AppCompatActivity{
         });
 
         swtContarKM.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isChecked) {
                     if (!verificaConexao()) {
                         Toast.makeText(AerobicoActivity.this, "Os resultados dessa função não são garantidos sem o uso dos Dados Móveis" +
                                 ". Por favor, ative-os.", Toast.LENGTH_LONG).show();
@@ -598,6 +629,7 @@ public class AerobicoActivity extends AppCompatActivity{
     }
 
     //método para editar o campo duração de acordo com o tipo de exercício
+    @SuppressLint("SetTextI18n")
     private void Duracao() {
         long h = duracao / 3600;
         long m = duracao / 60;
@@ -635,6 +667,7 @@ public class AerobicoActivity extends AppCompatActivity{
     }
 
     //método para editar o campo do tempo de descanso
+    @SuppressLint("SetTextI18n")
     private void Descanso() {
         long m = descanso / 60;
         long s = descanso % 60;
@@ -647,14 +680,15 @@ public class AerobicoActivity extends AppCompatActivity{
 
     //executando o aeróbico
     private void executarAerobico() {
-        if (data == 0){
+        if (data == 0) {
             data = System.currentTimeMillis();
         }
-        txtSeries.setText("" + s);
+        txtSeries.setText(String.valueOf(s));
         //se séries for maior que 0, significa que é um exercício com series
-        if (series > 0){
+        if (series > 0) {
             //inicia a contagem regressiva do tempo do aeróbico
-            cdTimer = new CountDownTimer((duracao+1) * 1000, 1000) {
+            cdTimer = new CountDownTimer((duracao + 1) * 1000, 1000) {
+                @SuppressLint("SetTextI18n")
                 public void onTick(long millisUntilFinished) {
                     long t = (millisUntilFinished / 1000) - 1;
                     long m = t / 60;
@@ -690,6 +724,8 @@ public class AerobicoActivity extends AppCompatActivity{
                     }
 
                 }
+
+                @SuppressLint("SetTextI18n")
                 public void onFinish() {
                     //ao terminar, ele verifica se a série atual é menor que a quantidade de séries
                     //se for menor, ele executa o fim de série
@@ -701,14 +737,14 @@ public class AerobicoActivity extends AppCompatActivity{
                         } else {
                             bambam(0);
                         }
-                        timer(descanso+1);
+                        timer(descanso + 1);
                         s++;
                     }
                     //se não for, ele executa o fim do aeróbico
                     else {
                         Vibrar(700);
                         if (bambam != null)
-                        bambam.release();
+                            bambam.release();
                         new Timer().schedule(new TimerTask() {
                             @Override
                             public void run() {
@@ -723,7 +759,7 @@ public class AerobicoActivity extends AppCompatActivity{
                         }, 300);
                         Duracao();
                         swtInicioAut.setChecked(false);
-                        timer(descanso+1);
+                        timer(descanso + 1);
                         completo = true;
                         btnIniciar.setChecked(false);
                         txtTemporizador.setTextSize(35);
@@ -736,12 +772,13 @@ public class AerobicoActivity extends AppCompatActivity{
         else {
             //aqui ele verifica se o aeróbico é medido por distância ou tempo
             //se distância for igual a 0, então é medido por tempo
-            if (distancia==0) {
+            if (distancia == 0) {
                 if (pausado != 0) {
                     duracao = pausado;
                 }
                 //inicia uma contagem regressiva com o tempo do aeróbico
                 cdTimer = new CountDownTimer((duracao + 1) * 1000, 1000) {
+                    @SuppressLint("SetTextI18n")
                     public void onTick(long millisUntilFinished) {
                         long t = (millisUntilFinished / 1000);
                         long h = t / 3600;
@@ -788,6 +825,7 @@ public class AerobicoActivity extends AppCompatActivity{
 
                     }
 
+                    @SuppressLint("SetTextI18n")
                     public void onFinish() {
                         if (bambam != null)
                             bambam.release();
@@ -817,6 +855,7 @@ public class AerobicoActivity extends AppCompatActivity{
             } else {
 
                 runnablePause = new Runnable() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void run() {
                         handler.postDelayed(runnablePause, 1000);
@@ -848,12 +887,12 @@ public class AerobicoActivity extends AppCompatActivity{
 
             }
 
-            if (swtContarKM.isChecked()){
+            if (swtContarKM.isChecked()) {
                 runLocation = new Runnable() {
                     @Override
                     public void run() {
                         localizacao();
-                        handlerLocation.postDelayed(this, 15000);
+                        handlerLocation.postDelayed(this, 5000);
                     }
                 };
                 handlerLocation.post(runLocation);
@@ -906,7 +945,6 @@ public class AerobicoActivity extends AppCompatActivity{
             public void onCompletion(MediaPlayer mp) {
                 if (mp != null) {
                     mp.release();
-                    mp = null;
                 }
             }
         });
@@ -914,11 +952,14 @@ public class AerobicoActivity extends AppCompatActivity{
 
     private void Vibrar(long milliseconds) {
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        vibrator.vibrate(milliseconds);
+        if (vibrator != null) {
+            vibrator.vibrate(milliseconds);
+        }
     }
 
     private void timer(int time) {
         cdTimer = new CountDownTimer(time * 1000, 1000) {
+            @SuppressLint("SetTextI18n")
             public void onTick(long millisUntilFinished) {
                 long t = (millisUntilFinished / 1000) - 1;
                 long m = t / 60;
@@ -937,6 +978,7 @@ public class AerobicoActivity extends AppCompatActivity{
                     txtDescanso.setText(m + ":0" + s);
                 }
             }
+
             public void onFinish() {
                 btnIniciar.setChecked(false);
                 if (swtInicioAut.isChecked()) {
@@ -962,14 +1004,13 @@ public class AerobicoActivity extends AppCompatActivity{
             public void onCompletion(MediaPlayer mp) {
                 if (mp != null) {
                     mp.release();
-                    mp = null;
                 }
             }
         });
     }
 
     private void bambam(int num) {
-        switch(num){
+        switch (num) {
             case 0:
                 bambam = MediaPlayer.create(AerobicoActivity.this, R.raw.birl);
                 break;
@@ -998,24 +1039,24 @@ public class AerobicoActivity extends AppCompatActivity{
             public void onCompletion(MediaPlayer mp) {
                 if (mp != null) {
                     mp.release();
-                    mp = null;
                 }
             }
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void carregarValores(int proximo) {
         txtTemporizador.setText("");
         completo = false;
         try {
 
-            if (proximo == 0) {
-                Cursor cursor = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idAerobico = " + id, null);
-                int indIdTreino = cursor.getColumnIndex("idTreino");
-                cursor.moveToFirst();
-                idTreino = cursor.getInt(indIdTreino);
-            }
-            Cursor cursor = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idTreino = " + idTreino + "ORDER BY pos", null);
+//            if (proximo == 0) {
+//                Cursor cursor = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idAerobico = " + id, null);
+//                int indIdTreino = cursor.getColumnIndex("idTreino");
+//                cursor.moveToFirst();
+//                idTreino = cursor.getInt(indIdTreino);
+//            }
+            Cursor cursor = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idTreino = " + idTreino + " ORDER BY pos", null);
             int indAerobico = cursor.getColumnIndex("aerobico");
             int indDuracaoH = cursor.getColumnIndex("duracaoH");
             int indDuracaoM = cursor.getColumnIndex("duracaoM");
@@ -1027,9 +1068,8 @@ public class AerobicoActivity extends AppCompatActivity{
             int indKM = cursor.getColumnIndex("km");
             int indIdAerobico = cursor.getColumnIndex("idAerobico");
             int indObs = cursor.getColumnIndex("obs");
-            cursor.moveToFirst();
             boolean parar = false;
-            while (cursor != null && parar == false) {
+            while (!parar && cursor.moveToNext()) {
                 if (cursor.getInt(indIdAerobico) == id) {
                     parar = true;
                     if (proximo == 1) {
@@ -1055,51 +1095,47 @@ public class AerobicoActivity extends AppCompatActivity{
                             antprox = 0;
                         }
                     }
-                } else {
-                    cursor.moveToNext();
                 }
             }
             id = cursor.getInt(indIdAerobico);
             txtAerobico.setText(cursor.getString(indAerobico));
-            if (txtAerobico.getText().equals("Step") || txtAerobico.getText().equals("Corda")){
+            if (txtAerobico.getText().equals("Step") || txtAerobico.getText().equals("Corda")) {
                 tipoAe = 1;
             } else {
                 tipoAe = 0;
             }
-            if (cursor.getString(indObs).toString().equals("")){
+            if (cursor.getString(indObs).equals("")) {
                 txtObs.setVisibility(View.INVISIBLE);
                 txtObs.setText("");
             } else {
                 txtObs.setVisibility(View.VISIBLE);
-                txtObs.setText("Obs: "+cursor.getString(indObs).toString());
+                txtObs.setText("Obs: " + cursor.getString(indObs));
             }
             duracao = (cursor.getInt(indDuracaoH) * 3600) + (cursor.getInt(indDuracaoM) * 60) + cursor.getInt(indDuracaoS);
             series = Integer.parseInt(cursor.getString(indSeries));
             descanso = (cursor.getInt(indDescansoM) * 60) + cursor.getInt(indDescansoS);
             distancia = cursor.getInt(indDistancia);
             km = cursor.getDouble(indKM);
-
+            cursor.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (distancia==0) {
+        if (distancia == 0) {
             Duracao();
         } else {
             txtDuracao.setText(km + " KM");
         }
-
         carregarText();
-
-
     }
 
-    void carregarText(){
+    @SuppressLint("SetTextI18n")
+    void carregarText() {
         if (tipoAe == 0) {
             txtDesca.setVisibility(View.INVISIBLE);
             txtDescanso.setVisibility(View.INVISIBLE);
 
             txtBarra.setVisibility(View.INVISIBLE);
-            if (distancia==0) {
+            if (distancia == 0) {
                 txtSer.setVisibility(View.INVISIBLE);
                 txtSeries.setVisibility(View.INVISIBLE);
             } else if (distancia == 2) {
@@ -1142,9 +1178,55 @@ public class AerobicoActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (bf == 1) {
+            if (keyCode == KeyEvent.KEYCODE_HEADSETHOOK) {
+                contbotao += 1;
+                if (btnIniciar.isChecked()) {
+                    btnIniciar.setChecked(false);
+                    contbotao = 0;
+                } else {
+                    Runnable runnableBotaoFone = new Runnable() {
+                        @Override
+                        public void run() {
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (contbotao == 1) {
+                                        btnIniciar.setChecked(true);
+                                        contbotao = 0;
+                                        handler.removeCallbacks(this);
+                                    } else if (contbotao == 2) {
+                                        Toast.makeText(getApplicationContext(), "Próximo", Toast.LENGTH_SHORT).show();
+                                        btnProximo.callOnClick();
+                                        contbotao = 0;
+                                        handler.removeCallbacks(this);
+                                    } else if (contbotao == 3) {
+                                        btnAnterior.callOnClick();
+                                        Toast.makeText(getApplicationContext(), "Anterior", Toast.LENGTH_SHORT).show();
+                                        contbotao = 0;
+                                        handler.removeCallbacks(this);
+                                    }
+                                }
+                            }, 1500);
+                        }
+                    };
+                    handler.post(runnableBotaoFone);
+                }
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
     private void ativarGPS() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        boolean  GPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean GPSEnabled = false;
+        if (locationManager != null) {
+            GPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        }
         if (!GPSEnabled) {
             Toast.makeText(this, "Ative a Localização para calcular a distância", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
@@ -1154,50 +1236,72 @@ public class AerobicoActivity extends AppCompatActivity{
     public boolean verificaConexao() {
         boolean conectado = false;
         ConnectivityManager conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (conectivtyManager.getActiveNetworkInfo() != null
-                && conectivtyManager.getActiveNetworkInfo().isAvailable()
-                && conectivtyManager.getActiveNetworkInfo().isConnected()) {
-            conectado = true;
-        } else {
-            conectado = false;
+        if (conectivtyManager != null) {
+            conectado = conectivtyManager.getActiveNetworkInfo() != null
+                    && conectivtyManager.getActiveNetworkInfo().isAvailable()
+                    && conectivtyManager.getActiveNetworkInfo().isConnected();
         }
         return conectado;
     }
 
-    public void localizacao(){
-        MyLocation.LocationResult locationResult = new MyLocation.LocationResult(){
-            @Override
-            public void gotLocation(Location location){
-                //Usar a localizacao aqui!
-                if (atualLocation == null){
-                    atualLocation = location;
-                    btnFinalizar.setEnabled(true);
-                } else {
-                    Float a = atualLocation.distanceTo(location);
-                    a = a/1000;
-                    if (a >= 0.003 && a < 1.0){
-                        distpercorrida += (a);
-                        String dist = String.format("%.2f", distpercorrida);
-                        txtDescanso.setText(dist + " KM");
-                        atualLocation = location;
-                    }
-                }
+    public void localizacao() {
+
+        if (atualLocation == null) {
+//                    atualLocation = location;
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
             }
-        };
-        MyLocation myLocation = new MyLocation();
-        myLocation.getLocation(this, locationResult);
+//            atualLocation = LocationServices.getFusedLocationProviderClient();
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                // Logic to handle location object
+                                atualLocation = location;
+                            } else {
+                                Toast.makeText(AerobicoActivity.this, "Sua localização está desativada. Por favor, ative novamente", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+            btnFinalizar.setEnabled(true);
+        } else {
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                // Logic to handle location object
+                                Float a = atualLocation.distanceTo(location);
+                                a = a / 1000;
+                                if (a >= 0.0001 && a < 0.2) {
+                                    distpercorrida += (a);
+                                    @SuppressLint("DefaultLocale") String dist = String.format("%.2f", distpercorrida);
+                                    txtDescanso.setText(dist + " KM");
+                                    atualLocation = location;
+                                }
+                            } else {
+                                Toast.makeText(AerobicoActivity.this, "Sua localização está desativada. Por favor, ative novamente", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
     }
 
-    void VerificarPermissao(){
+    void VerificarPermissao() {
         // Should we show an explanation?
-        if (ActivityCompat.shouldShowRequestPermissionRationale(AerobicoActivity.this,
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(AerobicoActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-            // Show an expanation to the user *asynchronously* -- don't block
-            // this thread waiting for the user's response! After the user
-            // sees the explanation, try again to request the permission.
-
-        } else {
 
             // No explanation needed, we can request the permission.
 
@@ -1211,4 +1315,25 @@ public class AerobicoActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        pararConexaoComGoogleApi();
+    }
+
+    public void pararConexaoComGoogleApi() {
+        //Verificando se está conectado para então cancelar a conexão!
+        if (googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
+        }
+    }
 }
