@@ -58,4 +58,20 @@
     <string name="sons_de_treino_text">Sons de Treino</string>
     <string name="padr_o_text">Padrão</string>
     <string name="bambam_text">Bambam</string>
+    <string name="dispositivos_encontrados_txt">Dispositivos encontrados</string>
+    <string name="km">KM</string>
+    <string name="medir_por_dist_ncia_txt">Medir por distância</string>
+    <string name="apagar_historico_txt">Apagar Historico</string>
+    <string name="novo_treino_txt">Novo Treino</string>
+    <string name="receber_treino_txt">Receber Treino</string>
+    <string name="pesquisar_dispositivos_txt">Pesquisar Dispositivos</string>
+    <string name="dispositivos_pareados_txt">Dispositivos pareados</string>
+    <string name="o_bluetooth_est_ativado_aguardando_um_treino_ser_enviado_txt">O Bluetooth está ativado aguardando um treino ser enviado</string>
+    <string name="salvar_treino_txt">Salvar Treino</string>
+    <string name="name_txt">Name</string>
+    <string name="caminhar_correr_txt">Caminhar/Correr</string>
+    <string name="voc_ainda_n_o_tem_nenhum_treino_txt">Você ainda não tem nenhum treino</string>
+    <string name="finalizar_treino_txt">Finalizar Treino</string>
+    <string name="ltima_vez_txt">Última vez:</string>
+    <string name="trespontos">…</string>
 </resources>

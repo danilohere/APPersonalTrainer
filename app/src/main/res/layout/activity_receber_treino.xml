@@ -33,7 +33,7 @@
     </com.google.android.gms.ads.AdView>
 
     <TextView
-        android:text="O Bluetooth está ativado aguardando um treino ser enviado"
+        android:text="@string/o_bluetooth_est_ativado_aguardando_um_treino_ser_enviado_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtTreino"
@@ -45,7 +45,7 @@
         />
 
     <Button
-        android:text="Salvar Treino"
+        android:text="@string/salvar_treino_txt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btnSalvar"
@@ -62,11 +62,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text="@string/name_txt"
         android:ems="10"
         android:id="@+id/edttroca"
         android:visibility="invisible"
         android:layout_centerVertical="true"
         android:layout_alignStart="@+id/adView"
-        android:layout_marginStart="174dp" />
+        android:layout_marginStart="174dp"
+        tools:ignore="LabelFor" />
 </RelativeLayout>

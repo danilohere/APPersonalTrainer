@@ -121,30 +121,21 @@ public class AlarmeActivity extends AppCompatActivity {
         spnMinutoFim = findViewById(R.id.spnMinutoFim);
         Spinner spnIntervalo = findViewById(R.id.spnIntervalo);
         Button btnSalvar = findViewById(R.id.btnSalvar);
-        ArrayAdapter<String> adapHoras = new ArrayAdapter<>(
-                getApplicationContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                horas
-        );
 
-        ArrayAdapter<String> adapMinutos = new ArrayAdapter<>(
-                getApplicationContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                minutos
-        );
+        ArrayAdapter<String> adapterHoras = new ArrayAdapter<>(this, R.layout.spinner_item, horas);
+        adapterHoras.setDropDownViewResource(R.layout.spinner_dropdown_item);
 
-        ArrayAdapter<String> adapIntervalo = new ArrayAdapter<>(
-                getApplicationContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                intervalo
-        );
+        ArrayAdapter<String> adapterMinutos = new ArrayAdapter<>(this, R.layout.spinner_item, minutos);
+        adapterMinutos.setDropDownViewResource(R.layout.spinner_dropdown_item);
 
+        ArrayAdapter<String> adapterIntervalo = new ArrayAdapter<>(this, R.layout.spinner_item, intervalo);
+        adapterIntervalo.setDropDownViewResource(R.layout.spinner_dropdown_item);
 
-        spnHoraInicio.setAdapter(adapHoras);
-        spnHoraFim.setAdapter(adapHoras);
-        spnMinutoInicio.setAdapter(adapMinutos);
-        spnMinutoFim.setAdapter(adapMinutos);
-        spnIntervalo.setAdapter(adapIntervalo);
+        spnHoraInicio.setAdapter(adapterHoras);
+        spnHoraFim.setAdapter(adapterHoras);
+        spnMinutoInicio.setAdapter(adapterMinutos);
+        spnMinutoFim.setAdapter(adapterMinutos);
+        spnIntervalo.setAdapter(adapterIntervalo);
 
         SharedPreferences alarme = getSharedPreferences(ALARME, Context.MODE_PRIVATE);
         if (alarme.getInt("Alarme", 0) == 0) {

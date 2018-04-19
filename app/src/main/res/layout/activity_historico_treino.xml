@@ -33,7 +33,7 @@
     </com.google.android.gms.ads.AdView>
 
     <Button
-        android:text="Apagar Historico"
+        android:text="@string/apagar_historico_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btnApagar"

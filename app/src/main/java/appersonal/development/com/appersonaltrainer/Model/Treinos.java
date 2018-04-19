@@ -1,7 +1,5 @@
 package appersonal.development.com.appersonaltrainer.Model;
 
-import java.util.Date;
-
 /**
  * Created by Danilo on 03/03/2017.
  */

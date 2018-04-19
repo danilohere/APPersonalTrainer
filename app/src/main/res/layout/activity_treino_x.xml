@@ -23,7 +23,7 @@
     </com.google.android.gms.ads.AdView>
 
     <TextView
-        android:text="Treino"
+        android:text="@string/treino"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -33,7 +33,7 @@
         android:textColor="@color/color_texto"/>
 
     <Button
-        android:text="Finalizar Treino"
+        android:text="@string/finalizar_treino_txt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btnFinalizar"

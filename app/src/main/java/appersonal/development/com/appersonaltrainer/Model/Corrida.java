@@ -6,18 +6,18 @@ package appersonal.development.com.appersonaltrainer.Model;
 
 public class Corrida {
 
-    private String nome;
+    //    private String nome;
     private String km;
     private String tempo;
     private long data;
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+//    public String getNome() {
+//        return nome;
+//    }
+//
+//    public void setNome(String nome) {
+//        this.nome = nome;
+//    }
 
     public String getKm() {
         return km;

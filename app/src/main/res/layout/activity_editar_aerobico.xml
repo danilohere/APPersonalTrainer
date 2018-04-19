@@ -41,9 +41,10 @@
         android:layout_below="@+id/spnAerobico"
         android:layout_marginTop="11dp"
         android:buttonTint="@color/color_texto"
-        android:text="Obs"
+        android:text="@string/obs_text3"
         android:textColor="@color/color_texto"
-        android:textSize="@dimen/texto_campos" />
+        android:textSize="@dimen/texto_campos"
+        tools:targetApi="lollipop" />
 
     <EditText
         android:id="@+id/edtObs"
@@ -60,10 +61,12 @@
         android:textSize="@dimen/texto_campos"
         android:visibility="invisible"
         android:layout_alignEnd="@+id/spnAerobico"
-        android:layout_toEndOf="@+id/textView1" />
+        android:layout_toEndOf="@+id/textView1"
+        android:inputType="text"
+        tools:ignore="LabelFor" />
 
     <TextView
-        android:text="Duração:"
+        android:text="@string/dura_o_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView1"
@@ -74,7 +77,7 @@
         android:layout_marginTop="15dp" />
 
     <TextView
-        android:text="Exercício:"
+        android:text="@string/exerc_ciodoispontos_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -85,7 +88,7 @@
         android:layout_marginTop="15dp"/>
 
     <TextView
-        android:text="Séries"
+        android:text="@string/s_ries_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layoutDuracao"
@@ -97,7 +100,7 @@
         android:visibility="invisible" />
 
     <TextView
-        android:text="Descanso:"
+        android:text="@string/descanso_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/edtSeries"
@@ -126,17 +129,17 @@
             android:ems="10"
             android:id="@+id/edtDescansoM"
             android:background="@color/background_list"
-            android:layout_alignParentStart="true"
             android:textColor="@color/color_texto"
             android:layout_weight="1"
             android:textAlignment="center"
             android:textSize="@dimen/texto_campos"
             android:maxLength="1"
             style="@style/edit_branco"
-            android:padding="@dimen/padding_caixa_texto" />
+            android:padding="@dimen/padding_caixa_texto"
+            tools:ignore="LabelFor" />
 
         <TextView
-            android:text=":"
+            android:text="@string/doispontos_text"
             android:id="@+id/txtDoisPontos"
             android:textColor="@color/color_texto"
             android:textAlignment="center"
@@ -157,7 +160,8 @@
             android:textSize="@dimen/texto_campos"
             android:maxLength="2"
             style="@style/edit_branco"
-            android:padding="@dimen/padding_caixa_texto" />
+            android:padding="@dimen/padding_caixa_texto"
+            tools:ignore="LabelFor" />
 
     </LinearLayout>
 
@@ -170,28 +174,30 @@
         android:id="@+id/layoutBotoes">
 
         <Button
-            android:text="Confirmar"
+            android:text="@string/confirmar_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnConfirmar"
             android:layout_weight="1"
             android:background="@color/botoes_transparente"
             android:textColor="@color/color_texto"
-            android:layout_marginRight="5dp" />
+            android:layout_marginEnd="5dp"
+            tools:ignore="ButtonStyle" />
 
         <Button
-            android:text="Cancelar"
+            android:text="@string/cancelar_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnCancelar"
             android:layout_weight="1"
             android:textColor="@color/color_texto"
             android:background="@color/botoes_transparente"
-            android:layout_marginLeft="5dp" />
+            android:layout_marginStart="5dp"
+            tools:ignore="ButtonStyle" />
     </LinearLayout>
 
     <TextView
-        android:text="KM"
+        android:text="@string/km"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtKM"
@@ -219,10 +225,11 @@
         android:layout_marginTop="10dp"
         android:visibility="invisible"
         android:layout_below="@+id/txtSeries"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        tools:ignore="LabelFor" />
 
     <CheckBox
-        android:text="Medir por distância"
+        android:text="@string/medir_por_dist_ncia_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/chbDistancia"
@@ -232,7 +239,8 @@
         android:layout_alignBaseline="@+id/textView1"
         android:layout_alignBottom="@+id/textView1"
         android:layout_alignParentEnd="true"
-        android:buttonTint="@color/color_texto"/>
+        android:buttonTint="@color/color_texto"
+        tools:targetApi="lollipop" />
 
     <EditText
         android:layout_height="wrap_content"
@@ -250,7 +258,8 @@
         android:layout_width="120dp"
         android:layout_below="@+id/chbDistancia"
         android:layout_marginTop="10dp"
-        android:layout_alignStart="@+id/chbDistancia" />
+        android:layout_alignStart="@+id/chbDistancia"
+        tools:ignore="LabelFor" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -267,17 +276,17 @@
             android:ems="10"
             android:id="@+id/edtDuracaoH"
             android:background="@color/background_list"
-            android:layout_alignParentStart="true"
             android:textColor="@color/color_texto"
             android:textAlignment="center"
             android:textSize="@dimen/texto_campos"
             android:maxLength="1"
             style="@style/edit_branco"
             android:layout_width="@dimen/tamanho_caixa_texto_num"
-            android:padding="@dimen/padding_caixa_texto" />
+            android:padding="@dimen/padding_caixa_texto"
+            tools:ignore="LabelFor" />
 
         <TextView
-            android:text=":"
+            android:text="@string/doispontos_text"
             android:id="@+id/txtDoisPont"
             android:textColor="@color/color_texto"
             android:textAlignment="center"
@@ -292,7 +301,6 @@
             android:ems="10"
             android:id="@+id/edtDuracaoM"
             android:background="@color/background_list"
-            android:layout_alignParentStart="true"
             android:textColor="@color/color_texto"
             android:layout_weight="1"
             android:textAlignment="center"
@@ -300,10 +308,11 @@
             android:maxLength="2"
             style="@style/edit_branco"
             android:layout_width="@dimen/tamanho_caixa_texto_num"
-            android:padding="@dimen/padding_caixa_texto" />
+            android:padding="@dimen/padding_caixa_texto"
+            tools:ignore="LabelFor" />
 
         <TextView
-            android:text=":"
+            android:text="@string/doispontos_text"
             android:id="@+id/txtDoisP"
             android:textColor="@color/color_texto"
             android:textAlignment="center"
@@ -325,7 +334,8 @@
             android:maxLength="2"
             style="@style/edit_branco"
             android:layout_width="@dimen/tamanho_caixa_texto_num"
-            android:padding="@dimen/padding_caixa_texto" />
+            android:padding="@dimen/padding_caixa_texto"
+            tools:ignore="LabelFor" />
 
     </LinearLayout>
 
@@ -338,9 +348,10 @@
         android:visibility="invisible"
         android:enabled="false"
         android:background="@color/background_list"
-        android:paddingLeft="8dp"
+        android:paddingStart="8dp"
         android:layout_alignTop="@+id/spnAerobico"
         android:layout_alignParentStart="true"
-        android:paddingTop="@dimen/padding_caixa_texto" />
+        android:paddingTop="@dimen/padding_caixa_texto"
+        tools:ignore="RtlSymmetry" />
 
 </RelativeLayout>

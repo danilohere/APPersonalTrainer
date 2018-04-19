@@ -5,11 +5,14 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -165,13 +168,13 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
             int indTreino = cursor.getColumnIndex("treinoH");
             int indData = cursor.getColumnIndex("data");
             meses = new ArrayList<>();
-            ArrayAdapter<String> adaptador = new ArrayAdapter<>(
-                    getApplicationContext(),
-                    android.R.layout.simple_list_item_1,
-                    android.R.id.text1,
-                    meses
-            );
-            lstMeses.setAdapter(adaptador);
+//            ArrayAdapter<String> adaptador = new ArrayAdapter<>(
+//                    getApplicationContext(),
+//                    android.R.layout.simple_list_item_1,
+//                    android.R.id.text1,
+//                    meses
+//            );
+            lstMeses.setAdapter(new MyAdapter(meses));
             while (cursor.moveToNext()) {
                 Treinos treino = new Treinos();
                 treino.setNome(cursor.getString(indTreino));
@@ -225,6 +228,76 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    static class MyAdapter extends BaseAdapter implements View.OnTouchListener {
+        private List<String> mItems;
+
+        private static class ViewHolder {
+            public TextView text;
+            float lastTouchedX;
+            float lastTouchedY;
+
+            ViewHolder(View v) {
+                text = (TextView) v;
+                text.setTextColor(Color.WHITE);
+            }
+        }
+
+        MyAdapter(List<String> items) {
+            mItems = items;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view;
+            ViewHolder vh;
+
+            if (convertView == null) {
+                view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+                view.setOnTouchListener(this);
+                vh = new ViewHolder(view);
+                view.setTag(vh);
+            } else {
+                view = convertView;
+                vh = (ViewHolder) view.getTag();
+            }
+
+            vh.text.setText(mItems.get(position));
+
+            return view;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return 0;
+        }
+
+        @Override
+        public int getCount() {
+            return mItems.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mItems.get(position);
+        }
+
+        @SuppressLint("ClickableViewAccessibility")
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            ViewHolder vh = (ViewHolder) v.getTag();
+
+            vh.lastTouchedX = event.getX();
+            vh.lastTouchedY = event.getY();
+
+            return false;
+        }
     }
 
     public class AdapterTreinosPersonalizado extends BaseAdapter {

@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/adView2"
         android:layout_marginTop="10dp"
-        android:text="Dispositivos encontrados"
+        android:text="@string/dispositivos_encontrados_txt"
         android:textAlignment="center"
         android:textColor="@color/color_texto"
         android:textSize="30sp" />

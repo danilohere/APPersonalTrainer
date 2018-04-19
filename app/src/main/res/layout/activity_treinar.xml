@@ -38,9 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/adView"
         android:layout_marginBottom="10dp"
-        android:layout_weight="1"
         android:background="@color/botoes_transparente"
-        android:text="Caminhar/Correr"
+        android:text="@string/caminhar_correr_txt"
         android:textColor="@color/color_texto" />
 
     <Button
@@ -49,9 +48,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/btnCorrer"
         android:layout_marginBottom="10dp"
-        android:layout_weight="1"
         android:background="@color/botoes_transparente"
-        android:text="Novo Treino"
+        android:text="@string/novo_treino_txt"
         android:textColor="@color/color_texto"
         android:visibility="invisible" />
 
@@ -60,7 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/btnNovoTreino"
-        android:text="Você ainda não tem nenhum treino "
+        android:text="@string/voc_ainda_n_o_tem_nenhum_treino_txt"
         android:textAlignment="center"
         android:textColor="@color/color_texto"
         android:textSize="@dimen/texto_campos"

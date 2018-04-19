@@ -3,9 +3,11 @@ package appersonal.development.com.appersonaltrainer.Activities;
 import android.Manifest;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -17,15 +19,16 @@ import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,21 +44,36 @@ import com.facebook.share.model.ShareOpenGraphAction;
 import com.facebook.share.model.ShareOpenGraphContent;
 import com.facebook.share.model.ShareOpenGraphObject;
 import com.facebook.share.widget.ShareDialog;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import appersonal.development.com.appersonaltrainer.R;
 
-public class AerobicoActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class AerobicoActivity extends AppCompatActivity {
 
     //Shared Preferences
     private static final String VOZ = "Voz";
@@ -87,6 +105,8 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
     private Location atualLocation;
     ShareDialog shareDialog = new ShareDialog(this);
 
+    private InterstitialAd mInterstitialAd;
+
     //Variáveis
     private int tipoAe;
     private int series;
@@ -103,6 +123,7 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
     private int distancia;
     private long tempo = 0;
     private long data = 0;
+    private int resetDist;
     private Double km;
     private Double distpercorrida = 0.0;
     private boolean completo = false;
@@ -112,8 +133,21 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
     private boolean corrida = false;
     private String nome;
 
-    private GoogleApiClient googleApiClient;
     private FusedLocationProviderClient mFusedLocationClient;
+    private LocationRequest mLocationRequest;
+    private LocationCallback mLocationCallback;
+    private boolean mRequestingLocationUpdates;
+    private static final int REQUEST_CHECK_SETTINGS = 0x1;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private final static String KEY_REQUESTING_LOCATION_UPDATES = "requesting-location-updates";
+    private final static String KEY_LOCATION = "location";
+    private final static String KEY_LAST_UPDATED_TIME_STRING = "last-updated-time-string";
+    private SettingsClient mSettingsClient;
+    private LocationSettingsRequest mLocationSettingsRequest;
+    private String mLastUpdateTime;
+    private Location mCurrentLocation;
 
     //Players de áudio
     private MediaPlayer largada;
@@ -147,8 +181,6 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
                     handler.removeCallbacks(runnablePause);
                     if (largada != null)
                         largada.release();
-//                    if (bambam !=null)
-//                        bambam.release();
                     if (contador != null)
                         contador.release();
                     AerobicoActivity.this.finish();
@@ -226,12 +258,23 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aerobico);
 
+
+        iniciarLocalizacao();
+        updateValuesFromBundle(savedInstanceState);
+
+
         //configura a Activity para controlar o volume de mídia
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         //Implementa o botão voltar na ActionBar
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        MobileAds.initialize(this,
+                "ca-app-pub-4960619699535760/4978018539");
+        mInterstitialAd = new InterstitialAd(getApplicationContext());
+        mInterstitialAd.setAdUnitId("ca-app-pub-4960619699535760/4978018539");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
         //Configurações da tela
 
@@ -259,15 +302,6 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
         if (nome == null)
             corrida = false;
 
-
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this) //Be aware of state of the connection
-                .addOnConnectionFailedListener(this) //Be aware of failures
-                .addApi(LocationServices.API)
-                .build();
-
-        //Tentando conexão com o Google API. Se a tentativa for bem sucessidade, o método onConnected() será chamado, senão, o método onConnectionFailed() será chamado.
-        googleApiClient.connect();
 
         //Implementa o ad na activity
         AdView adView = findViewById(R.id.adView);
@@ -308,8 +342,6 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
         SharedPreferences sons = getSharedPreferences(SONS, ConfiguracoesActivity.MODE_PRIVATE);
         som = sons.getInt("Sons", 0);
         bf = botaofone.getInt("BotaoFone", 0);
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         //Chama o método carregarValores()
         if (!corrida) {
@@ -362,10 +394,6 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
                                 .setPreviewPropertyName("fitness:course")
                                 .setAction(action)
                                 .build();
-
-//                ShareLinkContent content = new ShareLinkContent.Builder()
-//                        .setContentUrl(Uri.parse("http://www.facebook.com/appersonaltrainer1"))
-//                        .build();
                         shareDialog.show(content);
                         String nome = txtAerobico.getText().toString();
                         String Skm = txtDescanso.getText().toString();
@@ -403,7 +431,27 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
                         if (contador != null)
                             contador.release();
                         finish();
-                        Toast.makeText(AerobicoActivity.this, "Salvo no histórico de corridas!", Toast.LENGTH_SHORT).show();
+                        mInterstitialAd.setAdListener(new AdListener() {
+                            @Override
+                            public void onAdFailedToLoad(int i) {
+                                Toast.makeText(AerobicoActivity.this, "Salvo no histórico de corridas!", Toast.LENGTH_SHORT).show();
+                                super.onAdFailedToLoad(i);
+                            }
+
+                            @Override
+                            public void onAdClosed() {
+                                Toast.makeText(AerobicoActivity.this, "Salvo no histórico de corridas!", Toast.LENGTH_SHORT).show();
+                                super.onAdClosed();
+                            }
+
+                        });
+                        if (mInterstitialAd.isLoaded()) {
+                            mInterstitialAd.show();
+                        } else {
+                            Toast.makeText(AerobicoActivity.this, "Salvo no histórico de corridas!", Toast.LENGTH_SHORT).show();
+                            Log.d("TAG", "The interstitial wasn't loaded yet.");
+                        }
+
                     }
                 });
                 builder.setNegativeButton("Não salvar", new DialogInterface.OnClickListener() {
@@ -418,9 +466,25 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
                         if (contador != null)
                             contador.release();
                         finish();
+                        mInterstitialAd.setAdListener(new AdListener() {
+                            @Override
+                            public void onAdFailedToLoad(int i) {
+                                super.onAdFailedToLoad(i);
+                            }
+
+                            @Override
+                            public void onAdClosed() {
+                                super.onAdClosed();
+                            }
+
+                        });
+                        if (mInterstitialAd.isLoaded()) {
+                            mInterstitialAd.show();
+                        } else {
+                            Log.d("TAG", "The interstitial wasn't loaded yet.");
+                        }
                     }
                 });
-
                 alerta = builder.create();
                 alerta.show();
             }
@@ -501,6 +565,7 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
                     //para a Thread
                     handler.removeCallbacks(runnablePause);
                     handlerLocation.removeCallbacks(runLocation);
+                    stopLocationUpdates();
                     swtContarKM.setEnabled(true);
                     //se a contagem regressiva estiver executando, ele para
                     if (cdTimer != null) {
@@ -646,7 +711,7 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
             } else {
                 if (m < 10 && s > 9)
                     txtDuracao.setText(h + ":0" + m + ":" + s);
-                else if (m > 9 && s < 10)
+                else if (m > 9)
                     if (m >= 60) {
                         txtDuracao.setText(h + ":00:0" + s);
                     } else {
@@ -813,7 +878,7 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
                         } else {
                             if (m < 10 && s > 9)
                                 txtDuracao.setText(h + ":0" + m + ":" + s);
-                            else if (m > 9 && s < 10)
+                            else if (m > 9)
                                 if (m >= 60) {
                                     txtDuracao.setText(h + ":00:0" + s);
                                 } else {
@@ -871,7 +936,7 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
                         } else {
                             if (m < 10 && s > 9)
                                 txtSeries.setText(h + ":0" + m + ":" + s);
-                            else if (m > 9 && s < 10)
+                            else if (m > 9)
                                 if (m >= 60) {
                                     txtSeries.setText(h + ":00:0" + s);
                                 } else {
@@ -884,15 +949,19 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
                     }
                 };
                 handler.post(runnablePause);
-
             }
 
             if (swtContarKM.isChecked()) {
+                mRequestingLocationUpdates = true;
                 runLocation = new Runnable() {
                     @Override
                     public void run() {
-                        localizacao();
-                        handlerLocation.postDelayed(this, 5000);
+                        if (mCurrentLocation == null) {
+                            createLocationCallback();
+                            startLocationUpdates();
+                        } else {
+                            startLocationUpdates();
+                        }
                     }
                 };
                 handlerLocation.post(runLocation);
@@ -903,7 +972,6 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
     }
 
     private void contagem(int num) {
-
         if (vozselecionada == 0) {
             switch (num) {
                 case 0:
@@ -1049,13 +1117,6 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
         txtTemporizador.setText("");
         completo = false;
         try {
-
-//            if (proximo == 0) {
-//                Cursor cursor = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idAerobico = " + id, null);
-//                int indIdTreino = cursor.getColumnIndex("idTreino");
-//                cursor.moveToFirst();
-//                idTreino = cursor.getInt(indIdTreino);
-//            }
             Cursor cursor = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idTreino = " + idTreino + " ORDER BY pos", null);
             int indAerobico = cursor.getColumnIndex("aerobico");
             int indDuracaoH = cursor.getColumnIndex("duracaoH");
@@ -1244,60 +1305,6 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
         return conectado;
     }
 
-    public void localizacao() {
-
-        if (atualLocation == null) {
-//                    atualLocation = location;
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-//            atualLocation = LocationServices.getFusedLocationProviderClient();
-            mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                // Logic to handle location object
-                                atualLocation = location;
-                            } else {
-                                Toast.makeText(AerobicoActivity.this, "Sua localização está desativada. Por favor, ative novamente", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-            btnFinalizar.setEnabled(true);
-        } else {
-            mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                        @SuppressLint("SetTextI18n")
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                // Logic to handle location object
-                                Float a = atualLocation.distanceTo(location);
-                                a = a / 1000;
-                                if (a >= 0.0001 && a < 0.2) {
-                                    distpercorrida += (a);
-                                    @SuppressLint("DefaultLocale") String dist = String.format("%.2f", distpercorrida);
-                                    txtDescanso.setText(dist + " KM");
-                                    atualLocation = location;
-                                }
-                            } else {
-                                Toast.makeText(AerobicoActivity.this, "Sua localização está desativada. Por favor, ative novamente", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        }
-    }
-
     void VerificarPermissao() {
         // Should we show an explanation?
         if (!ActivityCompat.shouldShowRequestPermissionRationale(AerobicoActivity.this,
@@ -1315,25 +1322,206 @@ public class AerobicoActivity extends AppCompatActivity implements GoogleApiClie
         }
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
+    @SuppressLint("RestrictedApi")
+    private void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
 
+        // Sets the desired interval for active location updates. This interval is
+        // inexact. You may not receive updates at all if no location sources are available, or
+        // you may receive them slower than requested. You may also receive updates faster than
+        // requested if other applications are requesting location at a faster interval.
+        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+
+        // Sets the fastest rate for active location updates. This interval is exact, and your
+        // application will never receive updates faster than this value.
+        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    /**
+     * Creates a callback for receiving location events.
+     */
+    private void createLocationCallback() {
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+
+                mCurrentLocation = locationResult.getLastLocation();
+                mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+                updateLocationUI();
+            }
+        };
+    }
+
+    private void buildLocationSettingsRequest() {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        mLocationSettingsRequest = builder.build();
     }
 
     @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        pararConexaoComGoogleApi();
-    }
-
-    public void pararConexaoComGoogleApi() {
-        //Verificando se está conectado para então cancelar a conexão!
-        if (googleApiClient.isConnected()) {
-            googleApiClient.disconnect();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            // Check for the integer request code originally supplied to startResolutionForResult().
+            case REQUEST_CHECK_SETTINGS:
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+                        Log.i(TAG, "User agreed to make required location settings changes.");
+                        // Nothing to do. startLocationupdates() gets called in onResume again.
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        Log.i(TAG, "User chose not to make required location settings changes.");
+                        mRequestingLocationUpdates = false;
+                        updateUI();
+                        break;
+                }
+                break;
         }
+    }
+
+    private void startLocationUpdates() {
+
+        // Begin by checking if the device has the necessary location settings.
+        mSettingsClient.checkLocationSettings(mLocationSettingsRequest)
+                .addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
+                    @SuppressLint("MissingPermission")
+                    @Override
+                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                        Log.i(TAG, "All location settings are satisfied.");
+
+                        //noinspection MissingPermission
+                        mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                                mLocationCallback, Looper.myLooper());
+                        updateUI();
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        int statusCode = ((ApiException) e).getStatusCode();
+                        switch (statusCode) {
+                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                                Log.i(TAG, "Location settings are not satisfied. Attempting to upgrade " +
+                                        "location settings ");
+                                try {
+                                    // Show the dialog by calling startResolutionForResult(), and check the
+                                    // result in onActivityResult().
+                                    ResolvableApiException rae = (ResolvableApiException) e;
+                                    rae.startResolutionForResult(AerobicoActivity.this, REQUEST_CHECK_SETTINGS);
+                                } catch (IntentSender.SendIntentException sie) {
+                                    Log.i(TAG, "PendingIntent unable to execute request.");
+                                }
+                                break;
+                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                                String errorMessage = "Location settings are inadequate, and cannot be " +
+                                        "fixed here. Fix in Settings.";
+                                Log.e(TAG, errorMessage);
+                                Toast.makeText(AerobicoActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                                mRequestingLocationUpdates = false;
+                        }
+
+                        updateUI();
+                    }
+                });
+    }
+
+    private void updateUI() {
+        updateLocationUI();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void updateLocationUI() {
+        if (atualLocation == null) {
+            atualLocation = mCurrentLocation;
+        } else {
+            if (mCurrentLocation != null) {
+                btnFinalizar.setEnabled(true);
+                Float a = atualLocation.distanceTo(mCurrentLocation);
+                a = a / 1000;
+                Toast.makeText(AerobicoActivity.this, "Distância: " + a + "\n Lat1: " + atualLocation.getLatitude() + "  Lon1: " + atualLocation.getLongitude()
+                        + "\n Lat2: " + mCurrentLocation.getLatitude() + "  Lon2: " + mCurrentLocation.getLongitude(), Toast.LENGTH_LONG).show();
+                if (a < 0.29) {
+                    if (a >= 0.01) {
+                        distpercorrida += a;
+                        @SuppressLint("DefaultLocale") String dist = String.format("%.2f", distpercorrida);
+                        txtDescanso.setText(dist + " KM");
+                        atualLocation = mCurrentLocation;
+                        resetDist = 0;
+                    }
+                } else if (a >= 0.29) {
+                    resetDist++;
+                    if (resetDist >= 3) {
+                        atualLocation = mCurrentLocation;
+                        resetDist = 0;
+                    }
+                }
+            } else {
+                Toast.makeText(AerobicoActivity.this, "Sua localização está desativada. Por favor, ative novamente", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void stopLocationUpdates() {
+        if (!mRequestingLocationUpdates) {
+            Log.d(TAG, "stopLocationUpdates: updates never requested, no-op.");
+            return;
+        }
+
+        // It is a good practice to remove location requests when the activity is in a paused or
+        // stopped state. Doing so helps battery performance and is especially
+        // recommended in applications that request frequent location updates.
+        mFusedLocationClient.removeLocationUpdates(mLocationCallback)
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        mRequestingLocationUpdates = false;
+                    }
+                });
+    }
+
+    private void updateValuesFromBundle(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            // Update the value of mRequestingLocationUpdates from the Bundle, and make sure that
+            // the Start Updates and Stop Updates buttons are correctly enabled or disabled.
+            if (savedInstanceState.keySet().contains(KEY_REQUESTING_LOCATION_UPDATES)) {
+                mRequestingLocationUpdates = savedInstanceState.getBoolean(
+                        KEY_REQUESTING_LOCATION_UPDATES);
+            }
+
+            // Update the value of mCurrentLocation from the Bundle and update the UI to show the
+            // correct latitude and longitude.
+            if (savedInstanceState.keySet().contains(KEY_LOCATION)) {
+                // Since KEY_LOCATION was found in the Bundle, we can be sure that mCurrentLocation
+                // is not null.
+                mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
+            }
+
+            // Update the value of mLastUpdateTime from the Bundle and update the UI.
+            if (savedInstanceState.keySet().contains(KEY_LAST_UPDATED_TIME_STRING)) {
+                mLastUpdateTime = savedInstanceState.getString(KEY_LAST_UPDATED_TIME_STRING);
+            }
+            updateUI();
+        }
+    }
+
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putBoolean(KEY_REQUESTING_LOCATION_UPDATES, mRequestingLocationUpdates);
+        savedInstanceState.putParcelable(KEY_LOCATION, mCurrentLocation);
+        savedInstanceState.putString(KEY_LAST_UPDATED_TIME_STRING, mLastUpdateTime);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    void iniciarLocalizacao() {
+        mLastUpdateTime = "";
+        mRequestingLocationUpdates = false;
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mSettingsClient = LocationServices.getSettingsClient(this);
+
+        createLocationCallback();
+        createLocationRequest();
+        buildLocationSettingsRequest();
     }
 }

@@ -53,26 +53,26 @@
         android:layout_marginBottom="10dp">
 
         <Button
-            android:text="Novo Treino"
+            android:text="@string/novo_treino_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/btnNovo"
             android:background="@color/botoes_transparente"
             android:textColor="@color/color_texto"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
             android:layout_weight="1"
-            android:layout_marginRight="5dp" />
+            android:layout_marginEnd="5dp"
+            tools:ignore="ButtonStyle" />
 
         <Button
-            android:text="Receber Treino"
+            android:text="@string/receber_treino_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/btnReceber"
             android:layout_weight="1"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:textColor="@color/color_texto"
-            android:background="@color/botoes_transparente" />
+            android:background="@color/botoes_transparente"
+            tools:ignore="ButtonStyle" />
     </LinearLayout>
 
     <TextView
