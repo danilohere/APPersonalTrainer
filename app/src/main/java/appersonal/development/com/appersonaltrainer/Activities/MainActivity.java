@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         Button btnAlarme = findViewById(R.id.btnAlarme);
         Button btnHistorico = findViewById(R.id.btnHistorico);
         Button btnHistoricoCorrida = findViewById(R.id.btnHistoricoCorrida);
+        Button btnTutorial = findViewById(R.id.btnTutorial);
         Button btnConfig = findViewById(R.id.btnConfig);
         ImageView imgYoutube = findViewById(R.id.imgYoutube);
         ImageView imgFacebook = findViewById(R.id.imgFacebook);
@@ -119,6 +120,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, HistoricoTreinoActivity.class));
+            }
+        });
+        btnTutorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                startActivity(new Intent(MainActivity.this, TutorialActivity.class));
             }
         });
 
