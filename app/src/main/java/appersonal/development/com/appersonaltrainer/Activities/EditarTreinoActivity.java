@@ -46,6 +46,9 @@ public class EditarTreinoActivity extends AppCompatActivity {
     private Button btnNovoAerobico;
     private EditText edtTreino;
     private TextView txtTreino;
+    private TextView txtTempoMedio;
+    private int tempoMedio;
+    private boolean semTempo = false;
     private RelativeLayout rl;
     private int numIdEx;
     private int id;
@@ -109,6 +112,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
         btnNovoAerobico = findViewById(R.id.btnNovoAerobico);
         edtTreino = findViewById(R.id.edtTreino);
         txtTreino = findViewById(R.id.txtTreino);
+        txtTempoMedio = findViewById(R.id.txtTempoMedio);
         rl = findViewById(R.id.activity_editar_treino);
 
         recuperarExercicios();
@@ -248,7 +252,6 @@ public class EditarTreinoActivity extends AppCompatActivity {
         lstExercicios.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-
                 posIni = position;
                 try {
                     idEscolhido = idsEx.get(position);
@@ -341,8 +344,10 @@ public class EditarTreinoActivity extends AppCompatActivity {
         recuperarExercicios();
     }
 
+    @SuppressLint("SetTextI18n")
     private void recuperarExercicios() {
         numIdEx = 0;
+        tempoMedio = 0;
         exercicios = new ArrayList<>();
         idsEx = new ArrayList<>();
         idsAer = new ArrayList<>();
@@ -379,6 +384,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
             cursorExercicio = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino =" + id + " ORDER BY pos ASC", null);
             int indExercicio = cursorExercicio.getColumnIndex("exercicio");
             int indIdEx = cursorExercicio.getColumnIndex("idExercicio");
+            int indTempo = cursorExercicio.getColumnIndex("tempoMedio");
             lstExercicios.setAdapter(new MyAdapter(exercicios));
             int position = 0;
             while (cursorExercicio.moveToNext()) {
@@ -387,6 +393,12 @@ public class EditarTreinoActivity extends AppCompatActivity {
                 idsEx.add(Integer.parseInt(cursorExercicio.getString(indIdEx)));
                 numIdEx++;
                 position++;
+                int tempo = cursorExercicio.getInt(indTempo);
+                if (tempo == 0) {
+                    semTempo = true;
+                } else {
+                    tempoMedio += cursorExercicio.getInt(indTempo) + 150;
+                }
             }
             cursorExercicio.close();
         } catch (Exception e) {
@@ -412,6 +424,8 @@ public class EditarTreinoActivity extends AppCompatActivity {
             cursorAerobico = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idTreino =" + id + " ORDER BY pos ASC", null);
             int indAerobico = cursorAerobico.getColumnIndex("aerobico");
             int indIdAer = cursorAerobico.getColumnIndex("idAerobico");
+            int indTempo = cursorAerobico.getColumnIndex("tempoMedio");
+
             lstExercicios.setAdapter(new MyAdapter(exercicios));
             int position = numIdEx;
             while (cursorAerobico.moveToNext()) {
@@ -419,10 +433,43 @@ public class EditarTreinoActivity extends AppCompatActivity {
                 bancoDados.execSQL("UPDATE aerobicos SET pos = " + position + " WHERE idAerobico = " + cursorAerobico.getInt(indIdAer));
                 idsAer.add(Integer.parseInt(cursorAerobico.getString(indIdAer)));
                 position++;
+                int tempo = cursorAerobico.getInt(indTempo);
+                if (tempo == 0) {
+                    semTempo = true;
+                } else {
+                    tempoMedio += cursorAerobico.getInt(indTempo) + 150;
+                }
             }
             cursorAerobico.close();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        if (semTempo) {
+            txtTempoMedio.setText("Tempo médio não definido");
+            Toast.makeText(this, "Por favor, abrir e salvar os exercícios desse treino em Editar treinos para gravar o tempo médio", Toast.LENGTH_LONG).show();
+        } else {
+            int h = tempoMedio / 3600;
+            int m = tempoMedio / 60;
+            int s = tempoMedio % 60;
+            if (m > 9 && s > 9) {
+                if (m >= 60) {
+                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":00");
+                } else {
+                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":" + m);
+                }
+            } else {
+                if (m < 10 && s > 9)
+                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":0" + m);
+                else if (m > 9)
+                    if (m >= 60) {
+                        txtTempoMedio.setText("Tempo médio de treino: " + h + ":00");
+                    } else {
+                        txtTempoMedio.setText("Tempo médio de treino: " + h + ":" + m);
+                    }
+                else
+                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":0" + m);
+            }
         }
     }
 

@@ -37,10 +37,6 @@ public class ReceberTreinoActivity extends AppCompatActivity {
     static Button btnSalvar;
     private SQLiteDatabase bancoDados;
 
-    public ReceberTreinoActivity(boolean btAtivo) {
-        BtAtivo = btAtivo;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -93,6 +89,11 @@ public class ReceberTreinoActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        Bundle extra = getIntent().getExtras();
+        if (extra != null) {
+            BtAtivo = extra.getBoolean("BtAtivo");
+        }
+
         treinos = new ArrayList<>();
         txtTreino = findViewById(R.id.txtTreino);
         btnSalvar = findViewById(R.id.btnSalvar);
@@ -129,7 +130,8 @@ public class ReceberTreinoActivity extends AppCompatActivity {
                 h.removeCallbacks(aviso);
                 h.removeCallbacks(fechar);
                 connect.cancel();
-                btAdapter.disable();
+                if (!BtAtivo)
+                    btAdapter.disable();
                 finish();
 
             }
@@ -147,7 +149,7 @@ public class ReceberTreinoActivity extends AppCompatActivity {
                 Msg = new String(treino);
             }
             treinos.add(Msg);
-            txtTreino.setText("Treino "+ treinos.get(0) + " recebido");
+            txtTreino.setText(treinos.get(0) + " recebido");
             btnSalvar.setVisibility(View.VISIBLE);
         }
     };
@@ -166,9 +168,10 @@ public class ReceberTreinoActivity extends AppCompatActivity {
         @Override
         public void run() {
             if (btnSalvar.getVisibility() == View.INVISIBLE) {
-                btAdapter.disable();
-                finish();
                 connect.cancel();
+                if (!BtAtivo)
+                    btAdapter.disable();
+                finish();
             }
         }
     };

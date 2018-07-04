@@ -57,11 +57,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/btnNovo"
-            android:background="@color/botoes_transparente"
             android:textColor="@color/color_texto"
             android:layout_weight="1"
             android:layout_marginEnd="5dp"
-            tools:ignore="ButtonStyle" />
+            tools:ignore="ButtonStyle"
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#A8A8A8"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="5" />
 
         <Button
             android:text="@string/receber_treino_txt"
@@ -71,8 +75,12 @@
             android:layout_weight="1"
             android:layout_marginStart="5dp"
             android:textColor="@color/color_texto"
-            android:background="@color/botoes_transparente"
-            tools:ignore="ButtonStyle" />
+            tools:ignore="ButtonStyle"
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#A8A8A8"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="5" />
     </LinearLayout>
 
     <TextView

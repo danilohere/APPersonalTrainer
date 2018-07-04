@@ -60,7 +60,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
     private SQLiteDatabase bancoDados;
     private Bundle extra;
     private String[] setExercicio = new String[20];
-    private int[] valorExercicios = new int[18];
+    private int[] valorExercicios = new int[19];
 
     private boolean ver;
     private boolean altEditRep;
@@ -69,6 +69,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
     private int idTreino;
     private int idExercicio = 500000;
     private int carregado;
+    private int uni;
 
     private String[] unilateral = {
             "Simultâneo", "Alternado", "Unilateral"
@@ -952,7 +953,6 @@ public class EditarExercicioActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setValoresExercicio();
                 ver = true;
-
                 if (setExercicio[1].equals("") || setExercicio[11].equals("")
                         || setExercicio[12].equals("") || setExercicio[13].equals("")) {
                     Toast.makeText(getApplicationContext(), "Preencha todos os campos", Toast.LENGTH_SHORT).show();
@@ -962,11 +962,41 @@ public class EditarExercicioActivity extends AppCompatActivity {
                     for (int i = 0; i <= 17; i++) {
                         if (!setExercicio[i + 1].equals("") && !setExercicio[i + 1].equals(" ")) {
                             valorExercicios[i] = Integer.parseInt(setExercicio[i + 1]);
-
                         }
 
                     }
                     int t = valorExercicios[11] + valorExercicios[12];
+                    int tDescanso = valorExercicios[11] * 60 + valorExercicios[12]; // minutos * 60 + segundos
+                    int tSeries = 0; // tempo de série
+                    switch (valorExercicios[1]) { //por tipo de repetição
+                        case 0: // normal
+                            tSeries = valorExercicios[0] * valorExercicios[2] * valorExercicios[10];
+                            break;
+                        case 1: // pirâmide
+                            int repeticoes = 0;
+                            for (int i = 2; i <= 9; i++) {
+                                repeticoes += valorExercicios[i];
+                            }
+                            tSeries = repeticoes * valorExercicios[10];
+                            break;
+                        case 2: // dropset
+                            tSeries = valorExercicios[0] * valorExercicios[2] * valorExercicios[6] * valorExercicios[10] + (4 * valorExercicios[6]);
+                            break;
+                        case 3: // falha
+                            tSeries = valorExercicios[0] * 20 * valorExercicios[10];
+                            break;
+                    }
+
+                    if (valorExercicios[13] == 1 || valorExercicios[13] == 2) {
+
+                        tSeries = tSeries * 2;
+                        if (valorExercicios[13] == 2) {
+                            tSeries += (valorExercicios[0] * 4);
+                        }
+                    }
+
+                    valorExercicios[18] = tSeries + (tDescanso * (valorExercicios[0] - 1) + (valorExercicios[0] * 3));
+                    Toast.makeText(EditarExercicioActivity.this, "" + valorExercicios[18], Toast.LENGTH_SHORT).show();
 
                     if (valorExercicios[0] == 0 || valorExercicios[2] == 0 ||
                             valorExercicios[10] == 0 || t == 0) {
@@ -996,13 +1026,13 @@ public class EditarExercicioActivity extends AppCompatActivity {
                     try {
                         if (idExercicio == 500000) {
                             bancoDados.execSQL("INSERT INTO exercicios (exercicio, series, tipoRep, rep1, rep2," +
-                                    "rep3, rep4, rep5, rep6, rep7, rep8, tempoExecucao, descansoM, descansoS, unilateral, idTreino, musculoSpinner, exercicioSpinner, completo, obs, serieAtual) VALUES" +
+                                    "rep3, rep4, rep5, rep6, rep7, rep8, tempoExecucao, descansoM, descansoS, unilateral, idTreino, musculoSpinner, exercicioSpinner, completo, obs, serieAtual, tempoMedio) VALUES" +
                                     "('" + setExercicio[0] + "', " + valorExercicios[0] + ", " + valorExercicios[1] + ", " + valorExercicios[2] + "" +
                                     ", " + valorExercicios[3] + ", " + valorExercicios[4] + ", " + valorExercicios[5] + "" +
                                     ", " + valorExercicios[6] + ", " + valorExercicios[7] + ", " + valorExercicios[8] + "" +
                                     ", " + valorExercicios[9] + ", " + valorExercicios[10] + ", " + valorExercicios[11] + "" +
                                     ", " + valorExercicios[12] + ", " + valorExercicios[13] + ", " + valorExercicios[14] + "" +
-                                    ", " + valorExercicios[15] + ", " + valorExercicios[16] + ", " + valorExercicios[17] + ", '" + setExercicio[19] + "', 1)");
+                                    ", " + valorExercicios[15] + ", " + valorExercicios[16] + ", " + valorExercicios[17] + ", '" + setExercicio[19] + "', 1, " + valorExercicios[18] + ")");
                             Toast.makeText(getApplicationContext(), "Exercício adicionado", Toast.LENGTH_SHORT).show();
                         } else {
                             bancoDados.execSQL("UPDATE exercicios SET exercicio = '" + setExercicio[0] + "', series = " + valorExercicios[0] + ", tipoRep = " + valorExercicios[1]
@@ -1010,7 +1040,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
                                     + ", rep4 = " + valorExercicios[5] + ", rep5 = " + valorExercicios[6] + ", rep6 = " + valorExercicios[7]
                                     + ", rep7 = " + valorExercicios[8] + ", rep8 = " + valorExercicios[9] + ", tempoExecucao = " + valorExercicios[10]
                                     + ", descansoM = " + valorExercicios[11] + ", descansoS = " + valorExercicios[12] + ", unilateral = " + valorExercicios[13]
-                                    + ", obs = '" + setExercicio[19] + "' WHERE idExercicio = " + idExercicio);
+                                    + ", obs = '" + setExercicio[19] + "', tempoMedio = " + valorExercicios[18] + " WHERE idExercicio = " + idExercicio);
                             Toast.makeText(getApplicationContext(), "Exercício alterado", Toast.LENGTH_SHORT).show();
                         }
 
@@ -1362,7 +1392,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
             setExercicio[0] = spnExercicio.getSelectedItem().toString().trim();
         }
         setExercicio[1] = edtSeries.getText().toString().trim();
-        setExercicio[2] = "" + spnTipoRep.getSelectedItemId();
+        setExercicio[2] = String.valueOf(spnTipoRep.getSelectedItemId());
         if (setExercicio[0].equals("Rosca 21")) {
             setExercicio[2] = "2";
 
@@ -1387,16 +1417,14 @@ public class EditarExercicioActivity extends AppCompatActivity {
         setExercicio[11] = edtTempoExecucao.getText().toString().trim();
         setExercicio[12] = edtDescansoM.getText().toString().trim();
         setExercicio[13] = edtDescansoS.getText().toString().trim();
-        if (spnUnilateral.getSelectedItemId() == 1) {
-            setExercicio[14] = "1";
-        } else if (spnUnilateral.getSelectedItemId() == 0) {
-            setExercicio[14] = "0";
-        } else if (spnUnilateral.getSelectedItemId() == 2) {
-            setExercicio[14] = "2";
+        if (spnUnilateral.getVisibility() == View.VISIBLE) {
+            setExercicio[14] = String.valueOf(spnUnilateral.getSelectedItemId());
+        } else {
+            setExercicio[14] = String.valueOf(uni);
         }
         setExercicio[15] = String.valueOf(idTreino);
-        setExercicio[16] = "" + spnMusculo.getSelectedItemId();
-        setExercicio[17] = "" + spnExercicio.getSelectedItemId();
+        setExercicio[16] = String.valueOf(spnMusculo.getSelectedItemId());
+        setExercicio[17] = String.valueOf(spnExercicio.getSelectedItemId());
         setExercicio[18] = "0";
         setExercicio[19] = edtObs.getText().toString().trim();
 
@@ -1695,7 +1723,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
                         }
                     };
                     handler.post(runRep);
-                    int uni = cursor.getInt(indUnilateral);
+                    uni = cursor.getInt(indUnilateral);
                     if (uni == 1) {
                         spnUnilateral.setSelection(1);
                     } else if (uni == 0) {

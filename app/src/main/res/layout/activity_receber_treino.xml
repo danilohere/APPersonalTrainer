@@ -33,16 +33,15 @@
     </com.google.android.gms.ads.AdView>
 
     <TextView
-        android:text="@string/o_bluetooth_est_ativado_aguardando_um_treino_ser_enviado_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/txtTreino"
-        android:textColor="@color/color_texto"
-        android:textSize="24sp"
-        android:textAlignment="center"
-        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/adView2"
-        />
+        android:layout_marginTop="80dp"
+        android:text="@string/o_bluetooth_est_ativado_aguardando_um_treino_ser_enviado_txt"
+        android:textAlignment="center"
+        android:textColor="@color/color_texto"
+        android:textSize="24sp" />
 
     <Button
         android:text="@string/salvar_treino_txt"
@@ -51,12 +50,15 @@
         android:id="@+id/btnSalvar"
         android:layout_centerHorizontal="true"
         android:textColor="@color/color_texto"
-        android:background="@color/botoes_transparente"
         android:enabled="false"
         android:visibility="invisible"
         android:layout_above="@id/adView"
         android:layout_marginBottom="20dp"
-        />
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5" />
 
     <EditText
         android:layout_width="wrap_content"

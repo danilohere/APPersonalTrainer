@@ -8,4 +8,5 @@
     android:ellipsize="marquee"
     android:singleLine="true"
     android:textColor="@color/color_texto"
-    android:textSize="@dimen/texto_campos" />
+    android:textSize="@dimen/texto_campos"
+    android:radius="8dp" />

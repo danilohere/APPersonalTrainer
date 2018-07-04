@@ -327,10 +327,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:layout_weight="1"
-                    android:background="@color/botoes_transparente"
                     android:text="@string/confirmar_text"
                     android:textColor="@color/color_texto"
-                    tools:ignore="ButtonStyle" />
+                    tools:ignore="ButtonStyle"
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="#A8A8A8"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="5" />
 
                 <Button
                     android:id="@+id/btnCancelar"
@@ -338,10 +342,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_weight="1"
-                    android:background="@color/botoes_transparente"
                     android:text="@string/cancelar_text"
                     android:textColor="@color/color_texto"
-                    tools:ignore="ButtonStyle" />
+                    tools:ignore="ButtonStyle"
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="#A8A8A8"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="5" />
             </LinearLayout>
 
             <TextView
@@ -426,9 +434,13 @@
                     android:layout_width="30dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@color/botoes_transparente"
                     android:text="@string/traco"
-                    android:textColor="@color/color_texto" />
+                    android:textColor="@color/color_texto"
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="#A8A8A8"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="5" />
 
                 <EditText
                     android:id="@+id/edtTempoExecucao"
@@ -436,6 +448,7 @@
                     android:layout_width="@dimen/tamanho_caixa_texto_num"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
+                    android:layout_marginTop="2dp"
                     android:layout_weight="1"
                     android:background="@color/background_list"
                     android:ems="10"
@@ -456,9 +469,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_weight="1"
-                    android:background="@color/botoes_transparente"
                     android:text="@string/mais"
-                    android:textColor="@color/color_texto" />
+                    android:textColor="@color/color_texto"
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="#A8A8A8"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="5" />
 
                 <TextView
                     android:id="@+id/textView10"

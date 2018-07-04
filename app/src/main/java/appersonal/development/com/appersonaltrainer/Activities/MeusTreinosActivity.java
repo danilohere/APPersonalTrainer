@@ -55,6 +55,7 @@ public class MeusTreinosActivity extends AppCompatActivity {
     private int tentativa;
     private boolean StopRun1;
     private boolean StopRun2;
+    private boolean desligaBt = false;
     @SuppressLint("StaticFieldLeak")
     static TextView txtTeste;
     ConnectionThread connect;
@@ -115,8 +116,6 @@ public class MeusTreinosActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-
     }
 
     @Override
@@ -299,21 +298,6 @@ public class MeusTreinosActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     enviarTreino(id);
-                                    new Handler().postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            connect.cancel();
-                                            try {
-                                                PairedDevicesActivity.connect.cancel();
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-                                            if (!BtAtivo) {
-                                                btAdapter.disable();
-                                            }
-                                        }
-                                    }, 1000);
-
                                 }
                             });
 
@@ -355,6 +339,8 @@ public class MeusTreinosActivity extends AppCompatActivity {
         } else if (requestCode == DISCOVERABLE_BLUETOOTH) {
             if (resultCode == duration) {
                 Intent intent = new Intent(this, ReceberTreinoActivity.class);
+                BtAtivo = btAdapter.isEnabled();
+                intent.putExtra("BtAtivo", BtAtivo);
                 startActivity(intent);
             }
         }
@@ -405,7 +391,7 @@ public class MeusTreinosActivity extends AppCompatActivity {
         count = cString.getBytes();
 
         try {
-            cursorE = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino = " + idTreino, null);
+            cursorE = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino = " + idTreino + " ORDER BY pos ASC", null);
             indExercicio = cursorE.getColumnIndex("exercicio");
             indSeries = cursorE.getColumnIndex("series");
             indTipoRep = cursorE.getColumnIndex("tipoRep");
@@ -425,7 +411,7 @@ public class MeusTreinosActivity extends AppCompatActivity {
             indExercicioSpinner = cursorE.getColumnIndex("exercicioSpinner");
             indObs = cursorE.getColumnIndex("obs");
 
-            cursorA = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idTreino = " + id, null);
+            cursorA = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idTreino = " + id + " ORDER BY pos ASC", null);
             indAerobico = cursorA.getColumnIndex("aerobico");
             indDuracaoH = cursorA.getColumnIndex("duracaoH");
             indDuracaoM = cursorA.getColumnIndex("duracaoM");
@@ -443,9 +429,6 @@ public class MeusTreinosActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            cursorA.close();
-            cursorE.close();
         }
     }
 
@@ -529,6 +512,25 @@ public class MeusTreinosActivity extends AppCompatActivity {
 
             } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                if (!desligaBt) {
+                    desligaBt = true;
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            connect.cancel();
+                            Toast.makeText(MeusTreinosActivity.this, "Teste", Toast.LENGTH_SHORT).show();
+                            try {
+                                PairedDevicesActivity.connect.cancel();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            if (!BtAtivo) {
+                                btAdapter.disable();
+                            }
+                        }
+                    }, 1000);
+                }
             }
         }
     };

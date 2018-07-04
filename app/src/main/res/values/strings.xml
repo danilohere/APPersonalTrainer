@@ -75,4 +75,8 @@
     <string name="ltima_vez_txt">Última vez:</string>
     <string name="trespontos">…</string>
     <string name="tutorial">Tutorial</string>
+    <string name="como_criar_um_exerc_cio">Como criar um exercício</string>
+    <string name="como_criar_um_aer_bico">Como criar um aeróbico</string>
+    <string name="como_fazer_um_treino_com_o_appersonal_trainer">Como treinar com APPersonal Trainer</string>
+    <string name="tempo_m_dio_de_treino_txt">Tempo médio de treino</string>
 </resources>

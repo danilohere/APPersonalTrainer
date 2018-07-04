@@ -36,6 +36,7 @@ public class EditarAerobicoActivity extends AppCompatActivity {
     private TextView txtAerobico;
     private TextView txtDoisPontos;
     private TextView txtDescanso;
+    private TextView txtDuracao;
     private EditText edtDuracaoM;
     private EditText edtDuracaoS;
     private EditText edtSeries;
@@ -155,6 +156,7 @@ public class EditarAerobicoActivity extends AppCompatActivity {
         txtKM = findViewById(R.id.txtKM);
         txtAerobico = findViewById(R.id.txtAerobico);
         txtDoisPontos = findViewById(R.id.txtDoisP);
+        txtDuracao = findViewById(R.id.txtDuracao);
         layoutDescanso = findViewById(R.id.layoutDescanso);
         layoutDuracao = findViewById(R.id.layoutDuracao);
 
@@ -209,6 +211,7 @@ public class EditarAerobicoActivity extends AppCompatActivity {
         });
 
         chbDistancia.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -216,6 +219,7 @@ public class EditarAerobicoActivity extends AppCompatActivity {
                     edtDuracaoM.setText("");
                     edtDuracaoS.setText("");
                     edtDuracaoH.setText("");
+                    txtDuracao.setText("Distância:");
                     edtDistancia.setVisibility(View.VISIBLE);
                     txtKM.setVisibility(View.VISIBLE);
 
@@ -223,6 +227,8 @@ public class EditarAerobicoActivity extends AppCompatActivity {
                     layoutDuracao.setVisibility(View.VISIBLE);
                     edtDistancia.setVisibility(View.INVISIBLE);
                     txtKM.setVisibility(View.INVISIBLE);
+                    txtDuracao.setText("Duração:");
+                    edtDuracaoH.requestFocus();
                 }
             }
         });
@@ -258,9 +264,7 @@ public class EditarAerobicoActivity extends AppCompatActivity {
                 if (edtDuracaoM.getText().length() == 0 && vazio) {
                     edtDuracaoH.requestFocus();
                     vazio = false;
-                    edtDuracaoM.setText(" ");
                 } else if (edtDuracaoM.getText().length() == 0) {
-                    edtDuracaoM.setText(" ");
                     vazio = true;
                     edtDuracaoM.selectAll();
                 } else {
@@ -296,9 +300,7 @@ public class EditarAerobicoActivity extends AppCompatActivity {
                 if (edtDuracaoS.getText().length() == 0 && vazio) {
                     edtDuracaoM.requestFocus();
                     vazio = false;
-                    edtDuracaoS.setText(" ");
                 } else if (edtDuracaoS.getText().length() == 0) {
-                    edtDuracaoS.setText(" ");
                     vazio = true;
                     edtDuracaoS.selectAll();
                 } else {
@@ -329,9 +331,7 @@ public class EditarAerobicoActivity extends AppCompatActivity {
                 if (edtSeries.getText().length() == 0 && vazio) {
                     edtDuracaoM.requestFocus();
                     vazio = false;
-                    edtSeries.setText(" ");
                 } else if (edtSeries.getText().length() == 0) {
-                    edtSeries.setText(" ");
                     vazio = true;
                     edtSeries.selectAll();
                 } else {
@@ -357,11 +357,9 @@ public class EditarAerobicoActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (edtDescansoM.getText().length() == 0 && vazio) {
-                    edtDescansoM.setText(" ");
                     edtSeries.requestFocus();
                     vazio = false;
                 } else if (edtDescansoM.getText().length() == 0) {
-                    edtDescansoM.setText(" ");
                     vazio = true;
                     edtDescansoM.selectAll();
                 } else if (edtDescansoM.getText().length() == 1 && !edtDescansoM.getText().toString().equals(" ")) {
@@ -388,9 +386,7 @@ public class EditarAerobicoActivity extends AppCompatActivity {
                 if (edtDescansoS.getText().length() == 0 && vazio) {
                     edtDescansoM.requestFocus();
                     vazio = false;
-                    edtDescansoS.setText(" ");
                 } else if (edtDescansoS.getText().length() == 0) {
-                    edtDescansoS.setText(" ");
                     vazio = true;
                     edtDescansoS.selectAll();
                 } else {

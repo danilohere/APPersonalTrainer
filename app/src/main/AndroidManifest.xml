@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="appersonal.development.com.appersonaltrainer">
 
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -14,35 +15,38 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-
+        android:theme="@style/AppTheme"
+        android:largeHeap="true"
+        android:fullBackupContent="true">
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <provider android:authorities="com.facebook.app.FacebookContentProvider315516028874581"
+        <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
+            android:authorities="com.facebook.app.FacebookContentProvider315516028874581"
+            android:exported="false" />
 
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
-
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".Activities.MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -52,79 +56,105 @@
         <activity
             android:name=".Activities.TreinarActivity"
             android:label="Treinar!"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.TreinoXActivity"
             android:label="@string/treino"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.ExercicioActivity"
             android:label="Exercício"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.MeusTreinosActivity"
             android:label="Editar Treinos"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.EditarTreinoActivity"
             android:label="Editar Treino"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.EditarExercicioActivity"
             android:label="Editar Exercício"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.AerobicoActivity"
             android:label="Aeróbico"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.EditarAerobicoActivity"
             android:label="Editar Aeróbico"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.HistoricoTreinoActivity"
             android:label="Histórico de Treinos"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.HistoricoCorridaActivity"
             android:label="Histórico de Corridas"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.ConfiguracoesActivity"
             android:label="Configurações"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.DiscoveryBTActivity"
             android:label="Compartilhar com"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.PairedDevicesActivity"
             android:label="Compartilhar com"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.ReceberTreinoActivity"
             android:label="Receber Treino"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.AlarmeActivity"
             android:label="Alarme de Água"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            tools:ignore="InnerclassSeparator" />
 
-        <receiver android:name=".Controller.OnBootReceiver">
+        <receiver
+            android:name=".Controller.OnBootReceiver"
+            tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".Controller.OnAlarmReceiver" />
+        <receiver
+            android:name=".Controller.OnAlarmReceiver"
+            tools:ignore="InnerclassSeparator" />
 
-        <service android:name=".Controller.BackgroundService" />
+        <service
+            android:name=".Controller.BackgroundService"
+            tools:ignore="InnerclassSeparator" />
 
-        <activity android:name=".Activities.FacebookActivity"></activity>
+        <activity
+            android:name=".Activities.FacebookActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".Activities.TutorialActivity"
+            tools:ignore="InnerclassSeparator" />
     </application>
 
 </manifest>

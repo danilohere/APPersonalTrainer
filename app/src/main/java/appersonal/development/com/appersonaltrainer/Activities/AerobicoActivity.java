@@ -1438,8 +1438,8 @@ public class AerobicoActivity extends AppCompatActivity {
         } else {
             if (mCurrentLocation != null) {
                 btnFinalizar.setEnabled(true);
-                Float a = atualLocation.distanceTo(mCurrentLocation);
-                a = a / 1000;
+                Double a = (double) atualLocation.distanceTo(mCurrentLocation);
+                a = (a / 1000) * 0.92;
                 Toast.makeText(AerobicoActivity.this, "Distância: " + a + "\n Lat1: " + atualLocation.getLatitude() + "  Lon1: " + atualLocation.getLongitude()
                         + "\n Lat2: " + mCurrentLocation.getLatitude() + "  Lon2: " + mCurrentLocation.getLongitude(), Toast.LENGTH_LONG).show();
                 if (a < 0.29) {

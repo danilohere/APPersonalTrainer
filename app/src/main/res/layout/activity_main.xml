@@ -13,18 +13,6 @@
     tools:context="appersonal.development.com.appersonaltrainer.Activities.MainActivity"
     android:background="@drawable/bg2">
 
-    <Button
-        android:id="@+id/btnTutorial"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/btnHistoricoCorrida"
-        android:layout_marginTop="10dp"
-        android:background="@color/botoes_transparente"
-        android:text="@string/tutorial"
-        android:textColor="@color/color_texto" />
-
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="wrap_content"
@@ -51,9 +39,13 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/imageView2"
         android:layout_marginTop="20dp"
-        android:background="@color/botoes_transparente"
         android:text="@string/treinarText"
-        android:textColor="@color/color_texto" />
+        android:textColor="@color/color_texto"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5" />
 
     <Button
         android:id="@+id/btnMeusTreinos"
@@ -64,9 +56,13 @@
         android:layout_below="@+id/btnTreinar"
         android:layout_centerVertical="true"
         android:layout_marginTop="10dp"
-        android:background="@color/botoes_transparente"
         android:text="@string/editar_treinos_text"
-        android:textColor="@color/color_texto" />
+        android:textColor="@color/color_texto"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5" />
 
     <Button
         android:id="@+id/btnHistorico"
@@ -76,9 +72,13 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/btnAlarme"
         android:layout_marginTop="10dp"
-        android:background="@color/botoes_transparente"
         android:text="@string/hist_rico_de_treinos_btn"
-        android:textColor="@color/color_texto" />
+        android:textColor="@color/color_texto"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5" />
 
     <Button
         android:id="@+id/btnHistoricoCorrida"
@@ -88,9 +88,13 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/btnHistorico"
         android:layout_marginTop="10dp"
-        android:background="@color/botoes_transparente"
         android:text="@string/hist_rico_de_corridas_btn"
-        android:textColor="@color/color_texto" />
+        android:textColor="@color/color_texto"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -103,11 +107,15 @@
 
     <Button
         android:id="@+id/btnConfig"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignEnd="@+id/btnTreinar"
         android:layout_alignTop="@+id/likeView"
-        android:background="@drawable/config2"
+        android:background="@drawable/config"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
         android:textColor="@color/color_texto" />
 
     <Button
@@ -118,16 +126,37 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/btnMeusTreinos"
         android:layout_marginTop="10dp"
-        android:background="@color/botoes_transparente"
         android:text="@string/alarme_de_gua_text"
-        android:textColor="@color/color_texto" />
+        android:textColor="@color/color_texto"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5" />
+
+    <Button
+        android:id="@+id/btnTutorial"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/btnHistoricoCorrida"
+        android:layout_marginTop="10dp"
+        android:text="@string/tutorial"
+        android:textColor="@color/color_texto"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5" />
 
     <ImageView
         android:id="@+id/imgYoutube"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignStart="@+id/btnTreinar"
-        android:layout_below="@+id/btnConfig"
+        android:layout_below="@+id/imgFacebook"
+        android:layout_marginTop="10dp"
         android:contentDescription="@string/todo"
         ads:srcCompat="@drawable/youtube" />
 

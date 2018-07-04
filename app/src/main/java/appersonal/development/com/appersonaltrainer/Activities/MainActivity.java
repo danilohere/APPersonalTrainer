@@ -1,6 +1,7 @@
 package appersonal.development.com.appersonaltrainer.Activities;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.facebook.share.widget.LikeView;
 import com.google.android.gms.ads.AdRequest;
@@ -125,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         btnTutorial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this, TutorialActivity.class));
+                startActivity(new Intent(MainActivity.this, TutorialActivity.class));
             }
         });
 
@@ -149,28 +151,39 @@ public class MainActivity extends AppCompatActivity {
                     "exercicio VARCHAR, series INT(2), serieAtual INT(2), tipoRep INT(1)," +
                     "rep1 INT(2), rep2 INT(2), rep3 INT(2), rep4 INT(2), rep5 INT(2), rep6 INT(2), rep7 INT(2), rep8 INT(2), " +
                     "tempoExecucao INT(2), descansoM INT(1), descansoS INT(2), unilateral INT(1), musculoSpinner INT(2), exercicioSpinner INT(2), completo INT(1)," +
-                    "obs VARCHAR, pos INTEGER, " +
+                    "obs VARCHAR, pos INTEGER, tempoMedio INTEGER, " +
                     "FOREIGN KEY(idTreino) REFERENCES treinos(idTreino))");
 
             bancoDados.execSQL("CREATE TABLE IF NOT EXISTS aerobicos(idAerobico INTEGER PRIMARY KEY AUTOINCREMENT, idTreino INTEGER, " +
                     "aerobico VARCHAR, duracaoH INT(1), duracaoM INT(2), duracaoS INT(2), series INT(2), descansoM INT(1), descansoS INT(2), " +
                     "distancia INT(1), km DOUBLE(5), completo INT(1), " +
-                    "obs VARCHAR, pos INTEGER, " +
+                    "obs VARCHAR, pos INTEGER, tempoMedio INTEGER, " +
                     "FOREIGN KEY(idTreino) REFERENCES treinos(idTreino))");
 
             bancoDados.execSQL("CREATE TABLE IF NOT EXISTS historicokm(idHistoricoKM INTEGER PRIMARY KEY AUTOINCREMENT, nomeCorrida VARCHAR, km VARCHAR, tempo VARCHAR, data LONG)");
 
-//            try{
-//                Cursor cursor = bancoDados.rawQuery("SELECT pos FROM aerobicos", null);
-//            } catch(Exception e){
-//                e.printStackTrace();
-//                try{
-//                    bancoDados.execSQL("ALTER TABLE aerobicos ADD COLUMN pos INTEGER");
-//                } catch (Exception ex){
-//                    ex.printStackTrace();
-//                }
-//
-//            }
+            try {
+                bancoDados.rawQuery("SELECT tempoMedio FROM aerobicos", null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    bancoDados.execSQL("ALTER TABLE aerobicos ADD COLUMN tempoMedio INTEGER");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            try {
+                bancoDados.rawQuery("SELECT tempoMedio FROM exercicios", null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    bancoDados.execSQL("ALTER TABLE exercicios ADD COLUMN tempoMedio INTEGER");
+                } catch (Exception ex) {
+                    Toast.makeText(this, "Teste", Toast.LENGTH_SHORT).show();
+                    ex.printStackTrace();
+                }
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

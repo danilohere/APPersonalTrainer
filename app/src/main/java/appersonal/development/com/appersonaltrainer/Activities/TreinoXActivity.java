@@ -44,8 +44,10 @@ public class TreinoXActivity extends AppCompatActivity {
     private ArrayList<Integer> idsAer;
     private int idTreino;
     private int numIdEx;
+    private boolean semTempo = false;
     private SQLiteDatabase bancoDados;
     private TextView txtTreino;
+    private TextView txtTempoMedio;
     private AlertDialog alerta;
     private boolean completo = false;
     private InterstitialAd mInterstitialAd;
@@ -104,6 +106,7 @@ public class TreinoXActivity extends AppCompatActivity {
 
         lstExercicios = findViewById(R.id.lstExercicios);
         txtTreino = findViewById(R.id.txtTreino);
+        txtTempoMedio = findViewById(R.id.txtTempoMedio);
         Button btnFinalizar = findViewById(R.id.btnFinalizar);
 
         lstExercicios.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -228,7 +231,9 @@ public class TreinoXActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void recuperarExercicios() {
+        int tempoMedio = 0;
         numIdEx = 0;
         completo = true;
         ArrayList<Exercicios> exercicios = new ArrayList<>();
@@ -248,8 +253,16 @@ public class TreinoXActivity extends AppCompatActivity {
             int indExercicio = cursorExercicio.getColumnIndex("exercicio");
             int indIdEx = cursorExercicio.getColumnIndex("idExercicio");
             int indCompleto = cursorExercicio.getColumnIndex("completo");
+            int indTempo = cursorExercicio.getColumnIndex("tempoMedio");
+
             lstExercicios.setAdapter(adaptador);
             while (cursorExercicio.moveToNext()) {
+                int tempo = cursorExercicio.getInt(indTempo);
+                if (tempo == 0) {
+                    semTempo = true;
+                } else {
+                    tempoMedio += cursorExercicio.getInt(indTempo) + 150;
+                }
                 Exercicios exerc = new Exercicios();
                 exerc.setNome(cursorExercicio.getString(indExercicio));
                 if (cursorExercicio.getInt(indCompleto) == 1) {
@@ -271,8 +284,14 @@ public class TreinoXActivity extends AppCompatActivity {
             int indAerobico = cursorAerobico.getColumnIndex("aerobico");
             int indIdAer = cursorAerobico.getColumnIndex("idAerobico");
             int indCompleto = cursorAerobico.getColumnIndex("completo");
+            int indTempo = cursorAerobico.getColumnIndex("tempoMedio");
             lstExercicios.setAdapter(adaptador);
             while (cursorAerobico.moveToNext()) {
+                if (cursorAerobico.getInt(indTempo) == 0) {
+                    semTempo = true;
+                } else {
+                    tempoMedio += cursorAerobico.getInt(indTempo) + 150;
+                }
                 Exercicios exerc = new Exercicios();
                 exerc.setNome(cursorAerobico.getString(indAerobico));
                 if (cursorAerobico.getInt(indCompleto) == 1) {
@@ -289,7 +308,32 @@ public class TreinoXActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
+        if (semTempo) {
+            txtTempoMedio.setText("Tempo médio não definido");
+            Toast.makeText(this, "Por favor, abrir e salvar os exercícios desse treino em Editar treinos para gravar o tempo médio", Toast.LENGTH_LONG).show();
+        } else {
+            int h = tempoMedio / 3600;
+            int m = tempoMedio / 60;
+            int s = tempoMedio % 60;
+            if (m > 9 && s > 9) {
+                if (m >= 60) {
+                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":00:");
+                } else {
+                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":" + m);
+                }
+            } else {
+                if (m < 10 && s > 9)
+                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":0" + m);
+                else if (m > 9)
+                    if (m >= 60) {
+                        txtTempoMedio.setText("Tempo médio de treino: " + h + ":00");
+                    } else {
+                        txtTempoMedio.setText("Tempo médio de treino: " + h + ":" + m);
+                    }
+                else
+                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":0" + m);
+            }
+        }
     }
 
     public class AdapterExerciciosPersonalizado extends BaseAdapter {

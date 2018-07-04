@@ -12,6 +12,17 @@
     tools:context="appersonal.development.com.appersonaltrainer.Activities.TreinoXActivity"
     android:background="@drawable/bg2">
 
+    <TextView
+        android:id="@+id/txtTempoMedio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/lstExercicios"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="-30dp"
+        android:text="@string/tempo_m_dio_de_treino_txt"
+        android:textColor="@color/color_texto"
+        android:textSize="14sp" />
+
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="wrap_content"
@@ -37,11 +48,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btnFinalizar"
-        android:background="@color/botoes_transparente"
         android:textColor="@color/color_texto"
         android:layout_above="@id/adView"
         android:layout_marginBottom="20dp"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5" />
 
     <ListView
         android:layout_width="match_parent"

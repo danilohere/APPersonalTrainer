@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v7.app.AlertDialog;
@@ -73,8 +74,8 @@ public class ExercicioActivity extends AppCompatActivity {
     private int id;
     private int idTreino;
     private int preparo = 0;
+    private int iniciando = 0;
     private int antprox;
-    private int tempo;
     private int temporizador;
     private int vozselecionada;
     private int som;
@@ -85,10 +86,9 @@ public class ExercicioActivity extends AppCompatActivity {
     private boolean rosca21 = false;
 
     private Handler handler = new Handler();
-    private Handler h = new Handler();
-    private Runnable runnableDescanso;
     private Runnable runnableRep;
     private Runnable runnablePause;
+    private CountDownTimer cdTimer;
 
     private MediaPlayer largada;
     private MediaPlayer bambam;
@@ -110,7 +110,7 @@ public class ExercicioActivity extends AppCompatActivity {
             if (btnIniciar.isChecked()) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ExercicioActivity.this);
                 builder.setTitle("Exercício em execução");
-                builder.setMessage("Deseja parar e voltar?");
+                builder.setMessage("Deseja parar o exercício?");
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -118,7 +118,8 @@ public class ExercicioActivity extends AppCompatActivity {
                         swtInicioAut.setChecked(false);
                         handler.removeCallbacks(runnablePause);
                         handler.removeCallbacks(runnableRep);
-                        h.removeCallbacks(runnableDescanso);
+                        if (cdTimer != null)
+                            cdTimer.cancel();
                         btnIniciar.setChecked(false);
                         if (largada != null)
                             largada.release();
@@ -281,6 +282,7 @@ public class ExercicioActivity extends AppCompatActivity {
                                 txtTemporizador.setVisibility(View.VISIBLE);
                                 handler.postDelayed(runnablePause, 2000);
                                 preparo = 1;
+                                iniciando = 1;
                             } else if (temporizador > 0) {
                                 txtTemporizador.setVisibility(View.VISIBLE);
                                 txtTemporizador.setTextSize(60);
@@ -291,7 +293,22 @@ public class ExercicioActivity extends AppCompatActivity {
                             } else {
                                 handler.removeCallbacks(runnablePause);
                                 txtTemporizador.setVisibility(View.INVISIBLE);
-                                executarExercicio();
+                                if (iniciando == 1 && uni == 1) {
+                                    sa = 2;
+                                    iniciando = 0;
+                                    executarExercicio();
+                                } else {
+                                    if (uni == 1)
+                                        r--;
+                                    sa = 1;
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            executarExercicio();
+                                        }
+                                    }, tempoExecucao * 1000);
+                                }
+
                                 if (som == 0) {
                                     largada(2);
                                 } else {
@@ -312,7 +329,8 @@ public class ExercicioActivity extends AppCompatActivity {
                         Descanso();
                         handler.removeCallbacks(runnableRep);
                         handler.removeCallbacks(runnablePause);
-                        h.removeCallbacks(runnableDescanso);
+                        if (cdTimer != null)
+                            cdTimer.cancel();
                     }
                 }
             }
@@ -332,7 +350,8 @@ public class ExercicioActivity extends AppCompatActivity {
                         btnIniciar.setChecked(false);
                         handler.removeCallbacks(runnablePause);
                         handler.removeCallbacks(runnableRep);
-                        h.removeCallbacks(runnableDescanso);
+                        if (cdTimer != null)
+                            cdTimer.cancel();
                         carregarValores(1);
                     }
                 }
@@ -354,7 +373,8 @@ public class ExercicioActivity extends AppCompatActivity {
                         btnIniciar.setChecked(false);
                         handler.removeCallbacks(runnablePause);
                         handler.removeCallbacks(runnableRep);
-                        h.removeCallbacks(runnableDescanso);
+                        if (cdTimer != null)
+                            cdTimer.cancel();
                         carregarValores(2);
                     }
                 }
@@ -443,78 +463,123 @@ public class ExercicioActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void run() {
-                if (r <= rep[s - 1]) {
+                if (r <= rep[s - 1]) { //Se a repetição atual for menor ou igual à repetição total
                     contagem(r);
-                    if (r == rep[s - 1]) {
-                        if (s == series) {
-                            if (tipoRep == 2 && sd < seriesDrop) {
+                    if (r == rep[s - 1]) { //Se a repetição atual for igual à final, ou seja, fim da série
+                        if (s == series) { //Se a série atual for igual à final, ou seja, última série
+                            if (tipoRep == 2 && sd < seriesDrop * 2 && uni == 2) { // Se for unilateral e dropset
                                 if (som == 0) {
                                     largada(1);
                                 } else {
                                     bambam(0);
                                 }
                                 Vibrar(300);
-                            } else if (uni == 2 && su < 2) {
+                            } else if (tipoRep == 2 && sd < seriesDrop) { //Se for dropset
                                 if (som == 0) {
                                     largada(1);
                                 } else {
                                     bambam(0);
                                 }
                                 Vibrar(300);
-                            } else if (tipoRep == 2 && sd < seriesDrop * 2 && uni == 2) {
+                            } else if (uni == 2 && su < 2) { //Se for unilateral
                                 if (som == 0) {
                                     largada(1);
                                 } else {
                                     bambam(0);
                                 }
                                 Vibrar(300);
-                            } else {
-                                new Timer().schedule(new TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        if (som == 0) {
-                                            largada(2);
-                                        } else {
-                                            bambam.release();
-                                            Random al = new Random();
-                                            int i = al.nextInt(4) + 2;
-                                            bambam(i);
+                            } else { //Se não tiver em nenhuma das condições acima,
+                                if (uni != 1) {
+                                    new Timer().schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            if (som == 0) {
+                                                largada(2);
+                                            } else {
+                                                bambam.release();
+                                                Random al = new Random();
+                                                int i = al.nextInt(4) + 2;
+                                                bambam(i);
+                                            }
                                         }
-                                    }
-                                }, 300);
-                                Vibrar(700);
-                                completo = true;
-                                verificarProximo();
-                                swtInicioAut.setChecked(false);
-                                txtTemporizador.setVisibility(View.VISIBLE);
-                                txtTemporizador.setTextSize(35);
-                                txtTemporizador.setText("Exercício Concluído");
+                                    }, 300);
+                                    Vibrar(700);
+                                    completo = true;
+                                    verificarProximo();
+                                    swtInicioAut.setChecked(false);
+                                    txtTemporizador.setVisibility(View.VISIBLE);
+                                    txtTemporizador.setTextSize(35);
+                                    txtTemporizador.setText("Exercício Concluído");
+                                } else if (sa == 2) {
+                                    new Timer().schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            if (som == 0) {
+                                                largada(2);
+                                            } else {
+                                                bambam.release();
+                                                Random al = new Random();
+                                                int i = al.nextInt(4) + 2;
+                                                bambam(i);
+                                            }
+                                        }
+                                    }, 300);
+                                    Vibrar(700);
+                                    completo = true;
+                                    verificarProximo();
+                                    swtInicioAut.setChecked(false);
+                                    txtTemporizador.setVisibility(View.VISIBLE);
+                                    txtTemporizador.setTextSize(35);
+                                    txtTemporizador.setText("Exercício Concluído");
+                                }
                             }
 
-                        } else {
-                            if (som == 0) {
-                                largada(1);
-                            } else {
-                                bambam(0);
+                        } else { //Se não for a última série
+                            if (uni != 1) { //Se for diferente de Alternado
+                                if (tipoRep == 2 && sd < seriesDrop && uni != 2) { //Se for dropset e diferente de unilateral
+                                    Vibrar(300);
+                                } else if (tipoRep == 2 && sd < seriesDrop * 2 && uni == 2) { //Se for dropset e unilateral
+                                    if (sd == seriesDrop) {
+                                        if (som == 0) {
+                                            largada(1);
+                                        } else {
+                                            bambam(0);
+                                        }
+                                    }
+                                    Vibrar(300);
+                                } else {
+                                    if (som == 0) {
+                                        largada(1);
+                                    } else {
+                                        bambam(0);
+                                    }
+                                    Vibrar(300);
+                                }
+                            } else if (sa == 2) { //Se for alternado, ele precisa ser a segunda repetição para tocar o áudio
+                                if (som == 0) {
+                                    largada(1);
+                                } else {
+                                    bambam(0);
+                                }
+                                Vibrar(300);
                             }
-                            Vibrar(300);
                         }
                     }
                     handler.postDelayed(runnableRep, tempoExecucao * 1000);
                     txtRep.setText(String.valueOf(r));
                     r++;
                     re = r;
-                    if (uni == 1 && sa < 2) {
+                    if (uni == 1 && sa < 2) { // verifica se é alternado e em qual repetição está
                         r--;
                         sa++;
                     } else {
                         sa = 1;
                     }
-                } else {
-                    if (uni == 2 && tipoRep == 2) {
+                } else { //se a repetição atual for maior que o total
+                    if (uni == 2 && tipoRep == 2) { // verifica se é dropset unilateral
                         if (sd < seriesDrop * 2) {
                             sd++;
-                            descansar(7);
+                            descansar(5);
                         } else {
                             sd = 1;
                             if (s < series) {
@@ -543,14 +608,14 @@ public class ExercicioActivity extends AppCompatActivity {
                     } else {
                         if (uni == 2 && su < 2) {
                             su++;
-                            descansar(7);
+                            descansar(2);
                         } else if (tipoRep == 2 && sd < seriesDrop) {
                             sd++;
                             if (txtExercicio.getText().toString().equals("Rosca 21")) {
                                 rosca21 = true;
                                 descansar(1);
                             } else {
-                                descansar(7);
+                                descansar(5);
                             }
 
                         } else {
@@ -585,63 +650,56 @@ public class ExercicioActivity extends AppCompatActivity {
                         handler.removeCallbacks(runnableRep);
                         re = 0;
                     }
-
                 }
-
             }
         };
         handler.post(runnableRep);
     }
 
     private void descansar(int t) {
-        tempo = t;
-        runnableDescanso = new Runnable() {
+
+        cdTimer = new CountDownTimer((t) * 1000, 1000) {
             @SuppressLint("SetTextI18n")
-            @Override
-            public void run() {
-                tempo--;
-                if (tempo > 0) {
-                    long m = tempo / 60;
-                    long s = tempo % 60;
-                    if (m == 1 && s == 0) {
-                        contagem(1101);
-                    }
-                    if (m == 0 && s == 30) {
-                        contagem(1030);
-                    }
-                    if (m == 0 && s == 10) {
-                        contagem(1010);
-                    }
-                    if (s > 9) {
-                        txtDescanso.setText(m + ":" + s);
-                    } else {
-                        txtDescanso.setText(m + ":0" + s);
-                    }
-                    h.postDelayed(runnableDescanso, 1000);
-                } else if (tempo == 0) {
-                    h.postDelayed(runnableDescanso, 2000);
-                    txtSeries.setText(String.valueOf(s));
-                    btnIniciar.setChecked(false);
-                    Descanso();
-                    if (swtInicioAut.isChecked()) {
-                        btnIniciar.setChecked(true);
-                    } else {
-                        if (uni == 2 && tipoRep == 2 && sd >= seriesDrop * 2) {
-                            btnIniciar.setChecked(true);
-                        }
-                        if (uni == 2 && su >= 2) {
-                            btnIniciar.setChecked(true);
-                        }
-                        if (tipoRep == 2 && sd >= seriesDrop) {
-                            btnIniciar.setChecked(true);
-                        }
-                    }
+            public void onTick(long millisUntilFinished) {
+                long t = (millisUntilFinished / 1000);
+                long m = t / 60;
+                long s = t % 60;
+                if (s > 9) {
+                    txtDescanso.setText(m + ":" + s);
                 } else {
-                    h.removeCallbacks(runnableDescanso);
+                    txtDescanso.setText(m + ":0" + s);
+                }
+                if (m == 1 && s == 0) {
+                    contagem(1101);
+                }
+                if (m == 0 && s == 30) {
+                    contagem(1030);
+                }
+                if (m == 0 && s == 10) {
+                    contagem(1010);
                 }
             }
-        };
-        h.post(runnableDescanso);
+
+            @SuppressLint("SetTextI18n")
+            public void onFinish() {
+                txtSeries.setText(String.valueOf(s));
+                btnIniciar.setChecked(false);
+                Descanso();
+                if (swtInicioAut.isChecked()) {
+                    btnIniciar.setChecked(true);
+                } else {
+                    if (uni == 2 && tipoRep == 2 && sd >= seriesDrop * 2) {
+                        btnIniciar.setChecked(true);
+                    }
+                    if (uni == 2 && su >= 2) {
+                        btnIniciar.setChecked(true);
+                    }
+                    if (tipoRep == 2 && sd >= seriesDrop) {
+                        btnIniciar.setChecked(true);
+                    }
+                }
+            }
+        }.start();
     }
 
     private void contagem(int num) {
@@ -1155,7 +1213,6 @@ public class ExercicioActivity extends AppCompatActivity {
             for (int i = 0; i < series; i++) {
                 if (tipoRep == 0) {
                     rep[i] = Integer.parseInt(cursor.getString(indRep1));
-
                     repEsq[i] = rep[i];
                 } else if (tipoRep == 1) {
                     rep[i] = repInd[i];

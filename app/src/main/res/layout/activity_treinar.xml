@@ -38,9 +38,13 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/adView"
         android:layout_marginBottom="10dp"
-        android:background="@color/botoes_transparente"
         android:text="@string/caminhar_correr_txt"
-        android:textColor="@color/color_texto" />
+        android:textColor="@color/color_texto"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5" />
 
     <Button
         android:id="@+id/btnNovoTreino"
@@ -48,10 +52,14 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/btnCorrer"
         android:layout_marginBottom="10dp"
-        android:background="@color/botoes_transparente"
         android:text="@string/novo_treino_txt"
         android:textColor="@color/color_texto"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5" />
 
     <TextView
         android:id="@+id/txtAviso"

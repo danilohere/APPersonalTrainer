@@ -98,18 +98,22 @@
         android:textSize="@dimen/texto_campos" />
 
     <ToggleButton
+        android:id="@+id/btnIniciar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnIniciar"
-        android:visibility="visible"
-        android:textOff="@string/iniciar_btn"
-        android:textOn="@string/parar_btn"
-        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/swtInicioAut"
         android:layout_marginTop="15dp"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
         android:textColor="@color/color_texto"
-        android:background="@color/botoes_transparente" />
+        android:textOff="@string/iniciar_btn"
+        android:textOn="@string/parar_btn"
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/btnFinalizar"
@@ -119,11 +123,15 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/btnIniciar"
         android:layout_marginTop="10dp"
-        android:background="@color/botoes_transparente"
         android:enabled="false"
         android:text="@string/finalizar_corrida_text"
         android:textColor="@color/color_texto"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5" />
 
     <LinearLayout
         android:id="@+id/layoutBotoes"
@@ -140,7 +148,11 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
             android:layout_weight="1"
-            android:background="@color/botoes_transparente"
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#A8A8A8"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="5"
             android:text="@string/anterior_text"
             android:textColor="@color/color_texto"
             tools:ignore="ButtonStyle" />
@@ -151,7 +163,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_weight="1"
-            android:background="@color/botoes_transparente"
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#A8A8A8"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="5"
             android:text="@string/pr_ximo_text"
             android:textColor="@color/color_texto"
             tools:ignore="ButtonStyle" />

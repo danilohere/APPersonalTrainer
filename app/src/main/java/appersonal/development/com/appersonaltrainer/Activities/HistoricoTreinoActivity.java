@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -39,10 +40,14 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
 
     private ListView lstHistorico;
     private ListView lstMeses;
+    private int lstposition;
+    private int positionMes;
     private ArrayList<Treinos> treinos;
     private ArrayList<String> meses;
+    private ArrayList<Integer> ids;
     private SQLiteDatabase bancoDados;
     private AlertDialog alerta;
+    private String treino;
     ShareDialog shareDialog = new ShareDialog(this);
 
     @Override
@@ -53,6 +58,32 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        MenuItem compartilhar = menu.add("Compartilhar");
+        final MenuItem excluir = menu.add("Excluir treino");
+
+        compartilhar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                ShareLinkContent content = new ShareLinkContent.Builder()
+                        .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=appersonal.development.com.appersonaltrainer"))
+//                        .setContentUrl(Uri.parse("https://www.facebook.com/appersonaltrainer1"))
+                        .setQuote("Acabei de fazer " + treino + " com o APPersonal Trainer!")
+                        .build();
+                shareDialog.show(content);
+                return true;
+            }
+        });
+        excluir.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                excluirTreino(lstposition);
+                return true;
+            }
+        });
     }
 
     @Override
@@ -137,6 +168,7 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 lstHistorico.setVisibility(View.VISIBLE);
                 lstMeses.setVisibility(View.INVISIBLE);
+                positionMes = position;
                 recuperarTreinos(meses.get(position));
             }
         });
@@ -144,13 +176,10 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
         lstHistorico.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String treino = treinos.get(position).getNome();
-                ShareLinkContent content = new ShareLinkContent.Builder()
-                        .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=appersonal.development.com.appersonaltrainer"))
-//                        .setContentUrl(Uri.parse("https://www.facebook.com/appersonaltrainer1"))
-                        .setQuote("Acabei de fazer " + treino + " com o APPersonal Trainer!")
-                        .build();
-                shareDialog.show(content);
+                lstposition = position;
+                treino = treinos.get(position).getNome();
+                registerForContextMenu(parent);
+                openContextMenu(parent);
             }
         });
 
@@ -168,20 +197,53 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
             int indTreino = cursor.getColumnIndex("treinoH");
             int indData = cursor.getColumnIndex("data");
             meses = new ArrayList<>();
-//            ArrayAdapter<String> adaptador = new ArrayAdapter<>(
-//                    getApplicationContext(),
-//                    android.R.layout.simple_list_item_1,
-//                    android.R.id.text1,
-//                    meses
-//            );
             lstMeses.setAdapter(new MyAdapter(meses));
             while (cursor.moveToNext()) {
                 Treinos treino = new Treinos();
                 treino.setNome(cursor.getString(indTreino));
                 treino.setData(cursor.getLong(indData));
                 long data = treino.getData();
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatarData = new SimpleDateFormat("MM/yyyy");
-                String date = formatarData.format(data);
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatarMes = new SimpleDateFormat("MM");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatarAno = new SimpleDateFormat("yyyy");
+                String date;
+                switch (formatarMes.format(data)) {
+                    case "01":
+                        date = "Janeiro/" + formatarAno.format(data);
+                        break;
+                    case "02":
+                        date = "Fevereiro/" + formatarAno.format(data);
+                        break;
+                    case "03":
+                        date = "Março/" + formatarAno.format(data);
+                        break;
+                    case "04":
+                        date = "Abril/" + formatarAno.format(data);
+                        break;
+                    case "05":
+                        date = "Maio/" + formatarAno.format(data);
+                        break;
+                    case "06":
+                        date = "Junho/" + formatarAno.format(data);
+                        break;
+                    case "07":
+                        date = "Julho/" + formatarAno.format(data);
+                        break;
+                    case "08":
+                        date = "Agosto/" + formatarAno.format(data);
+                        break;
+                    case "09":
+                        date = "Setembro/" + formatarAno.format(data);
+                        break;
+                    case "10":
+                        date = "Outubro/" + formatarAno.format(data);
+                        break;
+                    case "11":
+                        date = "Novembro/" + formatarAno.format(data);
+                        break;
+                    default:
+                        date = "Dezembro/" + formatarAno.format(data);
+                        break;
+                }
                 int i = 0;
                 int igual = 0;
                 while (i < meses.size()) {
@@ -206,19 +268,61 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
 
             int indTreino = cursor.getColumnIndex("treinoH");
             int indData = cursor.getColumnIndex("data");
+            int indIdHistorico = cursor.getColumnIndex("idHistorico");
 
             treinos = new ArrayList<>();
+            ids = new ArrayList<>();
             AdapterTreinosPersonalizado adaptador = new AdapterTreinosPersonalizado(treinos, this);
             lstHistorico.setAdapter(adaptador);
 
             while (cursor.moveToNext()) {
                 long data = cursor.getLong(indData);
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatarData = new SimpleDateFormat("MM/yyyy");
-                String date = formatarData.format(data);
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatarMes = new SimpleDateFormat("MM");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatarAno = new SimpleDateFormat("yyyy");
+                String date;
+                switch (formatarMes.format(data)) {
+                    case "01":
+                        date = "Janeiro/" + formatarAno.format(data);
+                        break;
+                    case "02":
+                        date = "Fevereiro/" + formatarAno.format(data);
+                        break;
+                    case "03":
+                        date = "Março/" + formatarAno.format(data);
+                        break;
+                    case "04":
+                        date = "Abril/" + formatarAno.format(data);
+                        break;
+                    case "05":
+                        date = "Maio/" + formatarAno.format(data);
+                        break;
+                    case "06":
+                        date = "Junho/" + formatarAno.format(data);
+                        break;
+                    case "07":
+                        date = "Julho/" + formatarAno.format(data);
+                        break;
+                    case "08":
+                        date = "Agosto/" + formatarAno.format(data);
+                        break;
+                    case "09":
+                        date = "Setembro/" + formatarAno.format(data);
+                        break;
+                    case "10":
+                        date = "Outubro/" + formatarAno.format(data);
+                        break;
+                    case "11":
+                        date = "Novembro/" + formatarAno.format(data);
+                        break;
+                    default:
+                        date = "Dezembro/" + formatarAno.format(data);
+                        break;
+                }
                 if (date.equals(mesTreino)) {
                     Treinos treino = new Treinos();
                     treino.setNome(cursor.getString(indTreino));
                     treino.setData(cursor.getLong(indData));
+                    ids.add(cursor.getInt(indIdHistorico));
                     treinos.add(treino);
                 }
             }
@@ -226,8 +330,28 @@ public class HistoricoTreinoActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    private void excluirTreino(final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Excluir Treino do histórico");
+        builder.setMessage("Deseja excluir " + treinos.get(position).getNome() + " do histórico?");
+        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                bancoDados.execSQL("DELETE FROM historico WHERE idHistorico =" + ids.get(position));
+                recuperarTreinos(meses.get(positionMes));
+                Toast.makeText(getApplicationContext(), "Treino excluído do histórico", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
+            }
+        });
+        alerta = builder.create();
+        alerta.show();
     }
 
     static class MyAdapter extends BaseAdapter implements View.OnTouchListener {
