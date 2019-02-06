@@ -44,6 +44,7 @@ public class ExercicioActivity extends AppCompatActivity {
     private TextView txtExercicio;
     private TextView txtObs;
     private TextView txtRep;
+    private TextView txtUnilateral;
     private TextView txtSeries;
     private TextView txtSeriesTotal;
     private TextView txtDescanso;
@@ -100,6 +101,7 @@ public class ExercicioActivity extends AppCompatActivity {
     private static final String VOZ = "Voz";
     private static final String BOTAOFONE = "BotaoFone";
     private static final String SONS = "Sons";
+    private static final String DATA = "Data";
 
     @Override
     public void onBackPressed() {
@@ -207,6 +209,7 @@ public class ExercicioActivity extends AppCompatActivity {
         Button btnMais = findViewById(R.id.btnMais);
         Button btnMenos = findViewById(R.id.btnMenos);
         txtRep = findViewById(R.id.txtRep);
+        txtUnilateral = findViewById(R.id.txtUnilateral);
         txtObs = findViewById(R.id.txtObs);
         txtSeries = findViewById(R.id.txtSeries);
         txtSeriesTotal = findViewById(R.id.txtSeriesTotal);
@@ -239,7 +242,6 @@ public class ExercicioActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(getApplicationContext(), "Valor máximo atingido", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -297,7 +299,7 @@ public class ExercicioActivity extends AppCompatActivity {
                                     sa = 2;
                                     iniciando = 0;
                                     executarExercicio();
-                                } else {
+                                } else if (iniciando == 0) {
                                     if (uni == 1)
                                         r--;
                                     sa = 1;
@@ -307,6 +309,9 @@ public class ExercicioActivity extends AppCompatActivity {
                                             executarExercicio();
                                         }
                                     }, tempoExecucao * 1000);
+                                } else {
+                                    iniciando = 0;
+                                    executarExercicio();
                                 }
 
                                 if (som == 0) {
@@ -355,7 +360,6 @@ public class ExercicioActivity extends AppCompatActivity {
                         carregarValores(1);
                     }
                 }
-
             }
         });
 
@@ -380,7 +384,6 @@ public class ExercicioActivity extends AppCompatActivity {
                 }
             }
         });
-
         imgImagem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -388,19 +391,16 @@ public class ExercicioActivity extends AppCompatActivity {
                 imgExercicio.setVisibility(View.VISIBLE);
             }
         });
-
         imgExercicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 imgExercicio.setVisibility(View.INVISIBLE);
             }
         });
-
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
         if (bf == 1) {
             if (keyCode == KeyEvent.KEYCODE_HEADSETHOOK) {
                 contbotao += 1;
@@ -437,7 +437,6 @@ public class ExercicioActivity extends AppCompatActivity {
                 }
             }
         }
-
         return super.onKeyDown(keyCode, event);
     }
 
@@ -452,7 +451,6 @@ public class ExercicioActivity extends AppCompatActivity {
         } else {
             txtDescanso.setText(m + ":0" + s);
         }
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -466,6 +464,7 @@ public class ExercicioActivity extends AppCompatActivity {
                 if (r <= rep[s - 1]) { //Se a repetição atual for menor ou igual à repetição total
                     contagem(r);
                     if (r == rep[s - 1]) { //Se a repetição atual for igual à final, ou seja, fim da série
+                        iniciando = 1;
                         if (s == series) { //Se a série atual for igual à final, ou seja, última série
                             if (tipoRep == 2 && sd < seriesDrop * 2 && uni == 2) { // Se for unilateral e dropset
                                 if (som == 0) {
@@ -510,6 +509,7 @@ public class ExercicioActivity extends AppCompatActivity {
                                     txtTemporizador.setVisibility(View.VISIBLE);
                                     txtTemporizador.setTextSize(35);
                                     txtTemporizador.setText("Exercício Concluído");
+                                    atualizarData();
                                 } else if (sa == 2) {
                                     new Timer().schedule(new TimerTask() {
                                         @Override
@@ -531,9 +531,9 @@ public class ExercicioActivity extends AppCompatActivity {
                                     txtTemporizador.setVisibility(View.VISIBLE);
                                     txtTemporizador.setTextSize(35);
                                     txtTemporizador.setText("Exercício Concluído");
+                                    atualizarData();
                                 }
                             }
-
                         } else { //Se não for a última série
                             if (uni != 1) { //Se for diferente de Alternado
                                 if (tipoRep == 2 && sd < seriesDrop && uni != 2) { //Se for dropset e diferente de unilateral
@@ -591,6 +591,7 @@ public class ExercicioActivity extends AppCompatActivity {
                                 txtTemporizador.setVisibility(View.VISIBLE);
                                 txtTemporizador.setTextSize(35);
                                 txtTemporizador.setText("Exercício Concluído");
+                                atualizarData();
                                 swtInicioAut.setChecked(false);
                                 if (antprox != 1) {
                                     btnIniciar.setChecked(false);
@@ -599,9 +600,7 @@ public class ExercicioActivity extends AppCompatActivity {
                                     btnIniciar.setChecked(false);
                                     onBackPressed();
                                 }
-
                             }
-
                         }
                         handler.removeCallbacks(runnableRep);
                         re = 0;
@@ -617,7 +616,6 @@ public class ExercicioActivity extends AppCompatActivity {
                             } else {
                                 descansar(5);
                             }
-
                         } else {
                             sd = 1;
                             su = 1;
@@ -631,6 +629,7 @@ public class ExercicioActivity extends AppCompatActivity {
                                 txtTemporizador.setVisibility(View.VISIBLE);
                                 txtTemporizador.setTextSize(35);
                                 txtTemporizador.setText("Exercício Concluído");
+                                atualizarData();
                                 swtInicioAut.setChecked(false);
                                 if (antprox != 1) {
                                     btnIniciar.setChecked(false);
@@ -657,7 +656,6 @@ public class ExercicioActivity extends AppCompatActivity {
     }
 
     private void descansar(int t) {
-
         cdTimer = new CountDownTimer((t) * 1000, 1000) {
             @SuppressLint("SetTextI18n")
             public void onTick(long millisUntilFinished) {
@@ -1051,7 +1049,11 @@ public class ExercicioActivity extends AppCompatActivity {
                     break;
             }
         }
-        contador.start();
+        try {
+            contador.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         contador.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -1187,7 +1189,6 @@ public class ExercicioActivity extends AppCompatActivity {
                         }
                     }
                 }
-
             }
             id = cursor.getInt(indIdExercicio);
             txtExercicio.setText(cursor.getString(indExercicio));
@@ -1228,6 +1229,17 @@ public class ExercicioActivity extends AppCompatActivity {
             tempoExecucaoInicial = cursor.getInt(indTempoExecucao);
             descanso = (cursor.getInt(indDescansoM) * 60) + cursor.getInt(indDescansoS);
             uni = cursor.getInt(indUnilateral);
+            switch (uni) {
+                case 0:
+                    txtUnilateral.setText("");
+                    break;
+                case 1:
+                    txtUnilateral.setText("Alternado");
+                    break;
+                case 2:
+                    txtUnilateral.setText("Unilateral");
+                    break;
+            }
             e = cursor.getInt(indExercicioSpinner);
             m = cursor.getInt(indMusculoSpinner);
 
@@ -1235,7 +1247,6 @@ public class ExercicioActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         if (tipoRep == 3) {
             txtRep.setText("Até a falha");
@@ -1245,6 +1256,8 @@ public class ExercicioActivity extends AppCompatActivity {
         txtSeries.setText(String.valueOf(s));
         txtSeriesTotal.setText(String.valueOf(series));
         txtTempoExecucao.setText(String.valueOf(tempoExecucao));
+        iniciando = 1;
+        re = 0;
         Descanso();
     }
 
@@ -1549,6 +1562,13 @@ public class ExercicioActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    private void atualizarData() {
+        SharedPreferences data = getSharedPreferences(DATA, 0);
+        SharedPreferences.Editor editorData = data.edit();
+        editorData.putLong("Data", System.currentTimeMillis());
+        editorData.apply();
     }
 
     //FIM DOS MÉTODOS CRIADOS PARA A CLASSE

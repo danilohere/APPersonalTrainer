@@ -47,15 +47,14 @@ public class EditarTreinoActivity extends AppCompatActivity {
     private EditText edtTreino;
     private TextView txtTreino;
     private TextView txtTempoMedio;
-    private int tempoMedio;
-    private boolean semTempo = false;
     private RelativeLayout rl;
     private int numIdEx;
-    private int id;
+    private int idTreino;
     private int posIni;
     private int idEscolhido;
     private boolean exercEscolhido;
-
+    private boolean semTempo = false;
+    private String maisAerobico = "";
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -104,7 +103,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
         Bundle extra;
         extra = intent.getExtras();
         if (extra != null) {
-            id = extra.getInt("idTreino");
+            idTreino = extra.getInt("idTreino");
         }
 
         lstExercicios = findViewById(R.id.lstExercicios);
@@ -127,11 +126,11 @@ public class EditarTreinoActivity extends AppCompatActivity {
                     Intent aerobico = new Intent(EditarTreinoActivity.this, EditarAerobicoActivity.class);
                     if (position < numIdEx) {
                         exercicio.putExtra("idExercicio", idsEx.get(position));
-                        exercicio.putExtra("idTreino", id);
+                        exercicio.putExtra("idTreino", idTreino);
                         startActivity(exercicio);
                     } else {
                         aerobico.putExtra("idAerobico", idsAer.get(position - numIdEx));
-                        aerobico.putExtra("idTreino", id);
+                        aerobico.putExtra("idTreino", idTreino);
                         startActivity(aerobico);
                     }
                 }
@@ -149,8 +148,8 @@ public class EditarTreinoActivity extends AppCompatActivity {
 
                     int posNova = lstExercicios.pointToPosition((int) event.getX(), (int) event.getY());
 
-                    Cursor cursorExercicio = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino =" + id + " ORDER BY pos ASC", null);
-                    Cursor cursorAerobico = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idTreino =" + id + " ORDER BY pos ASC", null);
+                    Cursor cursorExercicio = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino =" + idTreino + " ORDER BY pos ASC", null);
+                    Cursor cursorAerobico = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idTreino =" + idTreino + " ORDER BY pos ASC", null);
                     int indIdEx = cursorExercicio.getColumnIndex("idExercicio");
                     int indPos = cursorExercicio.getColumnIndex("pos");
                     bancoDados.execSQL("UPDATE exercicios SET pos = " + posNova + " WHERE idExercicio = " + idEscolhido);
@@ -228,6 +227,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
                     view.setVisibility(View.VISIBLE);
                     rl.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg2));
                     txtTreino.setVisibility(View.VISIBLE);
+                    txtTempoMedio.setVisibility(View.VISIBLE);
                     edtTreino.setVisibility(View.VISIBLE);
                     btnNovoAerobico.setVisibility(View.VISIBLE);
                     btnNovoExercicio.setVisibility(View.VISIBLE);
@@ -235,6 +235,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
                 } else if (event.getAction() == DragEvent.ACTION_DRAG_STARTED) {
                     rl.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg3));
                     txtTreino.setVisibility(View.INVISIBLE);
+                    txtTempoMedio.setVisibility(View.INVISIBLE);
                     edtTreino.setVisibility(View.INVISIBLE);
                     btnNovoAerobico.setVisibility(View.INVISIBLE);
                     btnNovoExercicio.setVisibility(View.INVISIBLE);
@@ -298,14 +299,14 @@ public class EditarTreinoActivity extends AppCompatActivity {
                     int indIdTreino = cursorIdTreino.getColumnIndex("idTreino");
                     try {
                         while (cursorIdTreino.moveToNext()) {
-                            id = cursorIdTreino.getInt(indIdTreino);
+                            idTreino = cursorIdTreino.getInt(indIdTreino);
                         }
                     } finally {
                         cursorIdTreino.close();
                     }
                     Intent intent = new Intent(EditarTreinoActivity.this, EditarExercicioActivity.class);
                     intent.putExtra("idExercicio", 500000);
-                    intent.putExtra("idTreino", id);
+                    intent.putExtra("idTreino", idTreino);
                     startActivity(intent);
                 }
 
@@ -323,14 +324,14 @@ public class EditarTreinoActivity extends AppCompatActivity {
                     int indIdTreino = cursorIdTreino.getColumnIndex("idTreino");
                     try {
                         while (cursorIdTreino.moveToNext()) {
-                            id = cursorIdTreino.getInt(indIdTreino);
+                            idTreino = cursorIdTreino.getInt(indIdTreino);
                         }
                     } finally {
                         cursorIdTreino.close();
                     }
                     Intent intent = new Intent(EditarTreinoActivity.this, EditarAerobicoActivity.class);
                     intent.putExtra("idAerobico", 500000);
-                    intent.putExtra("idTreino", id);
+                    intent.putExtra("idTreino", idTreino);
                     startActivity(intent);
                 }
             }
@@ -347,7 +348,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void recuperarExercicios() {
         numIdEx = 0;
-        tempoMedio = 0;
+        int tempoMedio = 0;
         exercicios = new ArrayList<>();
         idsEx = new ArrayList<>();
         idsAer = new ArrayList<>();
@@ -357,7 +358,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
         Cursor cursorAerobico;
 
         try {
-            cursorTreino = bancoDados.rawQuery("SELECT treino FROM treinos WHERE idTreino =" + id, null);
+            cursorTreino = bancoDados.rawQuery("SELECT treino FROM treinos WHERE idTreino =" + idTreino, null);
             int indTreino = cursorTreino.getColumnIndex("treino");
             cursorTreino.moveToFirst();
             edtTreino.setText(cursorTreino.getString(indTreino));
@@ -367,7 +368,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
         }
 
         try {
-            cursorExercicio = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino =" + id + " ORDER BY idExercicio ASC", null);
+            cursorExercicio = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino =" + idTreino + " ORDER BY idExercicio ASC", null);
             int indIdEx = cursorExercicio.getColumnIndex("idExercicio");
             int indPos = cursorExercicio.getColumnIndex("pos");
             while (cursorExercicio.moveToNext()) {
@@ -381,7 +382,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
         }
 
         try {
-            cursorExercicio = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino =" + id + " ORDER BY pos ASC", null);
+            cursorExercicio = bancoDados.rawQuery("SELECT * FROM exercicios WHERE idTreino =" + idTreino + " ORDER BY pos ASC", null);
             int indExercicio = cursorExercicio.getColumnIndex("exercicio");
             int indIdEx = cursorExercicio.getColumnIndex("idExercicio");
             int indTempo = cursorExercicio.getColumnIndex("tempoMedio");
@@ -406,7 +407,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
         }
 
         try {
-            cursorAerobico = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idTreino =" + id + " ORDER BY idAerobico ASC", null);
+            cursorAerobico = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idTreino =" + idTreino + " ORDER BY idAerobico ASC", null);
             int indIdAer = cursorAerobico.getColumnIndex("idAerobico");
             int indPos = cursorAerobico.getColumnIndex("pos");
             lstExercicios.setAdapter(new MyAdapter(exercicios));
@@ -421,7 +422,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
         }
 
         try {
-            cursorAerobico = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idTreino =" + id + " ORDER BY pos ASC", null);
+            cursorAerobico = bancoDados.rawQuery("SELECT * FROM aerobicos WHERE idTreino =" + idTreino + " ORDER BY pos ASC", null);
             int indAerobico = cursorAerobico.getColumnIndex("aerobico");
             int indIdAer = cursorAerobico.getColumnIndex("idAerobico");
             int indTempo = cursorAerobico.getColumnIndex("tempoMedio");
@@ -436,6 +437,8 @@ public class EditarTreinoActivity extends AppCompatActivity {
                 int tempo = cursorAerobico.getInt(indTempo);
                 if (tempo == 0) {
                     semTempo = true;
+                } else if (tempo == 99999999) {
+                    maisAerobico = " + aeróbico";
                 } else {
                     tempoMedio += cursorAerobico.getInt(indTempo) + 150;
                 }
@@ -450,25 +453,15 @@ public class EditarTreinoActivity extends AppCompatActivity {
             Toast.makeText(this, "Por favor, abrir e salvar os exercícios desse treino em Editar treinos para gravar o tempo médio", Toast.LENGTH_LONG).show();
         } else {
             int h = tempoMedio / 3600;
-            int m = tempoMedio / 60;
-            int s = tempoMedio % 60;
-            if (m > 9 && s > 9) {
+            int m = (tempoMedio - (h * 3600)) / 60;
+            if (m > 9) {
                 if (m >= 60) {
-                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":00");
+                    txtTempoMedio.setText("Tempo médio de treino: " + h + "h00" + maisAerobico);
                 } else {
-                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":" + m);
+                    txtTempoMedio.setText("Tempo médio de treino: " + h + "h" + m + maisAerobico);
                 }
             } else {
-                if (m < 10 && s > 9)
-                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":0" + m);
-                else if (m > 9)
-                    if (m >= 60) {
-                        txtTempoMedio.setText("Tempo médio de treino: " + h + ":00");
-                    } else {
-                        txtTempoMedio.setText("Tempo médio de treino: " + h + ":" + m);
-                    }
-                else
-                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":0" + m);
+                txtTempoMedio.setText("Tempo médio de treino: " + h + "h0" + m + maisAerobico);
             }
         }
     }
@@ -545,10 +538,10 @@ public class EditarTreinoActivity extends AppCompatActivity {
 
     void salvar() {
         String nomeTreino = edtTreino.getText().toString();
-        if (id == 500000) {
+        if (idTreino == 500000) {
             bancoDados.execSQL("INSERT INTO treinos (treino) VALUES ('" + nomeTreino + "')");
         } else {
-            bancoDados.execSQL("UPDATE treinos SET treino = '" + nomeTreino + "' WHERE idTreino = " + id);
+            bancoDados.execSQL("UPDATE treinos SET treino = '" + nomeTreino + "' WHERE idTreino = " + idTreino);
         }
     }
 
@@ -567,6 +560,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
                 rl.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg2));
                 txtTreino.setVisibility(View.VISIBLE);
                 edtTreino.setVisibility(View.VISIBLE);
+                txtTempoMedio.setVisibility(View.VISIBLE);
                 btnNovoAerobico.setVisibility(View.VISIBLE);
                 btnNovoExercicio.setVisibility(View.VISIBLE);
                 recuperarExercicios();
@@ -579,6 +573,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
                 rl.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg2));
                 txtTreino.setVisibility(View.VISIBLE);
                 edtTreino.setVisibility(View.VISIBLE);
+                txtTempoMedio.setVisibility(View.VISIBLE);
                 btnNovoAerobico.setVisibility(View.VISIBLE);
                 btnNovoExercicio.setVisibility(View.VISIBLE);
             }
@@ -589,6 +584,7 @@ public class EditarTreinoActivity extends AppCompatActivity {
                 rl.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg2));
                 txtTreino.setVisibility(View.VISIBLE);
                 edtTreino.setVisibility(View.VISIBLE);
+                txtTempoMedio.setVisibility(View.VISIBLE);
                 btnNovoAerobico.setVisibility(View.VISIBLE);
                 btnNovoExercicio.setVisibility(View.VISIBLE);
             }

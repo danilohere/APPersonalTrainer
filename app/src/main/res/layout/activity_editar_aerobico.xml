@@ -30,7 +30,7 @@
         android:background="@color/background_list"
         android:popupBackground="@color/background_list"
         android:layout_height="30dp"
-        android:layout_below="@+id/textView14"
+        android:layout_below="@+id/txtAgua"
         android:layout_marginTop="10dp"/>
 
     <CheckBox
@@ -82,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/textView14"
+        android:id="@+id/txtAgua"
         android:textColor="@color/color_texto"
         android:textSize="@dimen/texto_campos"
         android:layout_marginTop="10dp" />

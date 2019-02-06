@@ -2,8 +2,10 @@ package appersonal.development.com.appersonaltrainer.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -39,20 +41,21 @@ import appersonal.development.com.appersonaltrainer.R;
 public class TreinoXActivity extends AppCompatActivity {
 
     private ListView lstExercicios;
-    private String nomeTreino;
+    private TextView txtTreino;
+    private TextView txtTempoMedio;
+    private AlertDialog alerta;
+    private SQLiteDatabase bancoDados;
+    private InterstitialAd mInterstitialAd;
+    ShareDialog shareDialog = new ShareDialog(this);
     private ArrayList<Integer> idsEx;
     private ArrayList<Integer> idsAer;
     private int idTreino;
     private int numIdEx;
     private boolean semTempo = false;
-    private SQLiteDatabase bancoDados;
-    private TextView txtTreino;
-    private TextView txtTempoMedio;
-    private AlertDialog alerta;
     private boolean completo = false;
-    private InterstitialAd mInterstitialAd;
-    ShareDialog shareDialog = new ShareDialog(this);
-
+    private String nomeTreino;
+    private String maisAerobico = "";
+    private static final String DATA = "Data";
 
     @Override
     protected void onResume() {
@@ -181,7 +184,8 @@ public class TreinoXActivity extends AppCompatActivity {
                                     .setQuote("Acabei de fazer " + nomeTreino + " com o APPersonal Trainer!")
                                     .build();
                             shareDialog.show(content);
-                            long data = System.currentTimeMillis();
+                            SharedPreferences dataTempo = getSharedPreferences(DATA, Context.MODE_PRIVATE);
+                            long data = dataTempo.getLong("Data", 0);
                             bancoDados.execSQL("UPDATE exercicios SET completo = 0, serieAtual = 1 WHERE idTreino =" + idTreino);
                             bancoDados.execSQL("UPDATE aerobicos SET completo = 0 WHERE idTreino =" + idTreino);
                             bancoDados.execSQL("UPDATE treinos SET data = '" + data + "' WHERE idTreino =" + idTreino);
@@ -193,7 +197,8 @@ public class TreinoXActivity extends AppCompatActivity {
                     builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            long data = System.currentTimeMillis();
+                            SharedPreferences dataTempo = getSharedPreferences(DATA, Context.MODE_PRIVATE);
+                            long data = dataTempo.getLong("Data", 0);
                             bancoDados.execSQL("UPDATE exercicios SET completo = 0, serieAtual = 1 WHERE idTreino =" + idTreino);
                             bancoDados.execSQL("UPDATE aerobicos SET completo = 0 WHERE idTreino =" + idTreino);
                             bancoDados.execSQL("UPDATE treinos SET data = '" + data + "' WHERE idTreino =" + idTreino);
@@ -289,6 +294,8 @@ public class TreinoXActivity extends AppCompatActivity {
             while (cursorAerobico.moveToNext()) {
                 if (cursorAerobico.getInt(indTempo) == 0) {
                     semTempo = true;
+                } else if (cursorAerobico.getInt(indTempo) == 99999999) {
+                    maisAerobico = " + aeróbico";
                 } else {
                     tempoMedio += cursorAerobico.getInt(indTempo) + 150;
                 }
@@ -313,25 +320,15 @@ public class TreinoXActivity extends AppCompatActivity {
             Toast.makeText(this, "Por favor, abrir e salvar os exercícios desse treino em Editar treinos para gravar o tempo médio", Toast.LENGTH_LONG).show();
         } else {
             int h = tempoMedio / 3600;
-            int m = tempoMedio / 60;
-            int s = tempoMedio % 60;
-            if (m > 9 && s > 9) {
+            int m = (tempoMedio - (h * 3600)) / 60;
+            if (m > 9) {
                 if (m >= 60) {
-                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":00:");
+                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":00" + maisAerobico);
                 } else {
-                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":" + m);
+                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":" + m + maisAerobico);
                 }
             } else {
-                if (m < 10 && s > 9)
-                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":0" + m);
-                else if (m > 9)
-                    if (m >= 60) {
-                        txtTempoMedio.setText("Tempo médio de treino: " + h + ":00");
-                    } else {
-                        txtTempoMedio.setText("Tempo médio de treino: " + h + ":" + m);
-                    }
-                else
-                    txtTempoMedio.setText("Tempo médio de treino: " + h + ":0" + m);
+                txtTempoMedio.setText("Tempo médio de treino: " + h + ":0" + m + maisAerobico);
             }
         }
     }

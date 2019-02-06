@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginBottom="100dp"
+    android:layout_marginTop="100dp"
+    android:background="@drawable/bg4">
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/qual_a_refei_o"
+        android:textAlignment="center"
+        android:textColor="@color/color_texto"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/edtRefeicao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView16"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="80dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/background_list"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textColor="@color/color_texto"
+        android:textSize="24sp"
+        style="@style/edit_branco"
+        tools:ignore="LabelFor" />
+
+    <LinearLayout
+        android:id="@+id/lytHora"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edtRefeicao"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/spnHoraRefeicao"
+            android:layout_width="@dimen/tamanho_caixa_texto_num"
+            android:layout_height="@dimen/tamanho_caixa_texto_num"
+            android:layout_weight="1"
+            android:background="@color/background_list"
+            android:popupBackground="@color/background_list"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/textView25"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="3dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:text="@string/doispontos_text"
+            android:textAlignment="center"
+            android:textColor="@color/color_texto"
+            android:textSize="@dimen/texto_campos" />
+
+        <Spinner
+            android:id="@+id/spnMinutoRefeicao"
+            android:layout_width="@dimen/tamanho_caixa_texto_num"
+            android:layout_height="@dimen/tamanho_caixa_texto_num"
+            android:layout_weight="1"
+            android:background="@color/background_list"
+            android:popupBackground="@color/background_list"
+            android:textAlignment="center" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnOkRefeicao"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/lytHora"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
+        android:text="@string/pronto"
+        android:textColor="@color/color_texto" />
+
+</RelativeLayout>

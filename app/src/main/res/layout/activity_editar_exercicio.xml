@@ -79,16 +79,17 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/chbObs"
                 android:layout_alignBottom="@+id/chbObs"
+                android:layout_alignEnd="@+id/spnExercicio"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@+id/txtRepDrop"
                 android:background="@color/background_list"
                 android:ems="10"
+                android:inputType="text"
                 android:padding="@dimen/padding_caixa_texto"
                 android:textAlignment="viewStart"
                 android:textColor="@color/color_texto"
                 android:textSize="@dimen/texto_campos"
                 android:visibility="invisible"
-                android:layout_alignEnd="@+id/spnExercicio"
-                android:layout_toEndOf="@+id/txtRepDrop"
-                android:inputType="text"
                 tools:ignore="LabelFor" />
 
             <TextView

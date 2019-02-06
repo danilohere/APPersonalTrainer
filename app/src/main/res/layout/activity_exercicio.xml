@@ -48,7 +48,7 @@
         android:textSize="@dimen/texto_campos" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtRep"
         android:layout_alignBottom="@+id/textView4"
@@ -56,6 +56,17 @@
         android:layout_marginStart="24dp"
         android:textSize="@dimen/texto_campos"
         android:textColor="@color/color_texto"/>
+
+    <TextView
+        android:id="@+id/txtUnilateral"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView4"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/txtRep"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos" />
 
     <TextView
         android:id="@+id/textView6"

@@ -12,12 +12,12 @@
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme"
         android:largeHeap="true"
-        android:fullBackupContent="true">
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -129,7 +129,7 @@
             tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.AlarmeActivity"
-            android:label="Alarme de Água"
+            android:label="Alarmes"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"
             tools:ignore="InnerclassSeparator" />
@@ -144,6 +144,9 @@
         <receiver
             android:name=".Controller.OnAlarmReceiver"
             tools:ignore="InnerclassSeparator" />
+        <receiver
+            android:name=".Controller.OnAlarmAguaReceiver"
+            tools:ignore="InnerclassSeparator" />
 
         <service
             android:name=".Controller.BackgroundService"
@@ -152,8 +155,18 @@
         <activity
             android:name=".Activities.FacebookActivity"
             tools:ignore="InnerclassSeparator" />
+
         <activity
             android:name=".Activities.TutorialActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="InnerclassSeparator" />
+
+        <activity
+            android:name=".Activities.AguaActivity"
+            android:taskAffinity=""
+            android:screenOrientation="portrait"
+            android:theme="@style/myDialog"
+            android:parentActivityName=".Activities.AlarmeActivity"
             tools:ignore="InnerclassSeparator" />
     </application>
 

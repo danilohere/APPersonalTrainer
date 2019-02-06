@@ -34,175 +34,447 @@
         ads:adUnitId="@string/banner_ad_unit_id">
     </com.google.android.gms.ads.AdView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/adView"
         android:layout_below="@id/adView2"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <Switch
-            android:id="@+id/swtAlerta"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="1"
-            android:text="@string/alarme_de_gua_text"
-            android:textColor="@color/color_texto"
-            android:textSize="24sp" />
-
-        <ImageView
-            android:id="@+id/imgInfo"
-            android:layout_width="24dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            app:srcCompat="@drawable/info24x24i"
-            android:contentDescription="@string/todo" />
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/rltAlarme"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
         android:layout_marginBottom="10dp"
-        android:layout_above="@id/adView">
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbars="vertical">
 
-        <Spinner
-            android:id="@+id/spnMinutoFim"
-            android:layout_width="40dp"
-            android:layout_height="@dimen/tamanho_caixa_texto_num"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/textView23"
-            android:layout_marginEnd="40dp"
-            android:background="@color/background_list"
-            android:popupBackground="@color/background_list"
-            android:textAlignment="center" />
-
-        <Spinner
-            android:id="@+id/spnIntervalo"
-            android:layout_width="@dimen/tamanho_caixa_texto_num"
-            android:layout_height="@dimen/tamanho_caixa_texto_num"
-            android:layout_alignEnd="@+id/spnHoraFim"
-            android:layout_below="@+id/textView24"
-            android:layout_marginTop="20dp"
-            android:layout_toEndOf="@+id/textView22"
-            android:background="@color/background_list"
-            android:popupBackground="@color/background_list"
-            android:textAlignment="center" />
-
-        <Button
-            android:id="@+id/btnSalvar"
+        <RelativeLayout
+            android:id="@+id/rltContent"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true"
-            android:text="@string/salvar_text"
-            android:textColor="@color/color_texto"
-            android:background="@drawable/buttonshape"
-            android:shadowColor="#A8A8A8"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="5" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/textView21"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/textView22"
-            android:layout_alignBottom="@+id/textView22"
-            android:layout_alignParentStart="true"
-            android:layout_toEndOf="@+id/spnMinutoInicio"
-            android:text="@string/at_text"
-            android:textAlignment="center"
-            android:textColor="@color/color_texto"
-            android:textSize="@dimen/texto_campos" />
+            <ImageView
+                android:id="@+id/btnHide"
+                android:layout_width="52dp"
+                android:layout_height="32dp"
+                android:layout_alignEnd="@+id/lytAlerta"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/lytAlerta"
+                android:contentDescription="@string/todo"
+                android:visibility="invisible"
+                ads:srcCompat="@drawable/sdown"
+                tools:ignore="ContentDescription" />
 
-        <TextView
-            android:id="@+id/textView24"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/spnHoraInicio"
-            android:layout_marginTop="20dp"
-            android:text="@string/beber_gua_a_cada_text"
-            android:textAlignment="center"
-            android:textColor="@color/color_texto"
-            android:textSize="@dimen/titulo" />
+            <ImageView
+                android:id="@+id/btnShow"
+                android:layout_width="52dp"
+                android:layout_height="32dp"
+                android:layout_alignEnd="@+id/lytAlerta"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/lytAlerta"
+                android:contentDescription="@string/todo"
+                ads:srcCompat="@drawable/sup"
+                tools:ignore="ContentDescription" />
 
-        <Spinner
-            android:id="@+id/spnHoraFim"
-            android:layout_width="40dp"
-            android:layout_height="@dimen/tamanho_caixa_texto_num"
-            android:layout_alignTop="@+id/spnMinutoInicio"
-            android:layout_toStartOf="@+id/textView23"
-            android:background="@color/background_list"
-            android:popupBackground="@color/background_list"
-            android:textAlignment="center" />
+            <LinearLayout
+                android:id="@+id/lytAlerta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/textView22"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/spnHoraInicio"
-            android:layout_alignTop="@+id/spnHoraInicio"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:layout_toEndOf="@+id/spnHoraInicio"
-            android:paddingTop="3dp"
-            android:text="@string/doispontos_text"
-            android:textAlignment="center"
-            android:textColor="@color/color_texto"
-            android:textSize="@dimen/texto_campos" />
+                <Switch
+                    android:id="@+id/swtAlerta"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="50dp"
+                    android:layout_weight="1"
+                    android:text="@string/alarme_de_gua_text"
+                    android:textColor="@color/color_texto"
+                    android:textSize="24sp" />
 
-        <Spinner
-            android:id="@+id/spnHoraInicio"
-            android:layout_width="40dp"
-            android:layout_height="@dimen/tamanho_caixa_texto_num"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView19"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/background_list"
-            android:popupBackground="@color/background_list"
-            android:textAlignment="center" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView19"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:text="@string/hor_rio_para_alerta_text"
-            android:textAlignment="center"
-            android:textColor="@color/color_texto"
-            android:textSize="@dimen/titulo" />
+            <RelativeLayout
+                android:id="@+id/rltAlarme"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_below="@id/lytAlerta"
+                android:layout_marginTop="10dp">
 
-        <Spinner
-            android:id="@+id/spnMinutoInicio"
-            android:layout_width="40dp"
-            android:layout_height="@dimen/tamanho_caixa_texto_num"
-            android:layout_alignTop="@+id/textView22"
-            android:layout_toEndOf="@+id/textView22"
-            android:background="@color/background_list"
-            android:popupBackground="@color/background_list"
-            android:textAlignment="center" />
+                <Spinner
+                    android:id="@+id/spnMinutoFim"
+                    android:layout_width="40dp"
+                    android:layout_height="@dimen/tamanho_caixa_texto_num"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignTop="@+id/textView23"
+                    android:layout_marginEnd="40dp"
+                    android:background="@color/background_list"
+                    android:popupBackground="@color/background_list"
+                    android:textAlignment="center" />
 
-        <TextView
-            android:id="@+id/textView23"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/spnHoraFim"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:layout_toStartOf="@+id/spnMinutoFim"
-            android:paddingTop="3dp"
-            android:text="@string/doispontos_text"
-            android:textAlignment="center"
-            android:textColor="@color/color_texto"
-            android:textSize="@dimen/texto_campos" />
-    </RelativeLayout>
+                <Spinner
+                    android:id="@+id/spnIntervalo"
+                    android:layout_width="@dimen/tamanho_caixa_texto_num"
+                    android:layout_height="@dimen/tamanho_caixa_texto_num"
+                    android:layout_alignEnd="@+id/spnHoraFim"
+                    android:layout_below="@+id/textView24"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/textView22"
+                    android:background="@color/background_list"
+                    android:popupBackground="@color/background_list"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/textView21"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/textView22"
+                    android:layout_alignBottom="@+id/textView22"
+                    android:layout_alignParentStart="true"
+                    android:layout_toEndOf="@+id/spnMinutoInicio"
+                    android:text="@string/at_text"
+                    android:textAlignment="center"
+                    android:textColor="@color/color_texto"
+                    android:textSize="@dimen/texto_campos" />
+
+                <TextView
+                    android:id="@+id/textView24"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/spnHoraInicio"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/beber_gua_a_cada_text"
+                    android:textAlignment="center"
+                    android:textColor="@color/color_texto"
+                    android:textSize="@dimen/texto_campos" />
+
+                <Spinner
+                    android:id="@+id/spnHoraFim"
+                    android:layout_width="40dp"
+                    android:layout_height="@dimen/tamanho_caixa_texto_num"
+                    android:layout_alignTop="@+id/spnMinutoInicio"
+                    android:layout_toStartOf="@+id/textView23"
+                    android:background="@color/background_list"
+                    android:popupBackground="@color/background_list"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/textView22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/spnHoraInicio"
+                    android:layout_alignTop="@+id/spnHoraInicio"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_toEndOf="@+id/spnHoraInicio"
+                    android:paddingTop="3dp"
+                    android:text="@string/doispontos_text"
+                    android:textAlignment="center"
+                    android:textColor="@color/color_texto"
+                    android:textSize="@dimen/texto_campos" />
+
+                <Spinner
+                    android:id="@+id/spnHoraInicio"
+                    android:layout_width="40dp"
+                    android:layout_height="@dimen/tamanho_caixa_texto_num"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/background_list"
+                    android:popupBackground="@color/background_list"
+                    android:textAlignment="center" />
+
+                <Spinner
+                    android:id="@+id/spnMinutoInicio"
+                    android:layout_width="40dp"
+                    android:layout_height="@dimen/tamanho_caixa_texto_num"
+                    android:layout_alignTop="@+id/textView22"
+                    android:layout_toEndOf="@+id/textView22"
+                    android:background="@color/background_list"
+                    android:popupBackground="@color/background_list"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/textView23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/spnHoraFim"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_toStartOf="@+id/spnMinutoFim"
+                    android:paddingTop="3dp"
+                    android:text="@string/doispontos_text"
+                    android:textAlignment="center"
+                    android:textColor="@color/color_texto"
+                    android:textSize="@dimen/texto_campos" />
+
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/btnHideTreino"
+                android:layout_width="52dp"
+                android:layout_height="32dp"
+                android:layout_alignEnd="@+id/lytAlertaTreino"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/lytAlertaTreino"
+                android:contentDescription="@string/todo"
+                android:visibility="invisible"
+                ads:srcCompat="@drawable/sdown"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/btnShowTreino"
+                android:layout_width="52dp"
+                android:layout_height="32dp"
+                android:layout_alignEnd="@+id/lytAlertaTreino"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/lytAlertaTreino"
+                android:contentDescription="@string/todo"
+                ads:srcCompat="@drawable/sup"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:id="@+id/lytAlertaTreino"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rltAlarme"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <Switch
+                    android:id="@+id/swtAlertaTreino"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="50dp"
+                    android:layout_weight="1"
+                    android:text="@string/alarme_de_treino"
+                    android:textColor="@color/color_texto"
+                    android:textSize="24sp" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rltAlarmeTreino"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_below="@id/lytAlertaTreino"
+                android:layout_marginTop="10dp">
+
+                <Button
+                    android:id="@+id/btnSegunda"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/list_background"
+                    android:shadowColor="#A8A8A8"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="5"
+                    android:text="@string/s"
+                    android:textColor="@color/color_texto" />
+
+                <Button
+                    android:id="@+id/btnTerca"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@id/btnSegunda"
+                    android:background="@color/list_background"
+                    android:shadowColor="#A8A8A8"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="5"
+                    android:text="@string/t"
+                    android:textColor="@color/color_texto" />
+
+                <Button
+                    android:id="@+id/btnQuarta"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@id/btnTerca"
+                    android:background="@color/list_background"
+                    android:shadowColor="#A8A8A8"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="5"
+                    android:text="@string/q"
+                    android:textColor="@color/color_texto" />
+
+                <Button
+                    android:id="@+id/btnQuinta"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@id/btnQuarta"
+                    android:background="@color/list_background"
+                    android:shadowColor="#A8A8A8"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="5"
+                    android:text="@string/q"
+                    android:textColor="@color/color_texto" />
+
+                <Button
+                    android:id="@+id/btnSexta"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@id/btnQuinta"
+                    android:background="@color/list_background"
+                    android:shadowColor="#A8A8A8"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="5"
+                    android:text="@string/s"
+                    android:textColor="@color/color_texto" />
+
+                <Button
+                    android:id="@+id/btnSabado"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@id/btnSexta"
+                    android:background="@color/list_background"
+                    android:shadowColor="#A8A8A8"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="5"
+                    android:text="@string/s"
+                    android:textColor="@color/color_texto" />
+
+                <Button
+                    android:id="@+id/btnDomingo"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@id/btnSabado"
+                    android:background="@color/list_background"
+                    android:shadowColor="#A8A8A8"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="5"
+                    android:text="@string/d"
+                    android:textColor="@color/color_texto" />
+
+                <Spinner
+                    android:id="@+id/spnHoraTreino"
+                    android:layout_width="30dp"
+                    android:layout_height="@dimen/tamanho_caixa_texto_num"
+                    android:layout_marginTop="10dp"
+                    android:layout_toStartOf="@id/textView25"
+                    android:background="@color/background_list"
+                    android:popupBackground="@color/background_list"
+                    android:textAlignment="center" />
+
+                <Spinner
+                    android:id="@+id/spnMinutoTreino"
+                    android:layout_width="30dp"
+                    android:layout_height="@dimen/tamanho_caixa_texto_num"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignTop="@+id/textView25"
+                    android:layout_marginEnd="5dp"
+                    android:background="@color/background_list"
+                    android:popupBackground="@color/background_list"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/textView25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/spnHoraTreino"
+                    android:layout_alignTop="@+id/spnHoraTreino"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_toStartOf="@id/spnMinutoTreino"
+                    android:paddingTop="3dp"
+                    android:text="@string/doispontos_text"
+                    android:textAlignment="center"
+                    android:textColor="@color/color_texto"
+                    android:textSize="@dimen/texto_campos" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/btnHideRefeicoes"
+                android:layout_width="52dp"
+                android:layout_height="32dp"
+                android:layout_alignEnd="@+id/lytAlertaRefeicoes"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/lytAlertaRefeicoes"
+                android:contentDescription="@string/todo"
+                android:visibility="invisible"
+                ads:srcCompat="@drawable/sdown"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/btnShowRefeicoes"
+                android:layout_width="52dp"
+                android:layout_height="32dp"
+                android:layout_alignEnd="@+id/lytAlertaRefeicoes"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/lytAlertaRefeicoes"
+                android:contentDescription="@string/todo"
+                ads:srcCompat="@drawable/sup"
+                tools:ignore="ContentDescription" />
+
+            <Button
+                android:id="@+id/btnMaisRefeicoes"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_toStartOf="@id/btnShowRefeicoes"
+                android:layout_marginEnd="6dp"
+                android:layout_alignTop="@+id/lytAlertaRefeicoes"
+                android:background="@drawable/buttonshape"
+                android:shadowColor="#A8A8A8"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5"
+                android:text="@string/mais"
+                android:textColor="@color/color_texto" />
+
+            <LinearLayout
+                android:id="@+id/lytAlertaRefeicoes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rltAlarmeTreino"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/alarme_de_refei_es"
+                    android:textColor="@color/color_texto"
+                    android:textSize="24sp" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rltAlarmeRefeicoes"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_below="@id/lytAlertaRefeicoes"
+                android:layout_marginTop="20dp">
+
+                <ListView
+                    android:id="@+id/lstRefeicoes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:minHeight="200dp" />
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+    </ScrollView>
 
 </RelativeLayout>

@@ -55,6 +55,7 @@ public class EditarAerobicoActivity extends AppCompatActivity {
     private Double valorAerobicoKM;
     private int idAerobico;
     private int idTreino;
+    private int tempoMedio;
     private boolean ver;
     private boolean vazio = false;
 
@@ -450,9 +451,12 @@ public class EditarAerobicoActivity extends AppCompatActivity {
                             if (du <= 0 || de <= 0 || valorAerobico[3] <= 0) {
                                 Toast.makeText(getApplicationContext(), "Preencha os campos com valores maiores que 0", Toast.LENGTH_SHORT).show();
                                 ver = false;
+                            } else {
+                                int tempoDescanso = valorAerobico[4] * 60 + valorAerobico[5];
+                                int tempoAer = valorAerobico[1] * 60 + valorAerobico[2];
+                                tempoMedio = (tempoAer * valorAerobico[3]) + (tempoDescanso * (valorAerobico[3] - 1));
                             }
                         }
-
                     }
                 } else {
                     if (chbDistancia.isChecked()) {
@@ -461,6 +465,7 @@ public class EditarAerobicoActivity extends AppCompatActivity {
                             ver = false;
                         } else {
                             valorAerobicoKM = Double.parseDouble(setAerobico[8]);
+                            tempoMedio = 99999999;
                             if (valorAerobicoKM <= 0) {
                                 Toast.makeText(getApplicationContext(), "Preencha os campos com valores maiores que 0", Toast.LENGTH_SHORT).show();
                                 ver = false;
@@ -491,6 +496,8 @@ public class EditarAerobicoActivity extends AppCompatActivity {
                             if (du <= 0) {
                                 Toast.makeText(getApplicationContext(), "Preencha os campos com valores maiores que 0", Toast.LENGTH_SHORT).show();
                                 ver = false;
+                            } else {
+                                tempoMedio = (valorAerobico[0] * 3600) + (valorAerobico[1] * 60) + valorAerobico[2];
                             }
                         }
                     }
@@ -499,16 +506,16 @@ public class EditarAerobicoActivity extends AppCompatActivity {
                     try {
                         if (idAerobico == 500000) {
                             bancoDados.execSQL("INSERT INTO aerobicos (aerobico, duracaoH, duracaoM, duracaoS, series, " +
-                                    "descansoM, descansoS, distancia, km, obs, idTreino) VALUES " +
+                                    "descansoM, descansoS, distancia, km, obs, idTreino, tempoMedio) VALUES " +
                                     "('" + setAerobico[0] + "', " + valorAerobico[0] + ", " + valorAerobico[1] + ", " + valorAerobico[2] + ", "
                                     + valorAerobico[3] + ", " + valorAerobico[4] + ", " + valorAerobico[5] + ", " + valorAerobico[6] + ", "
-                                    + valorAerobicoKM + ", '" + setAerobico[9] + "', " + idTreino + " )");
+                                    + valorAerobicoKM + ", '" + setAerobico[9] + "', " + idTreino + ", " + tempoMedio + " )");
                             Toast.makeText(getApplicationContext(), "Aeróbico adicionado", Toast.LENGTH_SHORT).show();
                         } else {
                             bancoDados.execSQL("UPDATE aerobicos SET duracaoH = " + valorAerobico[0] + ", duracaoM = " + valorAerobico[1] +
                                     ", duracaoS = " + valorAerobico[2] + ", series = " + valorAerobico[3] + ", descansoM = " + valorAerobico[4] +
                                     ", descansoS = " + valorAerobico[5] + ", distancia = " + valorAerobico[6] + ", km = " + valorAerobicoKM + ", obs = '" + setAerobico[9] +
-                                    "' WHERE idAerobico = " + idAerobico);
+                                    "', tempoMedio = " + tempoMedio + " WHERE idAerobico = " + idAerobico);
                             Toast.makeText(getApplicationContext(), "Aeróbico alterado", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {

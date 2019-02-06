@@ -79,4 +79,16 @@
     <string name="como_criar_um_aer_bico">Como criar um aeróbico</string>
     <string name="como_fazer_um_treino_com_o_appersonal_trainer">Como treinar com APPersonal Trainer</string>
     <string name="tempo_m_dio_de_treino_txt">Tempo médio de treino</string>
+    <string name="resultado_do_dia">Resultado do dia:</string>
+    <string name="alarme_de_treino">Alarme de Treino</string>
+    <string name="s">S</string>
+    <string name="d">D</string>
+    <string name="t">T</string>
+    <string name="q">Q</string>
+    <string name="x">X</string>
+    <string name="ok">OK</string>
+    <string name="alarmes">Configurar alarmes</string>
+    <string name="alarme_de_refei_es">Alarme de Refeições</string>
+    <string name="pronto">Pronto!</string>
+    <string name="qual_a_refei_o">Qual é a refeição?</string>
 </resources>

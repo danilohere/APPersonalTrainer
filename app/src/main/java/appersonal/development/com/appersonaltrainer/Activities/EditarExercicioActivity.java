@@ -592,10 +592,9 @@ public class EditarExercicioActivity extends AppCompatActivity {
                             spnUnilateral.setSelection(2);
                             spnUnilateral.setEnabled(false);
                         }
-                        //SÓ NORMAL
+                        //PODE TUDO
                         else {
-                            spnUnilateral.setSelection(0);
-                            spnUnilateral.setEnabled(false);
+                            spnUnilateral.setEnabled(true);
                         }
                         break;
                     case "Bíceps":
@@ -996,7 +995,6 @@ public class EditarExercicioActivity extends AppCompatActivity {
                     }
 
                     valorExercicios[18] = tSeries + (tDescanso * (valorExercicios[0] - 1) + (valorExercicios[0] * 3));
-                    Toast.makeText(EditarExercicioActivity.this, "" + valorExercicios[18], Toast.LENGTH_SHORT).show();
 
                     if (valorExercicios[0] == 0 || valorExercicios[2] == 0 ||
                             valorExercicios[10] == 0 || t == 0) {
@@ -1015,7 +1013,10 @@ public class EditarExercicioActivity extends AppCompatActivity {
                             ver = false;
                         }
                     }
-                    if (valorExercicios[2] > 50) {
+                    if (valorExercicios[0] > 20) {
+                        Toast.makeText(getApplicationContext(), "Limite de 20 séries ultrapassado, digite um valor menor", Toast.LENGTH_SHORT).show();
+                        ver = false;
+                    } else if (valorExercicios[2] > 50) {
                         valorExercicios[2] = 50;
                         Toast.makeText(EditarExercicioActivity.this, "Valor de repetições ultrapassou o limite e foi alterado para 50", Toast.LENGTH_SHORT).show();
                     }
