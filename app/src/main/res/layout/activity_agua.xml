@@ -8,7 +8,7 @@
     android:layout_marginEnd="40dp"
     android:layout_marginStart="40dp"
     android:layout_marginTop="100dp"
-    android:background="@drawable/bg4"
+    android:background="@drawable/bg5"
     android:orientation="vertical"
     android:paddingBottom="20dp">
 

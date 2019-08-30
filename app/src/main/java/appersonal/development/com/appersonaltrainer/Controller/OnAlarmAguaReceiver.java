@@ -1,19 +1,27 @@
 package appersonal.development.com.appersonaltrainer.Controller;
 
+import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
+//import android.support.v4.content.ContextCompat;
+//import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import appersonal.development.com.appersonaltrainer.Activities.AguaActivity;
 import appersonal.development.com.appersonaltrainer.R;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
+//import static android.app.Notification.EXTRA_NOTIFICATION_ID;
+//import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class OnAlarmAguaReceiver extends BroadcastReceiver {
 
@@ -23,11 +31,15 @@ public class OnAlarmAguaReceiver extends BroadcastReceiver {
     private static final String MINUTOINICIO = "MinutoInicio";
     private static final String ALARME = "Alarme";
     private static final String AGUA = "Agua";
+
+//    private static final String ACTION_TOMEI = "TOMEI";
     private int alarme;
     PendingIntent pIntent;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
+
 
         Calendar ca = Calendar.getInstance();
         ca.setTimeInMillis(System.currentTimeMillis());
@@ -44,6 +56,10 @@ public class OnAlarmAguaReceiver extends BroadcastReceiver {
         int mi = minutoinicioAlarm.getInt("MinutoInicio", 0);
         SharedPreferences alarm = context.getSharedPreferences(ALARME, Context.MODE_PRIVATE);
         alarme = alarm.getInt("Alarme", 0);
+
+        if (h == 0 && m >= 0 &&  m <=11){
+            resetarContador(context);
+        }
 
         //Se o alarme não precisar virar a noite
         if (hi <= hf) {
@@ -62,11 +78,7 @@ public class OnAlarmAguaReceiver extends BroadcastReceiver {
                         if (m >= mi && m <= mf) {
                             //se sim, ele dispara o alarme
                             notificacao(context);
-                        } else {
-                            resetarContador(context);
                         }
-                    } else {
-                        resetarContador(context);
                     }
                 }
                 //se o minuto inicial for maior que o minuto final
@@ -81,8 +93,6 @@ public class OnAlarmAguaReceiver extends BroadcastReceiver {
                         else if (h == hi) {
                             if (m >= mi) {
                                 notificacao(context);
-                            } else {
-                                resetarContador(context);
                             }
                         }
                     }
@@ -97,8 +107,6 @@ public class OnAlarmAguaReceiver extends BroadcastReceiver {
                             //se for igual, ele verifica se o minuto atual é menor ou igual ao final
                             if (m <= mf) {
                                 notificacao(context);
-                            } else {
-                                resetarContador(context);
                             }
                         }
                     }
@@ -114,8 +122,6 @@ public class OnAlarmAguaReceiver extends BroadcastReceiver {
                         if (m >= mi) {
                             //se for, ele envia a notificação
                             notificacao(context);
-                        } else {
-                            resetarContador(context);
                         }
                     }
                     //se a hora atual for maior que a hora inicial
@@ -128,8 +134,6 @@ public class OnAlarmAguaReceiver extends BroadcastReceiver {
                                 if (m <= mf) {
                                     //se sim, ele envia  a notificação
                                     notificacao(context);
-                                } else {
-                                    resetarContador(context);
                                 }
                             }
                             // se for menor
@@ -137,8 +141,6 @@ public class OnAlarmAguaReceiver extends BroadcastReceiver {
                                 //ele não precisa verificar os minutos e já envia a notificação
                                 notificacao(context);
                             }
-                        } else {
-                            resetarContador(context);
                         }
                     }
                 }
@@ -153,14 +155,10 @@ public class OnAlarmAguaReceiver extends BroadcastReceiver {
                     notificacao(context);
                 }
                 //se hora for igual, ele precisa verificar se o minuto atual é maior ou igual ao inicial
-                else if (h == hi) {
+                else {
                     if (m >= mi) {
                         notificacao(context);
-                    } else {
-                        resetarContador(context);
                     }
-                } else {
-                    resetarContador(context);
                 }
             }
             //se for depois da meia noite
@@ -174,11 +172,7 @@ public class OnAlarmAguaReceiver extends BroadcastReceiver {
                     //se for igual, ele verifica se o minuto atual é menor ou igual ao final
                     if (m <= mf) {
                         notificacao(context);
-                    } else {
-                        resetarContador(context);
                     }
-                } else {
-                    resetarContador(context);
                 }
             }
         }
@@ -193,27 +187,67 @@ public class OnAlarmAguaReceiver extends BroadcastReceiver {
 
     void notificacao(Context context) {
         int mNotificationId = 1;
+
         Intent alarmIntent = new Intent(context, AguaActivity.class);
-        alarmIntent.putExtra("Status", "Tomei");
-        alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        alarmIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        alarmIntent.putExtra("notificationId", mNotificationId);
-        pIntent = PendingIntent.getActivity(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder;
+//        alarmIntent.putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName());
+//        alarmIntent.putExtra(Settings.EXTRA_CHANNEL_ID, .getId());
+//        alarmIntent.putExtra("Status", "Tomei");
+//        alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        alarmIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        alarmIntent.putExtra("notificationId", mNotificationId);
+//        context.startActivity(alarmIntent);
         if (alarme == 1) {
-            //noinspection deprecation
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(context)
-                            .setSmallIcon(R.drawable.aguaicon)
-                            .setContentTitle("Alerta de água")
-                            .setContentText("Hora de tomar água!")
-                            .addAction(R.drawable.completo, "Tomei", pIntent)
-                            .setLights(100, 500, 100)
-                            .setVibrate(new long[]{100, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500
-                                    , 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500});
-            NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-            if (mNotifyMgr != null) {
-                mNotifyMgr.notify(mNotificationId, mBuilder.build());
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+                int importance = NotificationManager.IMPORTANCE_DEFAULT;
+                NotificationChannel notificationChannel = new NotificationChannel("ID", "Name", importance);
+                notificationManager.createNotificationChannel(notificationChannel);
+
+                alarmIntent.putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName());
+                alarmIntent.putExtra(Settings.EXTRA_CHANNEL_ID, notificationChannel.getId());
+                alarmIntent.putExtra("Status", "Tomei");
+                alarmIntent.putExtra("notificationId", mNotificationId);
+//                context.startActivity(alarmIntent);
+                pIntent = PendingIntent.getActivity(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                builder = new NotificationCompat.Builder(context, notificationChannel.getId());
+            } else {
+                alarmIntent.putExtra("Status", "Tomei");
+                alarmIntent.putExtra("notificationId", mNotificationId);
+                pIntent = PendingIntent.getActivity(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                //noinspection deprecation
+                builder = new NotificationCompat.Builder(context);
             }
+
+            builder = builder
+                    .setSmallIcon(R.drawable.aguaicon)
+                    .setContentTitle("Alerta de água")
+                    .setContentText("Hora de tomar água!")
+                    .setContentIntent(pIntent)
+                    .addAction(R.drawable.completo, "Tomei", pIntent)
+                    .setLights(100, 500, 100)
+                    .setVibrate(new long[]{100, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500
+                                , 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500});
+            notificationManager.notify(mNotificationId, builder.build());
+
+//            //noinspection deprecation
+//            NotificationCompat.Builder mBuilder =
+//                    new NotificationCompat.Builder(context)
+//                            .setSmallIcon(R.drawable.aguaicon)
+//                            .setContentTitle("Alerta de água")
+//                            .setContentText("Hora de tomar água!")
+//                            .addAction(R.drawable.completo, "Tomei", pIntent)
+//                            .setLights(100, 500, 100)
+//                            .setVibrate(new long[]{100, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500
+//                                    , 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500});
+//            NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+//            if (mNotifyMgr != null) {
+//                mNotifyMgr.notify(mNotificationId, mBuilder.build());
+//            }
         }
     }
 }

@@ -5,7 +5,7 @@
     android:layout_height="fill_parent"
     android:layout_marginBottom="100dp"
     android:layout_marginTop="100dp"
-    android:background="@drawable/bg4">
+    android:background="@drawable/bg5">
 
     <TextView
         android:id="@+id/textView16"
@@ -24,6 +24,8 @@
         android:layout_below="@+id/textView16"
         android:layout_centerHorizontal="true"
         android:layout_marginEnd="80dp"
+        android:paddingStart="3dp"
+        android:paddingEnd="3dp"
         android:layout_marginStart="80dp"
         android:layout_marginTop="10dp"
         android:background="@color/background_list"

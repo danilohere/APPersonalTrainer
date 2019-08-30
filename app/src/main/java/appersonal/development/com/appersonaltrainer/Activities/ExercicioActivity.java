@@ -12,6 +12,7 @@ import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,6 +45,8 @@ public class ExercicioActivity extends AppCompatActivity {
     private TextView txtExercicio;
     private TextView txtObs;
     private TextView txtRep;
+    private TextView txtRepTotal;
+    private TextView txtBarra2;
     private TextView txtUnilateral;
     private TextView txtSeries;
     private TextView txtSeriesTotal;
@@ -90,6 +93,7 @@ public class ExercicioActivity extends AppCompatActivity {
     private Runnable runnableRep;
     private Runnable runnablePause;
     private CountDownTimer cdTimer;
+    private AudioManager am;
 
     private MediaPlayer largada;
     private MediaPlayer bambam;
@@ -157,11 +161,28 @@ public class ExercicioActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        if (am.isMusicActive()){
+            if (am.getStreamVolume(AudioManager.STREAM_MUSIC) > 7) {
+                am.setStreamVolume(AudioManager.STREAM_MUSIC, 7, 0);
+            }
+        }
+
+        final Runnable r = new Runnable() {
+            public void run() {
+                am.abandonAudioFocus(null);
+            }
+        };
+        handler.postDelayed(r, 100);
+
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -179,6 +200,10 @@ public class ExercicioActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+        am = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+        assert am != null;
+        am.requestAudioFocus(null,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
 
         try {
             bancoDados = openOrCreateDatabase("appersonal", MODE_PRIVATE, null);
@@ -209,6 +234,8 @@ public class ExercicioActivity extends AppCompatActivity {
         Button btnMais = findViewById(R.id.btnMais);
         Button btnMenos = findViewById(R.id.btnMenos);
         txtRep = findViewById(R.id.txtRep);
+        txtRepTotal = findViewById(R.id.txtRepTotal);
+        txtBarra2 = findViewById(R.id.txtBarra2);
         txtUnilateral = findViewById(R.id.txtUnilateral);
         txtObs = findViewById(R.id.txtObs);
         txtSeries = findViewById(R.id.txtSeries);
@@ -267,7 +294,9 @@ public class ExercicioActivity extends AppCompatActivity {
                 if (isChecked) {
                     temporizador = 3;
                     btnAnterior.setEnabled(false);
+                    btnAnterior.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.buttonshapelocked));
                     btnProximo.setEnabled(false);
+                    btnProximo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.buttonshapelocked));
                     if (re > 0) {
                         r = re;
                     }
@@ -326,7 +355,9 @@ public class ExercicioActivity extends AppCompatActivity {
                     temporizador = 3;
                 } else {
                     btnProximo.setEnabled(true);
+                    btnProximo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.buttonshape));
                     btnAnterior.setEnabled(true);
+                    btnAnterior.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.buttonshape));
                     if (tipoRep == 3 && falha == 1) {
                         r = 51;
                         falha = 0;
@@ -1250,8 +1281,11 @@ public class ExercicioActivity extends AppCompatActivity {
 
         if (tipoRep == 3) {
             txtRep.setText("Até a falha");
+            txtBarra2.setText("");
+            txtRepTotal.setText("");
         } else {
-            txtRep.setText(String.valueOf(rep[0]));
+            txtRep.setText("1");
+            txtRepTotal.setText(String.valueOf(rep[0]));
         }
         txtSeries.setText(String.valueOf(s));
         txtSeriesTotal.setText(String.valueOf(series));
@@ -1378,6 +1412,9 @@ public class ExercicioActivity extends AppCompatActivity {
                         break;
                     case 15:
                         imgExercicio.setImageResource(R.drawable.m2e15);
+                        break;
+                    case 16:
+                        imgExercicio.setImageResource(R.drawable.m2e16);
                         break;
                 }
                 break;

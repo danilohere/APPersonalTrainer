@@ -54,6 +54,8 @@ import appersonal.development.com.appersonaltrainer.Controller.OnBootReceiver;
 import appersonal.development.com.appersonaltrainer.Model.Refeicoes;
 import appersonal.development.com.appersonaltrainer.R;
 
+import static android.widget.Toast.makeText;
+
 public class AlarmeActivity extends AppCompatActivity {
 
     private AlarmManager alarmManager;
@@ -140,10 +142,9 @@ public class AlarmeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -154,6 +155,7 @@ public class AlarmeActivity extends AppCompatActivity {
     public void onBackPressed() {
         qtdeAlarmes = 0;
         if (swtDespertador.isChecked()) {
+
             createNotification();
             qtdeAlarmes++;
         }
@@ -174,9 +176,9 @@ public class AlarmeActivity extends AppCompatActivity {
             @Override
             public void onAdClosed() {
                 if (qtdeAlarmes == 1) {
-                    Toast.makeText(AlarmeActivity.this, "Alarme configurado", Toast.LENGTH_SHORT).show();
+                    makeText(AlarmeActivity.this, "Alarme configurado", Toast.LENGTH_SHORT).show();
                 } else if (qtdeAlarmes > 1) {
-                    Toast.makeText(AlarmeActivity.this, "Alarmes configurados", Toast.LENGTH_SHORT).show();
+                    makeText(AlarmeActivity.this, "Alarmes configurados", Toast.LENGTH_SHORT).show();
                 }
                 super.onAdClosed();
             }
@@ -184,9 +186,10 @@ public class AlarmeActivity extends AppCompatActivity {
             @Override
             public void onAdFailedToLoad(int i) {
                 if (qtdeAlarmes == 1) {
-                    Toast.makeText(AlarmeActivity.this, "Alarme configurado", Toast.LENGTH_SHORT).show();
+                    makeText(AlarmeActivity.this, "Alarme configurado", Toast.LENGTH_SHORT).show();
                 } else if (qtdeAlarmes > 1) {
-                    Toast.makeText(AlarmeActivity.this, "Alarmes configurados", Toast.LENGTH_SHORT).show();
+                    makeText(AlarmeActivity.this, "Alarmes configurados", Toast.LENGTH_SHORT).show();
+
                 }
                 super.onAdFailedToLoad(i);
             }
@@ -196,9 +199,9 @@ public class AlarmeActivity extends AppCompatActivity {
             mInterstitialAd.show();
         } else {
             if (qtdeAlarmes == 1) {
-                Toast.makeText(AlarmeActivity.this, "Alarme configurado", Toast.LENGTH_SHORT).show();
+                makeText(AlarmeActivity.this, "Alarme configurado", Toast.LENGTH_SHORT).show();
             } else if (qtdeAlarmes > 1) {
-                Toast.makeText(AlarmeActivity.this, "Alarmes configurados", Toast.LENGTH_SHORT).show();
+                //makeText(AlarmeActivity.this, "Alarmes configurados", Toast.LENGTH_SHORT).show();
             }
             Log.d("TAG", "The interstitial wasn't loaded yet.");
         }
@@ -222,6 +225,14 @@ public class AlarmeActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 refeicoes.remove(lstposition);
+                SharedPreferences refeicoesSP = getSharedPreferences(REFEICOES, 0);
+                SharedPreferences.Editor editorRefeicoes = refeicoesSP.edit();
+                editorRefeicoes.putInt("refeicoes_size", refeicoes.size());
+                editorRefeicoes.remove("refeicao_" + lstposition);
+                editorRefeicoes.remove("hora_" + lstposition);
+                editorRefeicoes.remove("minuto_" + lstposition);
+                editorRefeicoes.apply();
+
                 adapter.notifyDataSetChanged();
                 return true;
             }
@@ -242,6 +253,7 @@ public class AlarmeActivity extends AppCompatActivity {
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
                 .addTestDevice("A74671A8A3250600B0E5121898AC7400")
+                .addTestDevice("6993B0696AE064D27BBDC28B90575368")
 //                .addTestDevice("D5C546361B50B5162E9BCD250E5EC1D2")
                 .build();
         adView.loadAd(adRequest);
@@ -251,6 +263,7 @@ public class AlarmeActivity extends AppCompatActivity {
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
                 .addTestDevice("A74671A8A3250600B0E5121898AC7400")
+                .addTestDevice("6993B0696AE064D27BBDC28B90575368")
 //                .addTestDevice("D5C546361B50B5162E9BCD250E5EC1D2")
                 .build();
         adView2.loadAd(adRequest2);
@@ -261,7 +274,6 @@ public class AlarmeActivity extends AppCompatActivity {
 
         rltAlarme = findViewById(R.id.rltAlarme);
         rltAlarmeTreino = findViewById(R.id.rltAlarmeTreino);
-        rltAlarmeRefeicoes = findViewById(R.id.rltAlarmeRefeicoes);
 
         swtDespertador = findViewById(R.id.swtAlerta);
         spnHoraInicio = findViewById(R.id.spnHoraInicio);
@@ -287,8 +299,6 @@ public class AlarmeActivity extends AppCompatActivity {
 
         Button btnMaisRefeicoes = findViewById(R.id.btnMaisRefeicoes);
         ListView lstRefeicoes = findViewById(R.id.lstRefeicoes);
-        btnHideRefeicoes = findViewById(R.id.btnHideRefeicoes);
-        btnShowRefeicoes = findViewById(R.id.btnShowRefeicoes);
 
 
         adapterHoras = new ArrayAdapter<>(this, R.layout.spinner_item, horas);
@@ -331,8 +341,8 @@ public class AlarmeActivity extends AppCompatActivity {
                 long time = cr.getTimeInMillis();
                 refeicao.setTime(time);
                 refeicoes.add(refeicao);
-                btnShowRefeicoes.callOnClick();
             }
+            ordenaPorNumero(refeicoes);
         }
 
 
@@ -681,31 +691,6 @@ public class AlarmeActivity extends AppCompatActivity {
             }
         });
 
-        btnShowRefeicoes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ordenaPorNumero(refeicoes);
-                btnShowRefeicoes.setVisibility(View.INVISIBLE);
-                btnHideRefeicoes.setVisibility(View.VISIBLE);
-                params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 500);
-                params.addRule(RelativeLayout.BELOW, R.id.lytAlertaRefeicoes);
-                params.topMargin = 10;
-                rltAlarmeRefeicoes.setLayoutParams(params);
-            }
-        });
-
-        btnHideRefeicoes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btnHideRefeicoes.setVisibility(View.INVISIBLE);
-                btnShowRefeicoes.setVisibility(View.VISIBLE);
-                params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 1);
-                params.addRule(RelativeLayout.BELOW, R.id.lytAlertaRefeicoes);
-                params.topMargin = 10;
-                rltAlarmeRefeicoes.setLayoutParams(params);
-            }
-        });
-
         lstRefeicoes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -1034,16 +1019,16 @@ public class AlarmeActivity extends AppCompatActivity {
                     refeicao.setTime(time);
                     if (alt == 1) {
                         refeicoes.remove(lstposition);
-                        Toast.makeText(AlarmeActivity.this, "Refeição alterada", Toast.LENGTH_SHORT).show();
+                        makeText(AlarmeActivity.this, "Refeição alterada", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(AlarmeActivity.this, "Refeição adicionada", Toast.LENGTH_SHORT).show();
+                        makeText(AlarmeActivity.this, "Refeição adicionada", Toast.LENGTH_SHORT).show();
                     }
                     refeicoes.add(refeicao);
+                    ordenaPorNumero(refeicoes);
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     assert imm != null;
                     imm.hideSoftInputFromWindow(edtRefeicao.getWindowToken(), 0);
                     dialog.dismiss();
-                    btnShowRefeicoes.callOnClick();
                     adapter.notifyDataSetChanged();
                 }
             }

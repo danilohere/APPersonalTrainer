@@ -95,7 +95,7 @@ public class EditarExercicioActivity extends AppCompatActivity {
     private String[] costas = {
             "Remada Cavalo", "Remada Unilateral", "Puxada Costas", "Puxada Frente", "Remada Sentada", "Remada Curvada",
             "Puxada Unilateral", "Barra Fixa", "Pull Down", "Frente Supinada", "Frente Triângulo",
-            "Remada Aparelho", "Remada Polia", "Crucifíxo Invertido", "Encolhimento Halter", "Encolhimento Barra"
+            "Remada Aparelho", "Remada Polia", "Crucifíxo Invertido", "Encolhimento Halter", "Encolhimento Barra", "Peck Deck Invertido"
     };
 
     private String[] peito = {
@@ -1171,6 +1171,9 @@ public class EditarExercicioActivity extends AppCompatActivity {
                         break;
                     case 15:
                         imgExercicio.setImageResource(R.drawable.m2e15);
+                        break;
+                    case 16:
+                        imgExercicio.setImageResource(R.drawable.m2e16);
                         break;
                 }
                 break;

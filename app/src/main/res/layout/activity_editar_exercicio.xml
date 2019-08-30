@@ -5,6 +5,11 @@
     android:id="@+id/ScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+    android:scrollbars="vertical"
+    android:fadeScrollbars="false"
+    android:scrollbarSize="4dp"
+    android:scrollbarThumbVertical="@color/botoes_transparente"
     android:fillViewport="true">
 
     <LinearLayout
@@ -578,27 +583,27 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/spnUnilateral"
                 android:layout_alignParentEnd="true"
-                ads:srcCompat="@drawable/info24x24i"
-                android:contentDescription="@string/todo" />
+                android:contentDescription="@string/todo"
+                ads:srcCompat="@drawable/info24x24a" />
 
             <ImageView
                 android:id="@+id/imgInfoTipoRep"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:layout_alignTop="@+id/spnTipoRep"
-                ads:srcCompat="@drawable/info24x24i"
-                android:contentDescription="@string/todo"/>
+                android:layout_alignParentEnd="true"
+                android:contentDescription="@string/todo"
+                ads:srcCompat="@drawable/info24x24a" />
 
             <ImageView
                 android:id="@+id/imgImagem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/spnExercicio"
                 android:layout_alignStart="@+id/imgInfoUnilateral"
                 android:layout_alignTop="@+id/spnExercicio"
-                ads:srcCompat="@drawable/imgimg"
-                android:contentDescription="@string/todo"/>
+                android:layout_alignBottom="@+id/spnExercicio"
+                android:contentDescription="@string/todo"
+                ads:srcCompat="@drawable/imgimg2" />
 
             <ImageView
                 android:id="@+id/imgExercicio"

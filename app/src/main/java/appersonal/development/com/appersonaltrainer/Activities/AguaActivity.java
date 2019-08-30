@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -14,7 +15,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.Objects;
 
 import appersonal.development.com.appersonaltrainer.R;
@@ -22,6 +25,8 @@ import appersonal.development.com.appersonaltrainer.R;
 public class AguaActivity extends AppCompatActivity {
 
     private static final String AGUA = "Agua";
+    private SQLiteDatabase bancoDados;
+
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -30,6 +35,12 @@ public class AguaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agua);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        try {
+            bancoDados = openOrCreateDatabase("appersonal", Context.MODE_PRIVATE, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Button btnOK = findViewById(R.id.btnOk);
         TextView txtAgua = findViewById(R.id.txtAgua);
@@ -47,6 +58,9 @@ public class AguaActivity extends AppCompatActivity {
             if (Objects.equals(extra.getString("Status"), "Tomei")) {
                 vezes = vezes + 1;
                 txtAgua.setText(vezes + "x ");
+                Calendar c = Calendar.getInstance();
+                long data = c.getTimeInMillis();
+                bancoDados.execSQL("INSERT INTO historicoAgua (coposAgua, data) VALUES (" + vezes + ", " + data + ")");
                 SharedPreferences.Editor editor = agua.edit();
                 editor.putInt("Agua", vezes);
                 editor.apply();

@@ -7,4 +7,6 @@
     <dimen name="padding_caixa_texto">3dp</dimen>
     <dimen name="margem_rep">3dp</dimen>
     <dimen name="tamanho_caixa_texto_num">30dp</dimen>
+    <dimen name="DiaCalendario">40dp</dimen>
+    <dimen name="texto_grande">40sp</dimen>
 </resources>

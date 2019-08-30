@@ -398,7 +398,10 @@ public class EditarTreinoActivity extends AppCompatActivity {
                 if (tempo == 0) {
                     semTempo = true;
                 } else {
-                    tempoMedio += cursorExercicio.getInt(indTempo) + 150;
+                    if (tempoMedio == 0)
+                        tempoMedio += cursorExercicio.getInt(indTempo);
+                    else
+                        tempoMedio += cursorExercicio.getInt(indTempo) + 150;
                 }
             }
             cursorExercicio.close();
@@ -440,7 +443,10 @@ public class EditarTreinoActivity extends AppCompatActivity {
                 } else if (tempo == 99999999) {
                     maisAerobico = " + aeróbico";
                 } else {
-                    tempoMedio += cursorAerobico.getInt(indTempo) + 150;
+                    if (tempoMedio == 0)
+                        tempoMedio += cursorAerobico.getInt(indTempo);
+                    else
+                        tempoMedio += cursorAerobico.getInt(indTempo) + 150;
                 }
             }
             cursorAerobico.close();

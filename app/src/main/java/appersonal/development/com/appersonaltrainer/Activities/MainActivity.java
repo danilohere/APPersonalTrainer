@@ -1,7 +1,7 @@
 package appersonal.development.com.appersonaltrainer.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -23,14 +23,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("Recycle")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("5E35E760A0E16547F564991F0C23CAC9")
                 .addTestDevice("A74671A8A3250600B0E5121898AC7400")
+                .addTestDevice("6993B0696AE064D27BBDC28B90575368")
                 .build();
         adView.loadAd(adRequest);
 
@@ -121,7 +122,8 @@ public class MainActivity extends AppCompatActivity {
         btnHistorico.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, HistoricoTreinoActivity.class));
+//                startActivity(new Intent(MainActivity.this, HistoricoTreinoActivity.class));
+                startActivity(new Intent(MainActivity.this, HistoricoCalendarioActivity.class));
             }
         });
         btnTutorial.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
             bancoDados.execSQL("CREATE TABLE IF NOT EXISTS treinos(idTreino INTEGER PRIMARY KEY AUTOINCREMENT, treino VARCHAR, data LONG)");
 
-            bancoDados.execSQL("CREATE TABLE IF NOT EXISTS historico(idHistorico INTEGER PRIMARY KEY AUTOINCREMENT, idTreino INT, treinoH VARCHAR, data LONG)");
+            bancoDados.execSQL("CREATE TABLE IF NOT EXISTS historico(idHistorico INTEGER PRIMARY KEY AUTOINCREMENT, idTreino INT, treinoH VARCHAR, data LONG, dataInicio LONG)");
 
             bancoDados.execSQL("CREATE TABLE IF NOT EXISTS exercicios(idExercicio INTEGER PRIMARY KEY AUTOINCREMENT, idTreino INTEGER, " +
                     "exercicio VARCHAR, series INT(2), serieAtual INT(2), tipoRep INT(1)," +
@@ -162,12 +164,25 @@ public class MainActivity extends AppCompatActivity {
 
             bancoDados.execSQL("CREATE TABLE IF NOT EXISTS historicokm(idHistoricoKM INTEGER PRIMARY KEY AUTOINCREMENT, nomeCorrida VARCHAR, km VARCHAR, tempo VARCHAR, data LONG)");
 
+            bancoDados.execSQL("CREATE TABLE IF NOT EXISTS historicoagua(idHistoricoAgua INTEGER PRIMARY KEY AUTOINCREMENT, coposAgua INTEGER, data LONG)");
+
             try {
                 bancoDados.rawQuery("SELECT tempoMedio FROM aerobicos", null);
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
                     bancoDados.execSQL("ALTER TABLE aerobicos ADD COLUMN tempoMedio INTEGER");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            try {
+                bancoDados.rawQuery("SELECT dataInicio FROM historico", null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    bancoDados.execSQL("ALTER TABLE historico ADD COLUMN dataInicio INTEGER");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

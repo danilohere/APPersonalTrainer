@@ -58,6 +58,27 @@
         android:textColor="@color/color_texto"/>
 
     <TextView
+        android:id="@+id/txtBarra2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView4"
+        android:layout_toEndOf="@+id/txtRep"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:text="@string/barra"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos" />
+
+    <TextView
+        android:id="@+id/txtRepTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView4"
+        android:layout_toEndOf="@+id/txtBarra2"
+        android:textColor="@color/color_texto"
+        android:textSize="@dimen/texto_campos" />
+
+    <TextView
         android:id="@+id/txtUnilateral"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -291,11 +312,11 @@
         android:id="@+id/imgImagem"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_alignParentEnd="true"
         android:layout_below="@id/adView"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="12dp"
-        ads:srcCompat="@drawable/imgimg"
-        android:contentDescription="@string/todo"/>
+        android:contentDescription="@string/todo"
+        ads:srcCompat="@drawable/imgimg2" />
 
     <ImageView
         android:id="@+id/imgExercicio"

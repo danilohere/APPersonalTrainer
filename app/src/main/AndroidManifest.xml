@@ -18,6 +18,7 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -65,6 +66,7 @@
             tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.ExercicioActivity"
+            android:alwaysRetainTaskState="true"
             android:label="Exercício"
             android:screenOrientation="portrait"
             tools:ignore="InnerclassSeparator" />
@@ -87,6 +89,7 @@
             tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.AerobicoActivity"
+            android:alwaysRetainTaskState="true"
             android:label="Aeróbico"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"
@@ -100,6 +103,11 @@
         <activity
             android:name=".Activities.HistoricoTreinoActivity"
             android:label="Histórico de Treinos"
+            android:screenOrientation="portrait"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".Activities.HistoricoCalendarioActivity"
+            android:label="Histórico Calendario"
             android:screenOrientation="portrait"
             tools:ignore="InnerclassSeparator" />
         <activity
@@ -129,9 +137,17 @@
             tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.AlarmeActivity"
-            android:label="Alarmes"
+            android:label="Alarme de Água"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".Activities.AguaActivity"
+            android:excludeFromRecents="true"
+            android:parentActivityName=".Activities.AlarmeActivity"
+            android:screenOrientation="portrait"
+            android:taskAffinity=""
+            android:theme="@style/myDialog"
             tools:ignore="InnerclassSeparator" />
 
         <receiver
@@ -155,19 +171,15 @@
         <activity
             android:name=".Activities.FacebookActivity"
             tools:ignore="InnerclassSeparator" />
-
         <activity
             android:name=".Activities.TutorialActivity"
             android:screenOrientation="portrait"
             tools:ignore="InnerclassSeparator" />
 
         <activity
-            android:name=".Activities.AguaActivity"
-            android:taskAffinity=""
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/myDialog"
-            android:parentActivityName=".Activities.AlarmeActivity"
-            tools:ignore="InnerclassSeparator" />
+            tools:replace="screenOrientation" />
     </application>
 
 </manifest>

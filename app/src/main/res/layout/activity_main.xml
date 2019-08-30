@@ -102,16 +102,16 @@
         android:layout_height="100dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/appersonalbg"
-        android:contentDescription="@string/todo" />
+        android:contentDescription="@string/todo"
+        app:srcCompat="@drawable/appersonalbg2" />
 
     <Button
         android:id="@+id/btnConfig"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_alignEnd="@+id/btnTreinar"
         android:layout_alignTop="@+id/likeView"
-        android:background="@drawable/config"
+        android:layout_alignEnd="@+id/btnTreinar"
+        android:background="@drawable/config2"
         android:shadowColor="#A8A8A8"
         android:shadowDx="0"
         android:shadowDy="0"

@@ -138,7 +138,7 @@ public class AerobicoActivity extends AppCompatActivity {
     private LocationCallback mLocationCallback;
     private boolean mRequestingLocationUpdates;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 7000;
     private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2;
     private static final String TAG = MainActivity.class.getSimpleName();
     private final static String KEY_REQUESTING_LOCATION_UPDATES = "requesting-location-updates";
@@ -245,10 +245,9 @@ public class AerobicoActivity extends AppCompatActivity {
     //cria o botão no canto superior esquerdo para voltar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -364,12 +363,12 @@ public class AerobicoActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         String kmS = txtDescanso.getText().toString().replaceAll("KM", "");
                         kmS = kmS.replaceAll(",", ".");
-                        Double km = Double.parseDouble(kmS);
+                        double km = Double.parseDouble(kmS);
                         int hora = Integer.parseInt(txtSeries.getText().toString().substring(0, 1));
                         int min = Integer.parseInt(txtSeries.getText().toString().substring(2, 4));
                         int seg = Integer.parseInt(txtSeries.getText().toString().substring(5, 7));
                         int tempoA = (hora * 3600) + (min * 60) + seg;
-                        Double kmph;
+                        double kmph;
                         if (km < 0.01) {
                             kmph = 0.0;
                         } else {
@@ -519,6 +518,10 @@ public class AerobicoActivity extends AppCompatActivity {
                             }
                         }
                     } else {
+                        btnAnterior.setEnabled(false);
+                        btnAnterior.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.buttonshapelocked));
+                        btnProximo.setEnabled(false);
+                        btnProximo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.buttonshapelocked));
                         //Inicia o temporizador com 3
                         temporizador = 3;
                         //Inicia uma Thread para fazer a contagem antes de iniciar o exercício
@@ -562,6 +565,10 @@ public class AerobicoActivity extends AppCompatActivity {
                 }
                 //Se o Checked for alterado para false
                 else {
+                    btnAnterior.setEnabled(true);
+                    btnAnterior.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.buttonshape));
+                    btnProximo.setEnabled(true);
+                    btnProximo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.buttonshape));
                     //para a Thread
                     handler.removeCallbacks(runnablePause);
                     handlerLocation.removeCallbacks(runLocation);
@@ -858,12 +865,25 @@ public class AerobicoActivity extends AppCompatActivity {
                                 contador = MediaPlayer.create(AerobicoActivity.this, R.raw.f30m);
                             }
                             contador.start();
-                        }
-                        if (h == 0 && m == 10 && s == 0) {
+                        } else if (h == 0 && m == 10 && s == 0) {
                             if (vozselecionada == 0) {
                                 contador = MediaPlayer.create(AerobicoActivity.this, R.raw.m10m);
                             } else {
                                 contador = MediaPlayer.create(AerobicoActivity.this, R.raw.f10m);
+                            }
+                            contador.start();
+                        } else if (h == 0 && m == 5 && s == 0) {
+                            if (vozselecionada == 0) {
+                                contador = MediaPlayer.create(AerobicoActivity.this, R.raw.m5m);
+                            } else {
+                                contador = MediaPlayer.create(AerobicoActivity.this, R.raw.f5m);
+                            }
+                            contador.start();
+                        } else if (h == 0 && m == 1 && s == 0) {
+                            if (vozselecionada == 0) {
+                                contador = MediaPlayer.create(AerobicoActivity.this, R.raw.m1m);
+                            } else {
+                                contador = MediaPlayer.create(AerobicoActivity.this, R.raw.f1m);
                             }
                             contador.start();
                         }
@@ -965,7 +985,6 @@ public class AerobicoActivity extends AppCompatActivity {
                     }
                 };
                 handlerLocation.post(runLocation);
-
             }
         }
 
@@ -1363,21 +1382,19 @@ public class AerobicoActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            // Check for the integer request code originally supplied to startResolutionForResult().
-            case REQUEST_CHECK_SETTINGS:
-                switch (resultCode) {
-                    case Activity.RESULT_OK:
-                        Log.i(TAG, "User agreed to make required location settings changes.");
-                        // Nothing to do. startLocationupdates() gets called in onResume again.
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        Log.i(TAG, "User chose not to make required location settings changes.");
-                        mRequestingLocationUpdates = false;
-                        updateUI();
-                        break;
-                }
-                break;
+        // Check for the integer request code originally supplied to startResolutionForResult().
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    Log.i(TAG, "User agreed to make required location settings changes.");
+                    // Nothing to do. startLocationupdates() gets called in onResume again.
+                    break;
+                case Activity.RESULT_CANCELED:
+                    Log.i(TAG, "User chose not to make required location settings changes.");
+                    mRequestingLocationUpdates = false;
+                    updateUI();
+                    break;
+            }
         }
     }
 
@@ -1418,7 +1435,7 @@ public class AerobicoActivity extends AppCompatActivity {
                                 String errorMessage = "Location settings are inadequate, and cannot be " +
                                         "fixed here. Fix in Settings.";
                                 Log.e(TAG, errorMessage);
-                                Toast.makeText(AerobicoActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+//                                Toast.makeText(AerobicoActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                                 mRequestingLocationUpdates = false;
                         }
 
@@ -1439,10 +1456,10 @@ public class AerobicoActivity extends AppCompatActivity {
             if (mCurrentLocation != null) {
                 btnFinalizar.setEnabled(true);
                 Double a = (double) atualLocation.distanceTo(mCurrentLocation);
-                a = (a / 1000) * 0.92;
-                Toast.makeText(AerobicoActivity.this, "Distância: " + a + "\n Lat1: " + atualLocation.getLatitude() + "  Lon1: " + atualLocation.getLongitude()
-                        + "\n Lat2: " + mCurrentLocation.getLatitude() + "  Lon2: " + mCurrentLocation.getLongitude(), Toast.LENGTH_LONG).show();
-                if (a < 0.29) {
+                a = (a / 1000);
+//                Toast.makeText(AerobicoActivity.this, "Distância: " + a + "\n Lat1: " + atualLocation.getLatitude() + "  Lon1: " + atualLocation.getLongitude()
+//                        + "\n Lat2: " + mCurrentLocation.getLatitude() + "  Lon2: " + mCurrentLocation.getLongitude(), Toast.LENGTH_LONG).show();
+                if (a < 0.12) {
                     if (a >= 0.01) {
                         distpercorrida += a;
                         @SuppressLint("DefaultLocale") String dist = String.format("%.2f", distpercorrida);
@@ -1450,13 +1467,16 @@ public class AerobicoActivity extends AppCompatActivity {
                         atualLocation = mCurrentLocation;
                         resetDist = 0;
                     }
-                } else if (a >= 0.29) {
+                } else if (a >= 0.12) {
                     resetDist++;
-                    if (resetDist >= 3) {
+                    if (resetDist >= 2) {
                         atualLocation = mCurrentLocation;
                         resetDist = 0;
                     }
                 }
+//                } else {
+//                    atualLocation = mCurrentLocation;
+//                }
             } else {
                 Toast.makeText(AerobicoActivity.this, "Sua localização está desativada. Por favor, ative novamente", Toast.LENGTH_SHORT).show();
             }

@@ -68,10 +68,10 @@
             android:shadowRadius="5" />
 
         <Button
-            android:text="@string/receber_treino_txt"
+            android:text="@string/copiar_treino_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btnReceber"
+            android:id="@+id/btnCopiar"
             android:layout_weight="1"
             android:layout_marginStart="5dp"
             android:textColor="@color/color_texto"
@@ -83,15 +83,62 @@
             android:shadowRadius="5" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="43dp"
-        android:id="@+id/txtTeste"
-        android:textSize="36sp"
-        android:textColor="@color/color_texto"
-        android:visibility="invisible" />
+    <RelativeLayout
+        android:animateLayoutChanges="true"
+        android:id="@+id/lytCompartilhar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/bg2"
+        android:padding="10dp"
+        android:paddingTop="20dp"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/txtMensagem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:padding="@dimen/padding_caixa_texto"
+            android:text="@string/escaneie_o_qr_code_com_o_celular_que_deseja_compartilhar"
+            android:textAlignment="center"
+            android:textColor="@color/color_texto"
+            android:textSize="@dimen/texto_campos" />
+
+        <ImageView
+            android:id="@+id/imgQR"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/lytBotoes"
+            android:layout_below="@id/txtMensagem"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="@string/todo" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lytBotoes"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp">
+
+            <Button
+                android:text="@string/fechar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnFechar"
+                android:layout_weight="1"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/color_texto"
+                tools:ignore="ButtonStyle"
+                android:background="@drawable/buttonshape"
+                android:shadowColor="#A8A8A8"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5" />
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -35,8 +35,9 @@
     </com.google.android.gms.ads.AdView>
 
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:animateLayoutChanges="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_above="@id/adView"
         android:layout_below="@id/adView2"
         android:layout_marginTop="10dp"
@@ -45,34 +46,38 @@
         android:scrollbars="vertical">
 
         <RelativeLayout
+            android:animateLayoutChanges="true"
             android:id="@+id/rltContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <ImageView
+                android:animateLayoutChanges="true"
                 android:id="@+id/btnHide"
                 android:layout_width="52dp"
                 android:layout_height="32dp"
+                android:layout_alignTop="@+id/lytAlerta"
                 android:layout_alignEnd="@+id/lytAlerta"
                 android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/lytAlerta"
                 android:contentDescription="@string/todo"
                 android:visibility="invisible"
                 ads:srcCompat="@drawable/sdown"
                 tools:ignore="ContentDescription" />
 
             <ImageView
+                android:animateLayoutChanges="true"
                 android:id="@+id/btnShow"
                 android:layout_width="52dp"
                 android:layout_height="32dp"
+                android:layout_alignTop="@+id/lytAlerta"
                 android:layout_alignEnd="@+id/lytAlerta"
                 android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/lytAlerta"
                 android:contentDescription="@string/todo"
                 ads:srcCompat="@drawable/sup"
                 tools:ignore="ContentDescription" />
 
             <LinearLayout
+                android:animateLayoutChanges="true"
                 android:id="@+id/lytAlerta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -91,6 +96,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:animateLayoutChanges="true"
                 android:id="@+id/rltAlarme"
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
@@ -101,8 +107,8 @@
                     android:id="@+id/spnMinutoFim"
                     android:layout_width="40dp"
                     android:layout_height="@dimen/tamanho_caixa_texto_num"
-                    android:layout_alignParentEnd="true"
                     android:layout_alignTop="@+id/textView23"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginEnd="40dp"
                     android:background="@color/background_list"
                     android:popupBackground="@color/background_list"
@@ -112,8 +118,8 @@
                     android:id="@+id/spnIntervalo"
                     android:layout_width="@dimen/tamanho_caixa_texto_num"
                     android:layout_height="@dimen/tamanho_caixa_texto_num"
-                    android:layout_alignEnd="@+id/spnHoraFim"
                     android:layout_below="@+id/textView24"
+                    android:layout_alignEnd="@+id/spnHoraFim"
                     android:layout_marginTop="10dp"
                     android:layout_toEndOf="@+id/textView22"
                     android:background="@color/background_list"
@@ -137,8 +143,8 @@
                     android:id="@+id/textView24"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
                     android:layout_below="@+id/spnHoraInicio"
+                    android:layout_alignParentStart="true"
                     android:layout_marginTop="10dp"
                     android:text="@string/beber_gua_a_cada_text"
                     android:textAlignment="center"
@@ -159,8 +165,8 @@
                     android:id="@+id/textView22"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/spnHoraInicio"
                     android:layout_alignTop="@+id/spnHoraInicio"
+                    android:layout_alignBottom="@+id/spnHoraInicio"
                     android:layout_marginLeft="2dp"
                     android:layout_marginRight="2dp"
                     android:layout_toEndOf="@+id/spnHoraInicio"
@@ -209,29 +215,32 @@
             </RelativeLayout>
 
             <ImageView
+                android:animateLayoutChanges="true"
                 android:id="@+id/btnHideTreino"
                 android:layout_width="52dp"
                 android:layout_height="32dp"
+                android:layout_alignTop="@+id/lytAlertaTreino"
                 android:layout_alignEnd="@+id/lytAlertaTreino"
                 android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/lytAlertaTreino"
                 android:contentDescription="@string/todo"
                 android:visibility="invisible"
                 ads:srcCompat="@drawable/sdown"
                 tools:ignore="ContentDescription" />
 
             <ImageView
+                android:animateLayoutChanges="true"
                 android:id="@+id/btnShowTreino"
                 android:layout_width="52dp"
                 android:layout_height="32dp"
+                android:layout_alignTop="@+id/lytAlertaTreino"
                 android:layout_alignEnd="@+id/lytAlertaTreino"
                 android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/lytAlertaTreino"
                 android:contentDescription="@string/todo"
                 ads:srcCompat="@drawable/sup"
                 tools:ignore="ContentDescription" />
 
             <LinearLayout
+                android:animateLayoutChanges="true"
                 android:id="@+id/lytAlertaTreino"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -252,6 +261,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:animateLayoutChanges="true"
                 android:id="@+id/rltAlarmeTreino"
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
@@ -376,8 +386,8 @@
                     android:id="@+id/spnMinutoTreino"
                     android:layout_width="30dp"
                     android:layout_height="@dimen/tamanho_caixa_texto_num"
-                    android:layout_alignParentEnd="true"
                     android:layout_alignTop="@+id/textView25"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginEnd="5dp"
                     android:background="@color/background_list"
                     android:popupBackground="@color/background_list"
@@ -387,8 +397,8 @@
                     android:id="@+id/textView25"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/spnHoraTreino"
                     android:layout_alignTop="@+id/spnHoraTreino"
+                    android:layout_alignBottom="@+id/spnHoraTreino"
                     android:layout_marginLeft="2dp"
                     android:layout_marginRight="2dp"
                     android:layout_toStartOf="@id/spnMinutoTreino"
@@ -399,36 +409,14 @@
                     android:textSize="@dimen/texto_campos" />
             </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/btnHideRefeicoes"
-                android:layout_width="52dp"
-                android:layout_height="32dp"
-                android:layout_alignEnd="@+id/lytAlertaRefeicoes"
-                android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/lytAlertaRefeicoes"
-                android:contentDescription="@string/todo"
-                android:visibility="invisible"
-                ads:srcCompat="@drawable/sdown"
-                tools:ignore="ContentDescription" />
-
-            <ImageView
-                android:id="@+id/btnShowRefeicoes"
-                android:layout_width="52dp"
-                android:layout_height="32dp"
-                android:layout_alignEnd="@+id/lytAlertaRefeicoes"
-                android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/lytAlertaRefeicoes"
-                android:contentDescription="@string/todo"
-                ads:srcCompat="@drawable/sup"
-                tools:ignore="ContentDescription" />
-
             <Button
                 android:id="@+id/btnMaisRefeicoes"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_toStartOf="@id/btnShowRefeicoes"
-                android:layout_marginEnd="6dp"
                 android:layout_alignTop="@+id/lytAlertaRefeicoes"
+                android:layout_alignEnd="@+id/lytAlertaRefeicoes"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/buttonshape"
                 android:shadowColor="#A8A8A8"
                 android:shadowDx="0"
@@ -456,24 +444,21 @@
 
             </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/rltAlarmeRefeicoes"
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
+            <ListView
+                android:animateLayoutChanges="true"
+                android:id="@+id/lstRefeicoes"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
                 android:layout_below="@id/lytAlertaRefeicoes"
-                android:layout_marginTop="20dp">
-
-                <ListView
-                    android:id="@+id/lstRefeicoes"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:minHeight="200dp" />
-
-
-            </RelativeLayout>
+                android:layout_marginTop="20dp"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbars="vertical"
+                android:fadeScrollbars="false"
+                android:scrollbarSize="4dp"
+                android:scrollbarThumbVertical="@color/botoes_transparente"
+                tools:ignore="NestedScrolling" />
 
         </RelativeLayout>
-
 
     </ScrollView>
 

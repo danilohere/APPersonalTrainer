@@ -82,7 +82,7 @@
         android:layout_marginEnd="50dp"
         android:layout_marginStart="50dp"
         android:visibility="invisible"
-        ads:srcCompat="@drawable/deslize"
+        ads:srcCompat="@drawable/deslize2"
         android:contentDescription="@string/todo" />
 
 

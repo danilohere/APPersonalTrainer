@@ -8,6 +8,7 @@ public class Treinos {
 
     private String nome;
     private Long data;
+    private Long dataInicio;
 
     public String getNome() {
         return nome;
@@ -23,5 +24,13 @@ public class Treinos {
 
     public void setData(Long data) {
         this.data = data;
+    }
+
+    public Long getDataInicio() {
+        return dataInicio;
+    }
+
+    public void setDataInicio(Long dataInicio) {
+        this.dataInicio = dataInicio;
     }
 }
