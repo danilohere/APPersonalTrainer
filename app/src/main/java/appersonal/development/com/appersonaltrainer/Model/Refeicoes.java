@@ -1,9 +1,5 @@
 package appersonal.development.com.appersonaltrainer.Model;
 
-import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-
 public class Refeicoes {
 
     private String refeicao;
