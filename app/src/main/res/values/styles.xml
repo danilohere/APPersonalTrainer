@@ -8,7 +8,7 @@
         <item name="colorPrimary">@color/background_list</item>
         <item name="colorPrimaryDark">@color/background_app</item>
         <item name="colorAccent">@color/background_list</item>
-
+        <item name="android:windowBackground">@drawable/splashscreen</item>
     </style>
 
     <style name="edit_branco" parent="@android:style/Widget.EditText">

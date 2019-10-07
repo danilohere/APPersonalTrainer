@@ -2,14 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_editar_aerobico"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="appersonal.development.com.appersonaltrainer.Activities.EditarAerobicoActivity"
+    tools:context="appersonal.development.com.appersonaltrainer.activities.EditarAerobicoActivity"
     android:background="@drawable/bg2">
 
     <com.google.android.gms.ads.AdView
@@ -63,7 +62,7 @@
         android:layout_alignEnd="@+id/spnAerobico"
         android:layout_toEndOf="@+id/txtDuracao"
         android:inputType="text"
-        tools:ignore="LabelFor" />
+        tools:ignore="Autofill,LabelFor" />
 
     <TextView
         android:text="@string/dura_o_text"
@@ -136,11 +135,10 @@
             android:maxLength="1"
             style="@style/edit_branco"
             android:padding="@dimen/padding_caixa_texto"
-            tools:ignore="LabelFor" />
+            tools:ignore="Autofill,LabelFor" />
 
         <TextView
             android:text="@string/doispontos_text"
-            android:id="@+id/txtDoisPontos"
             android:textColor="@color/color_texto"
             android:textAlignment="center"
             android:textSize="@dimen/texto_campos"
@@ -161,7 +159,7 @@
             android:maxLength="2"
             style="@style/edit_branco"
             android:padding="@dimen/padding_caixa_texto"
-            tools:ignore="LabelFor" />
+            tools:ignore="Autofill,LabelFor" />
 
     </LinearLayout>
 
@@ -234,7 +232,7 @@
         android:visibility="invisible"
         android:layout_below="@+id/txtSeries"
         android:layout_alignParentStart="true"
-        tools:ignore="LabelFor" />
+        tools:ignore="Autofill,LabelFor" />
 
     <CheckBox
         android:text="@string/medir_por_dist_ncia_txt"
@@ -266,7 +264,7 @@
         android:textColor="@color/color_texto"
         android:textSize="@dimen/texto_campos"
         android:visibility="invisible"
-        tools:ignore="LabelFor" />
+        tools:ignore="Autofill,LabelFor" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -290,11 +288,10 @@
             style="@style/edit_branco"
             android:layout_width="@dimen/tamanho_caixa_texto_num"
             android:padding="@dimen/padding_caixa_texto"
-            tools:ignore="LabelFor" />
+            tools:ignore="Autofill,LabelFor" />
 
         <TextView
             android:text="@string/doispontos_text"
-            android:id="@+id/txtDoisPont"
             android:textColor="@color/color_texto"
             android:textAlignment="center"
             android:textSize="@dimen/texto_campos"
@@ -316,7 +313,7 @@
             style="@style/edit_branco"
             android:layout_width="@dimen/tamanho_caixa_texto_num"
             android:padding="@dimen/padding_caixa_texto"
-            tools:ignore="LabelFor" />
+            tools:ignore="Autofill,LabelFor" />
 
         <TextView
             android:text="@string/doispontos_text"
@@ -342,7 +339,7 @@
             style="@style/edit_branco"
             android:layout_width="@dimen/tamanho_caixa_texto_num"
             android:padding="@dimen/padding_caixa_texto"
-            tools:ignore="LabelFor" />
+            tools:ignore="Autofill,LabelFor" />
 
     </LinearLayout>
 
@@ -360,5 +357,4 @@
         android:layout_alignParentStart="true"
         android:paddingTop="@dimen/padding_caixa_texto"
         tools:ignore="RtlSymmetry" />
-
 </RelativeLayout>

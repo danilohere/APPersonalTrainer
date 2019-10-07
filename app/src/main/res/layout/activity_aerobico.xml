@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_aerobico"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -10,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:keepScreenOn="true"
-    tools:context="appersonal.development.com.appersonaltrainer.Activities.AerobicoActivity"
+    tools:context="appersonal.development.com.appersonaltrainer.activities.AerobicoActivity"
     android:background="@drawable/bg2">
 
     <com.google.android.gms.ads.AdView

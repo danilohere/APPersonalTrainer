@@ -2,7 +2,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbarAlwaysDrawVerticalTrack="true"
@@ -17,7 +16,6 @@
         android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:id="@+id/activity_editar_exercicio"
             android:layout_width="match_parent"
             android:layout_height="650dp"
             android:background="@drawable/bg2"
@@ -26,7 +24,7 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
             android:animateLayoutChanges="true"
-            tools:context="appersonal.development.com.appersonaltrainer.Activities.EditarExercicioActivity"
+            tools:context="appersonal.development.com.appersonaltrainer.activities.EditarExercicioActivity"
             tools:ignore="UselessParent">
 
             <Spinner
@@ -95,7 +93,7 @@
                 android:textColor="@color/color_texto"
                 android:textSize="@dimen/texto_campos"
                 android:visibility="invisible"
-                tools:ignore="LabelFor" />
+                tools:ignore="Autofill,LabelFor" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -143,7 +141,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/color_texto"
                     android:textSize="@dimen/texto_campos"
-                    tools:ignore="LabelFor" />
+                    tools:ignore="Autofill,LabelFor" />
 
                 <EditText
                     android:id="@+id/edtRep2"
@@ -162,7 +160,7 @@
                     android:textColor="@color/color_texto"
                     android:textSize="@dimen/texto_campos"
                     android:visibility="invisible"
-                    tools:ignore="LabelFor" />
+                    tools:ignore="Autofill,LabelFor" />
 
                 <EditText
                     android:id="@+id/edtRep3"
@@ -181,7 +179,7 @@
                     android:textColor="@color/color_texto"
                     android:textSize="@dimen/texto_campos"
                     android:visibility="invisible"
-                    tools:ignore="LabelFor" />
+                    tools:ignore="Autofill,LabelFor" />
 
                 <EditText
                     android:id="@+id/edtRep4"
@@ -200,7 +198,7 @@
                     android:textColor="@color/color_texto"
                     android:textSize="@dimen/texto_campos"
                     android:visibility="invisible"
-                    tools:ignore="LabelFor" />
+                    tools:ignore="Autofill,LabelFor" />
 
                 <EditText
                     android:id="@+id/edtRep5"
@@ -219,7 +217,7 @@
                     android:textColor="@color/color_texto"
                     android:textSize="@dimen/texto_campos"
                     android:visibility="invisible"
-                    tools:ignore="LabelFor" />
+                    tools:ignore="Autofill,LabelFor" />
 
                 <EditText
                     android:id="@+id/edtRep6"
@@ -238,7 +236,7 @@
                     android:textColor="@color/color_texto"
                     android:textSize="@dimen/texto_campos"
                     android:visibility="invisible"
-                    tools:ignore="LabelFor" />
+                    tools:ignore="Autofill,LabelFor" />
 
                 <EditText
                     android:id="@+id/edtRep7"
@@ -257,7 +255,7 @@
                     android:textColor="@color/color_texto"
                     android:textSize="@dimen/texto_campos"
                     android:visibility="invisible"
-                    tools:ignore="LabelFor" />
+                    tools:ignore="Autofill,LabelFor" />
 
                 <EditText
                     android:id="@+id/edtRep8"
@@ -276,7 +274,7 @@
                     android:textColor="@color/color_texto"
                     android:textSize="@dimen/texto_campos"
                     android:visibility="invisible"
-                    tools:ignore="LabelFor" />
+                    tools:ignore="Autofill,LabelFor" />
 
             </LinearLayout>
 
@@ -307,7 +305,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/color_texto"
                 android:textSize="@dimen/texto_campos"
-                tools:ignore="LabelFor" />
+                tools:ignore="Autofill,LabelFor" />
 
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adView"
@@ -467,7 +465,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/color_texto"
                     android:textSize="@dimen/texto_campos"
-                    tools:ignore="LabelFor" />
+                    tools:ignore="Autofill,LabelFor" />
 
                 <Button
                     android:id="@+id/btnMais"
@@ -484,7 +482,6 @@
                     android:shadowRadius="5" />
 
                 <TextView
-                    android:id="@+id/textView10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -529,10 +526,9 @@
                     android:textAlignment="center"
                     android:textColor="@color/color_texto"
                     android:textSize="@dimen/texto_campos"
-                    tools:ignore="LabelFor" />
+                    tools:ignore="Autofill,LabelFor" />
 
                 <TextView
-                    android:id="@+id/textView12"
                     android:layout_width="5dp"
                     android:layout_height="wrap_content"
                     android:text="@string/doispontos_text"
@@ -554,7 +550,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/color_texto"
                     android:textSize="@dimen/texto_campos"
-                    tools:ignore="LabelFor" />
+                    tools:ignore="Autofill,LabelFor" />
 
             </LinearLayout>
 

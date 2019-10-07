@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_despertador"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -11,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:animateLayoutChanges="true"
-    tools:context="appersonal.development.com.appersonaltrainer.Activities.AlarmeActivity"
+    tools:context="appersonal.development.com.appersonaltrainer.activities.AlarmeActivity"
     android:background="@drawable/bg2">
 
     <com.google.android.gms.ads.AdView
@@ -21,7 +19,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         ads:adSize="BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id2">
+        ads:adUnitId="@string/banner_ad_unit_id">
     </com.google.android.gms.ads.AdView>
 
     <com.google.android.gms.ads.AdView
@@ -47,7 +45,6 @@
 
         <RelativeLayout
             android:animateLayoutChanges="true"
-            android:id="@+id/rltContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
@@ -127,7 +124,6 @@
                     android:textAlignment="center" />
 
                 <TextView
-                    android:id="@+id/textView21"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@+id/textView22"
@@ -434,7 +430,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView14"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

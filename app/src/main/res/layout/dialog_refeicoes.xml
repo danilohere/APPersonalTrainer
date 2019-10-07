@@ -34,7 +34,7 @@
         android:textColor="@color/color_texto"
         android:textSize="24sp"
         style="@style/edit_branco"
-        tools:ignore="LabelFor" />
+        tools:ignore="Autofill,LabelFor" />
 
     <LinearLayout
         android:id="@+id/lytHora"

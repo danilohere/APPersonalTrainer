@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:animateLayoutChanges="true"
-    tools:context="appersonal.development.com.appersonaltrainer.Activities.EditarTreinoActivity"
+    tools:context="appersonal.development.com.appersonaltrainer.activities.EditarTreinoActivity"
     android:background="@drawable/bg2">
 
     <TextView
@@ -111,6 +111,6 @@
         android:layout_toEndOf="@+id/txtTreino"
         android:layout_marginStart="21dp"
         style="@style/edit_branco"
-        tools:ignore="LabelFor" />
+        tools:ignore="Autofill,LabelFor" />
 
 </RelativeLayout>

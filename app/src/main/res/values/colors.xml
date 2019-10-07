@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
     <color name="background_list">#CBB700</color>
-    <color name="background_list2">#A94B1F</color>
     <color name="background_app">#1C1C1D</color>
     <color name="color_texto">#fffdfd</color>
     <color name="color_confirm_text">#52da29</color>

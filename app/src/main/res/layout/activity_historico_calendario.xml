@@ -2,14 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_historico_treino"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="appersonal.development.com.appersonaltrainer.Activities.HistoricoTreinoActivity"
+    tools:context="appersonal.development.com.appersonaltrainer.activities.HistoricoCalendarioActivity"
     android:background="@drawable/bg2">
 
     <com.google.android.gms.ads.AdView
@@ -19,7 +18,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         ads:adSize="BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id2">
+        ads:adUnitId="@string/banner_ad_unit_id">
     </com.google.android.gms.ads.AdView>
 
     <com.google.android.gms.ads.AdView
@@ -40,24 +39,6 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:stretchColumns="1">
-
-        <TableRow
-            android:id="@+id/tbItens"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:ignore="UselessParent">
-
-        <Button
-            android:id="@+id/btnAnterior"
-            android:layout_width="@dimen/DiaCalendario"
-            android:layout_height="@dimen/DiaCalendario"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:text="@string/Anterior"
-            android:textColor="@color/color_texto"
-            android:textSize="20sp"
-            tools:ignore="ButtonStyle" />
-
         <TextView
             android:id="@+id/txtMes"
             android:layout_width="wrap_content"
@@ -67,20 +48,8 @@
             android:textColor="@color/color_texto"
             android:textSize="24sp"
             android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btnProximo"
-            android:layout_width="@dimen/DiaCalendario"
-            android:layout_height="@dimen/DiaCalendario"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:text="@string/Proximo"
-            android:textColor="@color/color_texto"
-            android:textSize="20sp"
-            tools:ignore="ButtonStyle" />
-        </TableRow>
-
     </TableLayout>
+
 
     <TableLayout
         android:id="@+id/tbCalendario"
@@ -88,15 +57,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tbMes"
         android:layout_marginTop="30dp"
-
+        android:padding="10dp"
         android:background="@color/list_background"
         android:stretchColumns="*">
 
         <TableRow
-            android:id="@+id/tbDiaSemana"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp">
 
             <TextView
@@ -193,7 +160,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tbSemana1"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -276,7 +242,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tbSemana2"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -359,7 +324,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tbSemana3"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -442,7 +406,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tbSemana4"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -525,7 +488,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tbSemana5"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -608,7 +570,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tbSemana6"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
