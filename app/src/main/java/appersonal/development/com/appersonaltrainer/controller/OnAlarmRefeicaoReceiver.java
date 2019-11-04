@@ -1,53 +1,28 @@
 package appersonal.development.com.appersonaltrainer.controller;
 
-import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import appersonal.development.com.appersonaltrainer.R;
-import appersonal.development.com.appersonaltrainer.activities.TreinoXActivity;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class OnAlarmRefeicaoReceiver extends BroadcastReceiver {
 
-    private static final String TAG = "Teste";
-    private static final String HORATREINO = "HoraTreino";
-    private static final String MINUTOTREINO = "MinutoTreino";
-    private static final String ALARMETREINO = "AlarmeTreino";
     private static final String ALARMEREFEICOES = "AlarmeRefeicoes";
-    private static final String DIASSEMANA = "DiasSemana";
     private static final String REFEICOES = "Refeicoes";
-    private static final String DATA = "Data";
-    private final boolean[] diasSemana = new boolean[7];
-    private SQLiteDatabase bancoDados;
-    private int alarmeTreino;
     private int alarmeRefeicoes;
-    private int idTreino;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
-        try {
-            bancoDados = context.openOrCreateDatabase("appersonal", MODE_PRIVATE, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         Calendar ca = Calendar.getInstance();
         ca.setTimeInMillis(System.currentTimeMillis());
         int h = ca.get(Calendar.HOUR_OF_DAY);
