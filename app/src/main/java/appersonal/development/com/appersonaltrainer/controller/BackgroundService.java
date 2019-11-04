@@ -51,28 +51,21 @@ public class BackgroundService extends Service {
 
 
         if (alarmManager2 != null) {
-            alarmManager2.setRepeating(AlarmManager.RTC_WAKEUP, meianoite, 60 * 1000, alarmIntent2);
+            alarmManager2.setRepeating(AlarmManager.RTC_WAKEUP, meianoite, 60000, alarmIntent2);
         }
 
 
         SharedPreferences refeicoesSP = getSharedPreferences(REFEICOES, Context.MODE_PRIVATE);
         int sizeR = refeicoesSP.getInt("refeicoes_size", 0);
-        for (int i = 0; i < sizeR; i++) {
-
+        if (sizeR > 0) {
             AlarmManager alarmManager3 = (AlarmManager) this.getSystemService(ALARM_SERVICE);
-            Intent alarme3 = new Intent(BackgroundService.this, OnAlarmReceiver.class);
-            PendingIntent alarmIntent3 = PendingIntent.getBroadcast(BackgroundService.this, i + 2, alarme3, 0);
-
-            Refeicoes refeicao = new Refeicoes();
-            refeicao.setRefeicao(refeicoesSP.getString("refeicao_" + i, ""));
-            refeicao.setHora(refeicoesSP.getString("hora_" + i, ""));
-            refeicao.setMinuto(refeicoesSP.getString("minuto_" + i, ""));
+            Intent alarme3 = new Intent(BackgroundService.this, OnAlarmRefeicaoReceiver.class);
+            PendingIntent alarmIntent3 = PendingIntent.getBroadcast(BackgroundService.this, 2, alarme3, 0);
 
             if (alarmManager3 != null) {
-                alarmManager3.setRepeating(AlarmManager.RTC_WAKEUP, meianoite, 60 * 1000, alarmIntent3);
+                alarmManager3.setRepeating(AlarmManager.RTC_WAKEUP, meianoite, 60000, alarmIntent3);
             }
         }
-
         super.onCreate();
     }
 }

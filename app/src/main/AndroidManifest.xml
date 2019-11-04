@@ -156,6 +156,9 @@
         <receiver
             android:name=".controller.OnAlarmAguaReceiver"
             tools:ignore="InnerclassSeparator" />
+        <receiver
+            android:name=".controller.OnAlarmRefeicaoReceiver"
+            tools:ignore="InnerclassSeparator" />
 
         <service
             android:name=".controller.BackgroundService"

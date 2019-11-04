@@ -54,6 +54,7 @@ import java.util.Objects;
 
 import appersonal.development.com.appersonaltrainer.controller.OnAlarmAguaReceiver;
 import appersonal.development.com.appersonaltrainer.controller.OnAlarmReceiver;
+import appersonal.development.com.appersonaltrainer.controller.OnAlarmRefeicaoReceiver;
 import appersonal.development.com.appersonaltrainer.controller.OnBootReceiver;
 import appersonal.development.com.appersonaltrainer.model.Refeicoes;
 import appersonal.development.com.appersonaltrainer.R;
@@ -880,27 +881,26 @@ public class AlarmeActivity extends AppCompatActivity {
             editorRefeicoes.putString("refeicao_" + i, refeicoes.get(i).getRefeicao());
             editorRefeicoes.putString("hora_" + i, refeicoes.get(i).getHora());
             editorRefeicoes.putString("minuto_" + i, refeicoes.get(i).getMinuto());
-
-            alarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
-            Intent alarme = new Intent(AlarmeActivity.this, OnAlarmReceiver.class);
-            alarmIntent = PendingIntent.getBroadcast(AlarmeActivity.this, i + 2, alarme, 0);
-
-            Calendar ct = Calendar.getInstance();
-            ct.setTimeInMillis(System.currentTimeMillis());
-            ct.set(Calendar.HOUR_OF_DAY, Integer.parseInt(refeicoes.get(i).getHora()));
-            ct.set(Calendar.MINUTE, Integer.parseInt(refeicoes.get(i).getMinuto()));
-            long alarmeRefeicao = ct.getTimeInMillis();
-
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmeRefeicao, 1000 * 60, alarmIntent);
-
-            ComponentName receiver = new ComponentName(this, OnBootReceiver.class);
-            PackageManager pm = this.getPackageManager();
-
-            pm.setComponentEnabledSetting(receiver,
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                    PackageManager.DONT_KILL_APP);
         }
         editorRefeicoes.apply();
+        alarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
+        Intent alarme = new Intent(AlarmeActivity.this, OnAlarmRefeicaoReceiver.class);
+        alarmIntent = PendingIntent.getBroadcast(AlarmeActivity.this, 2, alarme, 0);
+
+        Calendar cmeia = Calendar.getInstance();
+        cmeia.setTimeInMillis(System.currentTimeMillis());
+        cmeia.set(Calendar.HOUR_OF_DAY, 0);
+        cmeia.set(Calendar.MINUTE, 0);
+        long meianoite = cmeia.getTimeInMillis();
+
+        ComponentName receiver = new ComponentName(this, OnBootReceiver.class);
+        PackageManager pm = this.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, meianoite, 60000, alarmIntent);
     }
 
     private class AdapterRefeicoesPersonalizado extends BaseAdapter {

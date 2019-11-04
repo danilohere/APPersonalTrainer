@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
@@ -24,6 +25,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class OnAlarmReceiver extends BroadcastReceiver {
 
+    private static final String TAG = "Teste";
     private SQLiteDatabase bancoDados;
     private static final String HORATREINO = "HoraTreino";
     private static final String MINUTOTREINO = "MinutoTreino";
@@ -31,10 +33,9 @@ public class OnAlarmReceiver extends BroadcastReceiver {
     private static final String ALARMEREFEICOES = "AlarmeRefeicoes";
     private static final String DIASSEMANA = "DiasSemana";
     private static final String REFEICOES = "Refeicoes";
+    private static final String DATA = "Data";
     private int alarmeTreino;
     private int alarmeRefeicoes;
-    private String treino;
-    private String atual;
     private int idTreino;
     private final boolean[] diasSemana = new boolean[7];
 
@@ -56,24 +57,18 @@ public class OnAlarmReceiver extends BroadcastReceiver {
         if (ds == -1)
             ds = 6;
 
+        SharedPreferences data = context.getSharedPreferences(DATA, 0);
+        long dataTreino = data.getLong("Data", 0);
+        long dataAtual = System.currentTimeMillis();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatarData = new SimpleDateFormat("dd/MM/yyyy");
+        String treino = formatarData.format(dataTreino);
+        String atual = formatarData.format(dataAtual);
+
         try {
             Cursor cursor = bancoDados.rawQuery("SELECT * FROM treinos ORDER BY data DESC", null);
-
-            cursor.moveToFirst();
-
-            int indData = cursor.getColumnIndex("data");
-
-            long dataTreino = cursor.getLong(indData);
-            long dataAtual = System.currentTimeMillis();
-
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatarData = new SimpleDateFormat("dd/MM/yyyy");
-            treino = formatarData.format(dataTreino);
-            atual = formatarData.format(dataAtual);
-
             cursor.moveToLast();
             int indId = cursor.getColumnIndex("idTreino");
             idTreino = cursor.getInt(indId);
-
             cursor.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,17 +89,21 @@ public class OnAlarmReceiver extends BroadcastReceiver {
             if (diasSemana[ds] && !treino.equals(atual))
                 notificacaoTreino(context);
         }
-        SharedPreferences alarmRefeicoes = context.getSharedPreferences(ALARMEREFEICOES, MODE_PRIVATE);
-        alarmeRefeicoes = alarmRefeicoes.getInt("AlarmeRefeicoes", 0);
-        SharedPreferences refeicoesSP = context.getSharedPreferences(REFEICOES, MODE_PRIVATE);
-        int sizeR = refeicoesSP.getInt("refeicoes_size", 0);
-        for (int i = 0; i < sizeR; i++) {
-            int hr = Integer.parseInt(refeicoesSP.getString("hora_" + i, ""));
-            int mr = Integer.parseInt(refeicoesSP.getString("minuto_" + i, ""));
-            if (h == hr && m == mr) {
-                notificacaoRefeicao(context, refeicoesSP.getString("refeicao_" + i, ""));
-            }
-        }
+//
+//
+//        SharedPreferences alarmRefeicoes = context.getSharedPreferences(ALARMEREFEICOES, MODE_PRIVATE);
+//        alarmeRefeicoes = alarmRefeicoes.getInt("AlarmeRefeicoes", 0);
+//        SharedPreferences refeicoesSP = context.getSharedPreferences(REFEICOES, MODE_PRIVATE);
+//        int sizeR = refeicoesSP.getInt("refeicoes_size", 0);
+//        for (int i = 0; i < sizeR; i++) {
+//
+//            int hr = Integer.parseInt(refeicoesSP.getString("hora_" + i, ""));
+//            int mr = Integer.parseInt(refeicoesSP.getString("minuto_" + i, ""));
+//            if (h == hr && m == mr) {
+//                Log.d(TAG, "Passou i="+i);
+//                notificacaoRefeicao(context, refeicoesSP.getString("refeicao_" + i, ""));
+//            }
+//        }
     }
 
     private void notificacaoTreino(Context context) {
@@ -135,64 +134,35 @@ public class OnAlarmReceiver extends BroadcastReceiver {
                     .setContentText("Bora treinar?")
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true)
-                    .setLights(100, 500, 100)
-                    .setVibrate(new long[]{100, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500
-                            , 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500});
+                    .setLights(100, 500, 100);
             assert notificationManager != null;
             notificationManager.notify(mNotificationId, builder.build());
-            //            NotificationCompat.Builder mBuilder =
-//                    new NotificationCompat.Builder(context)
-//                            .setSmallIcon(R.drawable.applogopush)
-//                            .setContentTitle("HORA DO TREINO!")
-//                            .setContentText("Bora treinar?")
-//                            .setLights(100, 500, 100)
-//                            .setVibrate(new long[]{100, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500
-//                                    , 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500});
-//            NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-//            if (mNotifyMgr != null) {
-//                mNotifyMgr.notify(mNotificationId, mBuilder.build());
-//            }
         }
     }
 
-    private void notificacaoRefeicao(Context context, String refeicao) {
-        int mNotificationId = 3;
-        if (alarmeRefeicoes == 1) {
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            NotificationCompat.Builder builder;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                int importance = NotificationManager.IMPORTANCE_DEFAULT;
-                NotificationChannel notificationChannel = new NotificationChannel("ID", "Name", importance);
-                assert notificationManager != null;
-                notificationManager.createNotificationChannel(notificationChannel);
-                builder = new NotificationCompat.Builder(context, notificationChannel.getId());
-            } else {
-                //noinspection deprecation
-                builder = new NotificationCompat.Builder(context);
-            }
-
-            builder = builder
-                    .setSmallIcon(R.drawable.refeicao)
-                    .setContentTitle("Hora da refeição!")
-                    .setContentText(refeicao)
-                    .setLights(100, 500, 100)
-                    .setVibrate(new long[]{100, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500
-                            , 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500});
-            assert notificationManager != null;
-            notificationManager.notify(mNotificationId, builder.build());
-//            //noinspection deprecation
-//            NotificationCompat.Builder mBuilder =
-//                    new NotificationCompat.Builder(context)
-//                            .setSmallIcon(R.drawable.refeicao)
-//                            .setContentTitle("Hora da refeição!")
-//                            .setContentText(refeicao)
-//                            .setLights(100, 500, 100)
-//                            .setVibrate(new long[]{100, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500
-//                                    , 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500, 300, 500});
-//            NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-//            if (mNotifyMgr != null) {
-//                mNotifyMgr.notify(mNotificationId, mBuilder.build());
+//    private void notificacaoRefeicao(Context context, String refeicao) {
+//        int mNotificationId = 3;
+//        if (alarmeRefeicoes == 1) {
+//            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+//            NotificationCompat.Builder builder;
+//            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+//                int importance = NotificationManager.IMPORTANCE_DEFAULT;
+//                NotificationChannel notificationChannel = new NotificationChannel("ID", "Name", importance);
+//                assert notificationManager != null;
+//                notificationManager.createNotificationChannel(notificationChannel);
+//                builder = new NotificationCompat.Builder(context, notificationChannel.getId());
+//            } else {
+//                //noinspection deprecation
+//                builder = new NotificationCompat.Builder(context);
 //            }
-        }
-    }
+//
+//            builder = builder
+//                    .setSmallIcon(R.drawable.refeicao)
+//                    .setContentTitle("Hora da refeição!")
+//                    .setContentText(refeicao)
+//                    .setLights(100, 500, 100);
+//            assert notificationManager != null;
+//            notificationManager.notify(mNotificationId, builder.build());
+//        }
+//    }
 }

@@ -16,6 +16,7 @@ import android.os.Vibrator;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -51,6 +52,7 @@ public class ExercicioActivity extends AppCompatActivity {
     private TextView txtUnilateral;
     private TextView txtSeries;
     private TextView txtSeriesTotal;
+    private TextView txtTipoRep;
     private TextView txtDescanso;
     private TextView txtTemporizador;
     private TextView txtTempoExecucao;
@@ -163,7 +165,7 @@ public class ExercicioActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if (am.isMusicActive()){
+        if (am.isMusicActive()) {
             int volume = am.getStreamVolume(AudioManager.STREAM_MUSIC) / 2;
             if (volume > 1)
                 am.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
@@ -192,6 +194,14 @@ public class ExercicioActivity extends AppCompatActivity {
     protected void onResume() {
         assert am != null;
         am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+        if (am.isMusicActive()) {
+            int volume = am.getStreamVolume(AudioManager.STREAM_MUSIC) * 2;
+            if (volume > 15) {
+                am.setStreamVolume(AudioManager.STREAM_MUSIC, 15, 0);
+            } else {
+                am.setStreamVolume(AudioManager.STREAM_MUSIC, volume - 1, 0);
+            }
+        }
         super.onResume();
     }
 
@@ -248,6 +258,7 @@ public class ExercicioActivity extends AppCompatActivity {
         txtObs = findViewById(R.id.txtObs);
         txtSeries = findViewById(R.id.txtSeries);
         txtSeriesTotal = findViewById(R.id.txtSeriesTotal);
+        txtTipoRep = findViewById(R.id.txtTipoRep);
         txtDescanso = findViewById(R.id.txtDescanso);
         txtTemporizador = findViewById(R.id.txtTemporizador);
         txtExercicio = findViewById(R.id.txtExercicio);
@@ -305,6 +316,13 @@ public class ExercicioActivity extends AppCompatActivity {
                     btnAnterior.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.buttonshapelocked));
                     btnProximo.setEnabled(false);
                     btnProximo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.buttonshapelocked));
+                    falha = 1;
+                    if (tipoRep == 3 && cdTimer != null) {
+                        Descanso();
+                        handler.removeCallbacks(runnableRep);
+                        handler.removeCallbacks(runnablePause);
+                        cdTimer.cancel();
+                    }
                     if (re > 0) {
                         r = re;
                     }
@@ -369,6 +387,9 @@ public class ExercicioActivity extends AppCompatActivity {
                     if (tipoRep == 3 && falha == 1) {
                         r = 51;
                         falha = 0;
+                        if (s < series) {
+                            fimSerie(true, true);
+                        }
                     } else {
                         Descanso();
                         handler.removeCallbacks(runnableRep);
@@ -495,7 +516,6 @@ public class ExercicioActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void executarExercicio() {
         txtSeries.setText(String.valueOf(s));
-        falha = 1;
         runnableRep = new Runnable() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -506,26 +526,11 @@ public class ExercicioActivity extends AppCompatActivity {
                         iniciando = 1;
                         if (s == series) { //Se a série atual for igual à final, ou seja, última série
                             if (tipoRep == 2 && sd < seriesDrop * 2 && uni == 2) { // Se for unilateral e dropset
-                                if (som == 0) {
-                                    largada(1);
-                                } else {
-                                    bambam(0);
-                                }
-                                fimSerie();
+                                fimSerie(false, true);
                             } else if (tipoRep == 2 && sd < seriesDrop) { //Se for dropset
-                                if (som == 0) {
-                                    largada(1);
-                                } else {
-                                    bambam(0);
-                                }
-                                fimSerie();
+                                fimSerie(false, true);
                             } else if (uni == 2 && su < 2) { //Se for unilateral
-                                if (som == 0) {
-                                    largada(1);
-                                } else {
-                                    bambam(0);
-                                }
-                                fimSerie();
+                                fimSerie(false, true);
                             } else { //Se não tiver em nenhuma das condições acima,
                                 if (uni != 1) {
                                     new Timer().schedule(new TimerTask() {
@@ -576,36 +581,22 @@ public class ExercicioActivity extends AppCompatActivity {
                         } else { //Se não for a última série
                             if (uni != 1) { //Se for diferente de Alternado
                                 if (tipoRep == 2 && sd < seriesDrop && uni != 2) { //Se for dropset e diferente de unilateral
-                                    fimSerie();
+                                    fimSerie(false, false);
                                 } else if (tipoRep == 2 && sd < seriesDrop * 2 && uni == 2) { //Se for dropset e unilateral
                                     if (sd == seriesDrop) {
-                                        if (som == 0) {
-                                            largada(1);
-                                        } else {
-                                            bambam(0);
-                                        }
+                                        fimSerie(false, true);
                                     }
-                                    fimSerie();
                                 } else {
-                                    if (som == 0) {
-                                        largada(1);
-                                    } else {
-                                        bambam(0);
-                                    }
-                                    fimSerie();
+                                    fimSerie(true, true);
                                 }
                             } else if (sa == 2) { //Se for alternado, ele precisa ser a segunda repetição para tocar o áudio
-                                if (som == 0) {
-                                    largada(1);
-                                } else {
-                                    bambam(0);
-                                }
-                                fimSerie();
+                                fimSerie(true, true);
                             }
                         }
                     }
                     handler.postDelayed(runnableRep, tempoExecucao * 1000);
-                    txtRep.setText(String.valueOf(r));
+                    if (r != 51)
+                        txtRep.setText(String.valueOf(r));
                     r++;
                     re = r;
                     if (uni == 1 && sa < 2) { // verifica se é alternado e em qual repetição está
@@ -625,6 +616,20 @@ public class ExercicioActivity extends AppCompatActivity {
                                 s++;
                                 descansar(descanso);
                             } else {
+                                new Timer().schedule(new TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        if (som == 0) {
+                                            largada(2);
+                                        } else {
+                                            bambam.release();
+                                            Random al = new Random();
+                                            int i = al.nextInt(11) + 2;
+                                            bambam(i);
+                                        }
+                                    }
+                                }, 300);
+                                Vibrar(700);
                                 completo = true;
                                 verificarProximo();
                                 txtTemporizador.setVisibility(View.VISIBLE);
@@ -663,12 +668,6 @@ public class ExercicioActivity extends AppCompatActivity {
                                 s++;
                                 descansar(descanso);
                             } else {
-                                completo = true;
-                                verificarProximo();
-                                txtTemporizador.setVisibility(View.VISIBLE);
-                                txtTemporizador.setTextSize(35);
-                                txtTemporizador.setText("Exercício Concluído");
-                                atualizarData();
                                 swtInicioAut.setChecked(false);
                                 if (antprox != 1) {
                                     btnIniciar.setChecked(false);
@@ -694,9 +693,19 @@ public class ExercicioActivity extends AppCompatActivity {
         handler.post(runnableRep);
     }
 
-    private void fimSerie() {
+    private void fimSerie(boolean aumentaSerie, boolean tocaSom) {
         Vibrar(300);
-        int serieAtual = s + 1;
+        if (tocaSom) {
+            if (som == 0) {
+                largada(1);
+            } else {
+                bambam(0);
+            }
+        }
+        int serieAtual = s;
+        if (aumentaSerie)
+            serieAtual++;
+        txtSeries.setText(String.valueOf(serieAtual));
         bancoDados.execSQL("UPDATE exercicios SET serieAtual = " + serieAtual + " WHERE idExercicio =" + id);
     }
 
@@ -1284,7 +1293,7 @@ public class ExercicioActivity extends AppCompatActivity {
                 } else if (tipoRep == 1) {
                     rep[i] = repInd[i];
                 } else if (tipoRep == 3) {
-                    rep[i] = 50;
+                    rep[i] = 51;
                     repEsq[i] = rep[i];
                 } else if (tipoRep == 2) {
                     rep[i] = cursor.getInt(indRep1);
@@ -1313,14 +1322,25 @@ public class ExercicioActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        if (tipoRep == 3) {
-            txtRep.setText("Até a falha");
-            txtBarra2.setText("");
-            txtRepTotal.setText("");
-        } else {
-            txtRep.setText("1");
-            txtRepTotal.setText(String.valueOf(rep[0]));
+        txtRep.setText("1");
+        txtBarra2.setText("/");
+        txtRepTotal.setText(String.valueOf(rep[0]));
+        switch (tipoRep) {
+            case 3:
+                txtTipoRep.setText("Até a falha");
+                txtRep.setText("1");
+                txtBarra2.setText("");
+                txtRepTotal.setText("");
+                break;
+            case 2:
+                txtTipoRep.setText("Dropset");
+                break;
+            case 1:
+                txtTipoRep.setText("Pirâmide");
+                break;
+            default:
+                txtTipoRep.setText("");
+                break;
         }
         txtSeries.setText(String.valueOf(s));
         txtSeriesTotal.setText(String.valueOf(series));
