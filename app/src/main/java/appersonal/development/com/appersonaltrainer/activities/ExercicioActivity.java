@@ -168,16 +168,14 @@ public class ExercicioActivity extends AppCompatActivity {
         if (am.isMusicActive()) {
             int volume = am.getStreamVolume(AudioManager.STREAM_MUSIC) / 2;
             if (volume > 1)
-                am.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
+                am.setStreamVolume(AudioManager.STREAM_MUSIC, volume + 1, 0);
         }
-
         final Runnable r = new Runnable() {
             public void run() {
                 am.abandonAudioFocus(null);
             }
         };
         handler.postDelayed(r, 100);
-
         super.onDestroy();
     }
 
@@ -194,14 +192,6 @@ public class ExercicioActivity extends AppCompatActivity {
     protected void onResume() {
         assert am != null;
         am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
-        if (am.isMusicActive()) {
-            int volume = am.getStreamVolume(AudioManager.STREAM_MUSIC) * 2;
-            if (volume > 15) {
-                am.setStreamVolume(AudioManager.STREAM_MUSIC, 15, 0);
-            } else {
-                am.setStreamVolume(AudioManager.STREAM_MUSIC, volume - 1, 0);
-            }
-        }
         super.onResume();
     }
 
@@ -220,7 +210,15 @@ public class ExercicioActivity extends AppCompatActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         am = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
-
+        assert am != null;
+        if (am.isMusicActive()) {
+            int volume = am.getStreamVolume(AudioManager.STREAM_MUSIC) * 2;
+            if (volume > 15) {
+                am.setStreamVolume(AudioManager.STREAM_MUSIC, 15, 0);
+            } else {
+                am.setStreamVolume(AudioManager.STREAM_MUSIC, volume - 1, 0);
+            }
+        }
 
         try {
             bancoDados = openOrCreateDatabase("appersonal", MODE_PRIVATE, null);
@@ -586,6 +584,8 @@ public class ExercicioActivity extends AppCompatActivity {
                                     if (sd == seriesDrop) {
                                         fimSerie(false, true);
                                     }
+                                } else if (uni == 2 && su < 2) { //Se for unilateral
+                                    fimSerie(false, true);
                                 } else {
                                     fimSerie(true, true);
                                 }
